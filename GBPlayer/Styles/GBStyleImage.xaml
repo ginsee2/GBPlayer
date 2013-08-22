@@ -1,0 +1,18 @@
+﻿<ResourceDictionary
+	x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Style x:Uid="Style_1" x:Key="GBImage" TargetType="{x:Type Image}">
+		<Setter x:Uid="Setter_1" Property="FlowDirection" Value="LeftToRight"/>
+        <Setter x:Uid="Setter_2" Property="OpacityMask">
+			<Setter.Value>
+				<ImageBrush x:Uid="ImageBrush_1" ImageSource="../Images/alphaImage.png"/>
+			</Setter.Value>
+		</Setter>
+		<!--<Setter Property="Effect">
+			<Setter.Value>
+				<DropShadowEffect Opacity="1" ShadowDepth="2"/>
+			</Setter.Value>
+		</Setter>-->
+	</Style>
+	<!-- Resource dictionary entries should be defined here. -->
+</ResourceDictionary>

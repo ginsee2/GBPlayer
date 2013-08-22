@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<ConfigPerso xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Nom>GBPLayer</Nom>
+  <Version>3.0.17</Version>
+  <MAINWINDOW_Position>
+    <X>4</X>
+    <Y>0</Y>
+  </MAINWINDOW_Position>
+  <MAINWINDOW_Size>
+    <Width>1296</Width>
+    <Height>816</Height>
+  </MAINWINDOW_Size>
+  <PLAYERVOLUME0>52</PLAYERVOLUME0>
+  <LISTEREPERTOIRES_Racine>G:\GILLES\MUSIC</LISTEREPERTOIRES_Racine>
+  <LISTEREPERTOIRES_RepertoireEnCours>G:\GILLES\MUSIC\_A trier</LISTEREPERTOIRES_RepertoireEnCours>
+  <LISTEFICHIERSMP3_ListeColonnes>
+    <string>Image;0/98</string>
+    <string>Artiste;1/277</string>
+    <string>Titre;2/0</string>
+    <string>Style;3/94,42</string>
+    <string>Compositeur;4/165</string>
+    <string>Repertoire;5/217,535742731979</string>
+    <string>Nom;6/208</string>
+    <string>Label;7/Non Numérique</string>
+    <string>Catalogue;8/96</string>
+    <string>Annee;9/Non Numérique</string>
+    <string>Album;10/Non Numérique</string>
+    <string>Taille;11/55</string>
+    <string>Padding;12/66</string>
+  </LISTEFICHIERSMP3_ListeColonnes>
+  <LISTEFICHIERSMP3_ColonneTriee>Nom;A</LISTEFICHIERSMP3_ColonneTriee>
+  <LISTECOLLECTION_ListeColonnes>
+    <string>Image;0/57</string>
+    <string>Tag;1/Non Numérique</string>
+    <string>Artiste;2/128</string>
+    <string>Titre;3/168</string>
+    <string>Format;4/43</string>
+    <string>Pays;5/40</string>
+    <string>Label;6/101</string>
+    <string>Catalogue;7/87</string>
+    <string>Annee;8/60</string>
+    <string>Style;9/79</string>
+    <string>Livraison;10/200</string>
+    <string>Folder;11/100</string>
+  </LISTECOLLECTION_ListeColonnes>
+  <LISTECOLLECTION_ColonneTriee>Artiste;A</LISTECOLLECTION_ColonneTriee>
+  <LISTECOLLECTION_BackUpDirectory></LISTECOLLECTION_BackUpDirectory>
+  <WANTLIST_ListeColonnes>
+    <string>Tag;0/Non Numérique</string>
+    <string>Image;1/52</string>
+    <string>Artiste;2/186,28</string>
+    <string>Titre;3/205,19</string>
+    <string>Label;4/100</string>
+    <string>Catalogue;5/82</string>
+    <string>Annee;6/Non Numérique</string>
+    <string>Format;7/Non Numérique</string>
+  </WANTLIST_ListeColonnes>
+  <WANTLIST_ColonneTriee>Artiste;A</WANTLIST_ColonneTriee>
+  <LISTECD_ListeColonnes>
+    <string>Piste;0/81</string>
+    <string>Artiste;1/160</string>
+    <string>Titre;2/143</string>
+    <string>Album;3/143</string>
+    <string>Duree;4/50</string>
+  </LISTECD_ListeColonnes>
+  <LISTECD_ColonneTriee>Piste;A</LISTECD_ColonneTriee>
+  <FILESINFOS_ParametrageMenuTitre>
+    <string>[12'' Version]</string>
+    <string>[Lp Version]</string>
+    <string>[7'' Version]</string>
+  </FILESINFOS_ParametrageMenuTitre>
+  <FILESINFOS_ChaineFormattageNom>%ARTISTE% - %TITRE%</FILESINFOS_ChaineFormattageNom>
+  <FILESINFOS_ChaineExtractionInfos>%ARTISTE%-%TITRE%</FILESINFOS_ChaineExtractionInfos>
+  <DISCOGSCONNECTION_consumerKey></DISCOGSCONNECTION_consumerKey>
+  <DISCOGSCONNECTION_consumerSecret></DISCOGSCONNECTION_consumerSecret>
+  <DISCOGSCONNECTION_tokenValue></DISCOGSCONNECTION_tokenValue>
+  <DISCOGSCONNECTION_tokenSecret></DISCOGSCONNECTION_tokenSecret>
+  <USER_Name></USER_Name>
+  <USER_ID></USER_ID>
+  <SELLLIST_ListeColonnes>
+    <string>Image;0/52</string>
+    <string>Description;1/186,28</string>
+    <string>Tag;2/Non Numérique</string>
+    <string>Label;3/100</string>
+    <string>Catalogue;4/82</string>
+    <string>Annee;5/Non Numérique</string>
+    <string>Condition;6/Non Numérique</string>
+    <string>Pays;7/40</string>
+    <string>Style;8/79</string>
+  </SELLLIST_ListeColonnes>
+  <SELLLIST_ColonneTriee>Artiste;A</SELLLIST_ColonneTriee>
+  <PHONESYNCHRO_Directory></PHONESYNCHRO_Directory>
+  <PHONESYNCHRO_ListeColonnes>
+    <string>Image;0/98</string>
+    <string>Artiste;1/277</string>
+    <string>Titre;2/0</string>
+    <string>Style;3/94,42</string>
+    <string>Compositeur;4/165</string>
+    <string>Repertoire;5/217,535742731979</string>
+    <string>Nom;6/208</string>
+    <string>Label;7/Non Numérique</string>
+    <string>Catalogue;8/96</string>
+    <string>Annee;9/Non Numérique</string>
+    <string>Album;10/Non Numérique</string>
+    <string>Taille;11/55</string>
+    <string>Padding;12/66</string>
+  </PHONESYNCHRO_ListeColonnes>
+  <PHONESYNCHRO_ColonneTriee>Artiste;A</PHONESYNCHRO_ColonneTriee>
+
+</ConfigPerso>

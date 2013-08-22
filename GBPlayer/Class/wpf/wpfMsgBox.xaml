@@ -1,0 +1,92 @@
+﻿<Window x:Uid="Window_1" x:Class="wpfMsgBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gbdev="clr-namespace:gbDev"
+    Title="MsgBox" Height="Auto" MinWidth="250" Width="Auto" WindowStyle="None"  ResizeMode="NoResize" 
+    AllowsTransparency="true" Background="Transparent" ShowInTaskbar="False" Opacity="1" 
+        mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        SnapsToDevicePixels="true"
+        d:DesignHeight="165" d:DesignWidth="286" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="/Styles/GBStyleTextBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Uid="Contenu" Name="Contenu" Margin="0">
+         <Border x:Uid="BordureMsgBox" x:Name="BordureMsgBox" 
+              Grid.RowSpan="3"
+              CornerRadius="4"
+              BorderThickness="1"
+              Margin="0" 
+              Padding="2"
+              Background="{StaticResource W8Background}"
+              BorderBrush="{StaticResource W8BorderGray}">
+                 <Grid x:Uid="Grid_1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+                        <RowDefinition x:Uid="RowDefinition_2"/>
+                        <RowDefinition x:Uid="RowDefinition_3" Height="45"/>
+                        <RowDefinition x:Uid="RowDefinition_4" Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border x:Uid="EnteteMsgbox" Margin="0" Height="30"  x:Name="EnteteMsgbox"
+                            VerticalAlignment="Top"
+                            CornerRadius="4"
+                            BorderThickness="1,1,0,0"
+                            Background="{StaticResource W8BackgroundOver}">
+                        <Label x:Uid="Titre" Name="Titre" FontFamily="Calibri" FontSize="14" Foreground="{StaticResource W8ForegroundWhite}" 
+                               VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                Content="" IsHitTestVisible="False">
+                        </Label>
+                    </Border>
+                    <Border x:Uid="BasMsgbox" Grid.Row="3"  Height="19"  x:Name="BasMsgbox"
+                            VerticalAlignment="Bottom"
+                            CornerRadius="0,0,4,4"
+                            BorderThickness="0,1,0,0"
+                            Background="{StaticResource W8Background}"
+                            BorderBrush="{StaticResource W8BorderGray}">
+                        <Label x:Uid="TexteExplication" Name="TexteExplication" Margin="-2" FontFamily="Calibri" FontSize="10" 
+                               Foreground="{StaticResource W8ForegroundWhite}" VerticalAlignment="Center" HorizontalAlignment="Right" 
+                                Content="" IsHitTestVisible="False"/>
+                    </Border>
+                <DockPanel x:Uid="DockPanel_1" Height="Auto" Grid.Row="1" MaxWidth="270">
+                    <TextBox  x:Uid="Valeur" Name="Valeur"  Style="{StaticResource GBTextBox}" Margin="4" Height="Auto" Width="Auto"
+                        Background="{StaticResource W8Background}"
+                        FontFamily="Calibri"
+                        HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                              MinWidth="250"
+                        Foreground="{StaticResource W8ForegroundWhite}" TextWrapping="Wrap"
+                        FontSize="12">
+                    </TextBox>
+                </DockPanel>
+                <TextBlock x:Uid="Texte" Name="Texte" Grid.Row="1"  Margin="4" Height="Auto" 
+                        Background="Transparent"
+                       HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                        FontFamily="Calibri"
+                        Foreground="{StaticResource W8ForegroundWhite}"
+                        FontSize="12"
+                           Visibility="Hidden" MaxWidth="270" TextWrapping="Wrap">
+                    </TextBlock>
+                    <Grid x:Uid="GrilleBoutons" Name="GrilleBoutons" Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_5" Height="0*" />
+                            <RowDefinition x:Uid="RowDefinition_6" Height="45*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="50*"/>
+                            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Uid="Oui" Name="Oui" Height="40" Style="{StaticResource W8Button}" Margin="2" Content="Oui" 
+                                Click="Button_Click" Width="Auto" IsDefault="True" Grid.Row="1" />
+                        <Button x:Uid="Annuler" Name="Annuler" Height="40" Style="{StaticResource W8Button}" 
+                                Margin="2" Grid.Column="1" Content="Annuler" Click="Button_Click" Width="Auto" 
+                                IsDefault="False" IsCancel="True" Grid.Row="1" />
+                    </Grid>
+                </Grid>
+            </Border>
+    </Grid>
+</Window>

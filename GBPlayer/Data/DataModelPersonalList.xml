@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LISTESPERSO Version="1.0.1" Chemin="">
+  <LISTESTYLES>
+    <Style>Acapella</Style>
+    <Style>Acid</Style>
+    <Style>Acid Jazz</Style>
+    <Style>Acid Punk</Style>
+    <Style>Acoustic</Style>
+    <Style>Alternative</Style>
+    <Style>Alternative Rock</Style>
+    <Style>Ambient</Style>
+    <Style>Anime</Style>
+    <Style>Avantgarde</Style>
+    <Style>Ballad</Style>
+    <Style>Bass</Style>
+    <Style>Beat</Style>
+    <Style>Bebob</Style>
+    <Style>Big Band</Style>
+    <Style>Black Metal</Style>
+    <Style>Bluegrass</Style>
+    <Style>Blues</Style>
+    <Style>Booty Bass</Style>
+    <Style>BritPop</Style>
+    <Style>Cabaret</Style>
+    <Style>Celtic</Style>
+    <Style>Chamber Music</Style>
+    <Style>Chanson</Style>
+    <Style>Chorus</Style>
+    <Style>Christian Gangsta</Style>
+    <Style>Christian Rap</Style>
+    <Style>Christian Rock</Style>
+    <Style>Classic Rock</Style>
+    <Style>Classical</Style>
+    <Style>Club</Style>
+    <Style>Club-House</Style>
+    <Style>Comedy</Style>
+    <Style>Contemporary C</Style>
+    <Style>Country</Style>
+    <Style>Crossover</Style>
+    <Style>Cult</Style>
+    <Style>Dance</Style>
+    <Style>Dance Hall</Style>
+    <Style>Darkwave</Style>
+    <Style>Death Metal</Style>
+    <Style>Disco</Style>
+    <Style>Dream</Style>
+    <Style>Drum n Bass</Style>
+    <Style>Drum Solo</Style>
+    <Style>Duet</Style>
+    <Style>Easy Listening</Style>
+    <Style>Electronic</Style>
+    <Style>Ethnic</Style>
+    <Style>Eurodance</Style>
+    <Style>Euro-House</Style>
+    <Style>Euro-Techno</Style>
+    <Style>Fast Fusion</Style>
+    <Style>Folk</Style>
+    <Style>Folklore</Style>
+    <Style>Folk-Rock</Style>
+    <Style>Freestyle</Style>
+    <Style>Funk</Style>
+    <Style>Fusion</Style>
+    <Style>Game</Style>
+    <Style>Gangsta</Style>
+    <Style>Goa</Style>
+    <Style>Gospel</Style>
+    <Style>Gothic</Style>
+    <Style>Gothic Rock</Style>
+    <Style>Grunge</Style>
+    <Style>Hard Rock</Style>
+    <Style>Hardcore</Style>
+    <Style>Heavy Metal</Style>
+    <Style>Hip-Hop</Style>
+    <Style>House</Style>
+    <Style>Humour</Style>
+    <Style>Indie</Style>
+    <Style>Industrial</Style>
+    <Style>Instrumental</Style>
+    <Style>Instrumental Pop</Style>
+    <Style>Instrumental Rock</Style>
+    <Style>Italo Disco</Style>
+    <Style>Jazz</Style>
+    <Style>Jazz+Funk</Style>
+    <Style>JPop</Style>
+    <Style>Jungle</Style>
+    <Style>Latin</Style>
+    <Style>Lo-Fi</Style>
+    <Style>Meditative</Style>
+    <Style>Merengue</Style>
+    <Style>Metal</Style>
+    <Style>Musical</Style>
+    <Style>National Folk</Style>
+    <Style>Native US</Style>
+    <Style>Negerpunk</Style>
+    <Style>New Age</Style>
+    <Style>New Wave</Style>
+    <Style>Noise</Style>
+    <Style>Oldies</Style>
+    <Style>Opera</Style>
+    <Style>Other</Style>
+    <Style>Polka</Style>
+    <Style>Polsk Punk</Style>
+    <Style>Pop</Style>
+    <Style>Pop/Funk</Style>
+    <Style>Pop-Folk</Style>
+    <Style>Porn Groove</Style>
+    <Style>Power Ballad</Style>
+    <Style>Pranks</Style>
+    <Style>Primus</Style>
+    <Style>Progressive Rock</Style>
+    <Style>Psychadelic</Style>
+    <Style>Psychedelic Rock</Style>
+    <Style>Punk</Style>
+    <Style>Punk Rock</Style>
+    <Style>RnB</Style>
+    <Style>Rap</Style>
+    <Style>Rave</Style>
+    <Style>Reggae</Style>
+    <Style>Retro</Style>
+    <Style>Revival</Style>
+    <Style>Rhytmic Soul</Style>
+    <Style>Rock</Style>
+    <Style>Rock n Roll</Style>
+    <Style>Salsa</Style>
+    <Style>Samba</Style>
+    <Style>Satire</Style>
+    <Style>Showtunes</Style>
+    <Style>Ska</Style>
+    <Style>Slow Jam</Style>
+    <Style>Slow Rock</Style>
+    <Style>Sonata</Style>
+    <Style>Sound Clip</Style>
+    <Style>Soundtrack</Style>
+    <Style>Southern Rock</Style>
+    <Style>Space</Style>
+    <Style>Speech</Style>
+    <Style>Swing</Style>
+    <Style>Symphonic Rock</Style>
+    <Style>Symphony</Style>
+    <Style>SynthPop</Style>
+    <Style>Tango</Style>
+    <Style>Techno</Style>
+    <Style>Techno-Industrial</Style>
+    <Style>Terror</Style>
+    <Style>Thrash Metal</Style>
+    <Style>Top 40</Style>
+    <Style>Trailer</Style>
+    <Style>Trance</Style>
+    <Style>Tribal</Style>
+    <Style>Trip-Hop</Style>
+    <Style>Vocal</Style>
+  </LISTESTYLES>
+  <LISTECONDITIONS>
+    <condition>Mint (M)</condition>
+    <condition>Near Mint (NM or M-)</condition>
+    <condition>Very Good Plus (VG+)</condition>
+    <condition>Very Good (VG)</condition>
+    <condition>Good Plus (G+)</condition>
+    <condition>Good (G)</condition>
+    <condition>Fair (F)</condition>
+    <condition>Poor (P)</condition>
+  </LISTECONDITIONS>
+  <LISTESLEEVECONDITIONS>
+    <condition>Mint (M)</condition>
+    <condition>Near Mint (NM or M-)</condition>
+    <condition>Very Good Plus (VG+)</condition>
+    <condition>Very Good (VG)</condition>
+    <condition>Good Plus (G+)</condition>
+    <condition>Good (G)</condition>
+    <condition>Fair (F)</condition>
+    <condition>Poor (P)</condition>
+    <condition>Generic</condition>
+    <condition>Not Graded</condition>
+    <condition>No Cover</condition>
+  </LISTESLEEVECONDITIONS>
+</LISTESPERSO>

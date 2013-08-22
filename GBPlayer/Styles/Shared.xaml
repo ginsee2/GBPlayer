@@ -1,0 +1,129 @@
+﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+<!--<SnippetVerticalHIC>-->
+  <Style x:Uid="Style_1" x:Key="VerticalHIC"
+         TargetType="{x:Type HeaderedItemsControl}">
+    <Setter x:Uid="Setter_1" Property="Template">
+      <Setter.Value>
+        <ControlTemplate x:Uid="ControlTemplate_1" TargetType="{x:Type HeaderedItemsControl}">
+          <StackPanel x:Uid="StackPanel_1" Margin="20">
+            <ContentPresenter x:Uid="ContentPresenter_1" Grid.Row="0"
+                              Margin="8,20,0,0"
+                              TextBlock.Foreground="#65A"
+                              TextBlock.FontFamily="Trebuchet MS"
+                              TextBlock.FontSize="14px"
+                              TextBlock.FontWeight="Bold"
+                              ContentSource="Header" />
+            <StackPanel x:Uid="StackPanel_2" IsItemsHost="True"
+                        Orientation="Vertical"
+                        Grid.Row="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+<!--</SnippetVerticalHIC>-->
+<!--<SnippetHorizontalHIC>-->
+  <Style x:Uid="Style_2" x:Key="HorizontalHIC"
+         TargetType="{x:Type HeaderedItemsControl}">
+    <Setter x:Uid="Setter_2" Property="Template">
+      <Setter.Value>
+        <ControlTemplate x:Uid="ControlTemplate_2" TargetType="{x:Type HeaderedItemsControl}">
+          <StackPanel x:Uid="StackPanel_3" Margin="20">
+            <ContentPresenter x:Uid="ContentPresenter_2" Grid.Row="0"
+                              Margin="8,20,0,0"
+                              TextBlock.Foreground="#65A"
+                              TextBlock.FontFamily="Trebuchet MS"
+                              TextBlock.FontSize="14px"
+                              TextBlock.FontWeight="Bold"
+                              ContentSource="Header" />
+            <StackPanel x:Uid="StackPanel_4" IsItemsHost="True"
+                        Orientation="Horizontal"
+                        Grid.Row="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+<!--</SnippetHorizontalHIC>-->
+
+<!--<SnippetResources>-->
+  <!--Control colors.-->
+  <Color x:Uid="Color_1" x:Key="WindowColor">#FFE8EDF9</Color>
+  <Color x:Uid="Color_2" x:Key="ContentAreaColorLight">#FFC5CBF9</Color>
+  <Color x:Uid="Color_3" x:Key="ContentAreaColorDark">#FF7381F9</Color>
+
+  <Color x:Uid="Color_4" x:Key="DisabledControlLightColor">#FFE8EDF9</Color>
+  <Color x:Uid="Color_5" x:Key="DisabledControlDarkColor">#FFC5CBF9</Color>
+  <Color x:Uid="Color_6" x:Key="DisabledForegroundColor">#FF888888</Color>
+
+  <Color x:Uid="Color_7" x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
+  <Color x:Uid="Color_8" x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
+
+  <Color x:Uid="Color_9" x:Key="ControlLightColor">White</Color>
+  <Color x:Uid="Color_10" x:Key="ControlMediumColor">#FF7381F9</Color>
+  <Color x:Uid="Color_11" x:Key="ControlDarkColor">#FF211AA9</Color>
+
+  <Color x:Uid="Color_12" x:Key="ControlMouseOverColor">#FF3843C4</Color>
+  <Color x:Uid="Color_13" x:Key="ControlPressedColor">#FF211AA9</Color>
+
+
+  <Color x:Uid="Color_14" x:Key="GlyphColor">#FF444444</Color>
+  <Color x:Uid="Color_15" x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color>
+
+  <!--Border colors-->
+  <Color x:Uid="Color_16" x:Key="BorderLightColor">#FFCCCCCC</Color>
+  <Color x:Uid="Color_17" x:Key="BorderMediumColor">#FF888888</Color>
+  <Color x:Uid="Color_18" x:Key="BorderDarkColor">#FF444444</Color>
+
+  <Color x:Uid="Color_19" x:Key="PressedBorderLightColor">#FF888888</Color>
+  <Color x:Uid="Color_20" x:Key="PressedBorderDarkColor">#FF444444</Color>
+
+  <Color x:Uid="Color_21" x:Key="DisabledBorderLightColor">#FFAAAAAA</Color>
+  <Color x:Uid="Color_22" x:Key="DisabledBorderDarkColor">#FF888888</Color>
+
+  <Color x:Uid="Color_23" x:Key="DefaultBorderBrushDarkColor">Black</Color>
+
+  <!--Control-specific resources.-->
+  <Color x:Uid="Color_24" x:Key="HeaderTopColor">#FFC5CBF9</Color>
+  <Color x:Uid="Color_25" x:Key="DatagridCurrentCellBorderColor">Black</Color>
+  <Color x:Uid="Color_26" x:Key="SliderTrackDarkColor">#FFC5CBF9</Color>
+
+  <Color x:Uid="Color_27" x:Key="NavButtonFrameColor">#FF3843C4</Color>
+
+  <LinearGradientBrush x:Uid="LinearGradientBrush_1" x:Key="MenuPopupBrush"
+                       EndPoint="0.5,1"
+                       StartPoint="0.5,0">
+    <GradientStop x:Uid="GradientStop_1" Color="{DynamicResource ControlLightColor}"
+                  Offset="0" />
+    <GradientStop x:Uid="GradientStop_2" Color="{DynamicResource ControlMediumColor}"
+                  Offset="0.5" />
+    <GradientStop x:Uid="GradientStop_3" Color="{DynamicResource ControlLightColor}"
+                  Offset="1" />
+  </LinearGradientBrush>
+
+  <LinearGradientBrush x:Uid="LinearGradientBrush_2" x:Key="ProgressBarIndicatorAnimatedFill"
+                       StartPoint="0,0"
+                       EndPoint="1,0">
+    <LinearGradientBrush.GradientStops>
+      <GradientStopCollection x:Uid="GradientStopCollection_1">
+        <GradientStop x:Uid="GradientStop_4" Color="#000000FF"
+                      Offset="0" />
+        <GradientStop x:Uid="GradientStop_5" Color="#600000FF"
+                      Offset="0.4" />
+        <GradientStop x:Uid="GradientStop_6" Color="#600000FF"
+                      Offset="0.6" />
+        <GradientStop x:Uid="GradientStop_7" Color="#000000FF"
+                      Offset="1" />
+      </GradientStopCollection>
+    </LinearGradientBrush.GradientStops>
+  </LinearGradientBrush>
+<!--</SnippetResources>-->
+
+
+</ResourceDictionary>

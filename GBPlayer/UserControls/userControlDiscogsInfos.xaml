@@ -1,0 +1,666 @@
+﻿<UserControl x:Uid="UserControl_1" x:Class="userControlDiscogsInfos"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+            d:DesignHeight="300" d:DesignWidth="832"
+            xmlns:gbDev="clr-namespace:gbDev">
+    <UserControl.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="../Styles/GBStyleListView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <gbDev:ConverterStringToFlagPath x:Uid="gbDev:ConverterStringToFlagPath_1" x:Key="ConverterStringToFlagPath"/>
+            <gbDev:ConverterBoolToImageSource x:Uid="gbDev:ConverterBoolToImageSource_1" x:Key="ConverterBoolToImage"/>
+            <gbDev:ConverterBoolToOpacity x:Uid="gbDev:ConverterBoolToOpacity_1" x:Key="ConverterBoolToOpacity"/>
+            <gbDev:ConverterDiscogsListExtraTracksCollection x:Uid="gbDev:ConverterDiscogsListExtraTracksCollection_1" x:Key="ConverterDiscogsListExtraTracksCollection"/>
+            <gbDev:ConverterDiscogsConcatArtistsCollection x:Uid="gbDev:ConverterDiscogsConcatArtistsCollection_1" x:Key="ConverterDiscogsConcatArtistsCollection"/>
+            <gbDev:ConverterDiscogsConcatLabelsCollection x:Uid="gbDev:ConverterDiscogsConcatLabelsCollection_1" x:Key="ConverterDiscogsConcatLabelsCollection"/>
+            <gbDev:ConverterDiscogsConcatImagesCollection x:Uid="gbDev:ConverterDiscogsConcatImagesCollection_1" x:Key="ConverterDiscogsConcatImagesCollection"/>
+            <gbDev:ConverterStringToVisibility x:Uid="gbDev:ConverterStringToVisibility_1" x:Key="ConverterStringToVisibility"/>
+            <gbDev:ConverterBoolToHeight x:Uid="gbDev:ConverterBoolToHeight_1" x:Key="ConverterBoolToHeight"/>
+            <gbDev:ConverterBoolToVisibility x:Uid="gbDev:ConverterBoolToVisibility_1" x:Key="ConverterBoolToVisibility"/>
+            <gbDev:ConverterDiscogsReleasedToYear x:Uid="gbDev:ConverterDiscogsReleasedToYear_1" x:Key="ConverterDiscogsReleasedToYear"/>
+            <gbDev:ConverterDiscogsConcatStringCollection x:Uid="gbDev:ConverterDiscogsConcatStringCollection_1" x:Key="ConverterDiscogsConcatStringCollection"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid x:Uid="Grid_1">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.DataContext>
+            <XmlDataProvider x:Uid="DataProvider" x:Name="DataProvider" XPath="resp/discogs"  />
+        </Grid.DataContext>
+        <!--*********************************** PANNEAU AFFICHAGE ERREUR*****************************************-->
+        <StackPanel x:Uid="PageErreur" Name="PageErreur" Grid.Row="1" Visibility="Hidden">
+            <TextBlock  x:Uid="tagAlerte" Text="{Binding XPath=alerte}" FontFamily="Calibri" FontSize="15" Name="tagAlerte" Margin="2"
+                                                           MinWidth="50" TextWrapping="WrapWithOverflow" FontWeight="Bold" />
+            <ListBox  x:Uid="tagListeErreurs" Name="tagListeErreurs"  Margin="2"
+                                              BorderThickness="0"
+                                              Background="Transparent"
+                                              FontFamily="Calibri" FontSize="12"
+                                              ItemsSource="{Binding XPath=messages}"
+                                              Width="Auto" MinWidth="80" Height="Auto"  >
+            </ListBox>
+            <TextBlock x:Uid="tagLibelleErreur" Name="tagLibelleErreur" Text="{Binding XPath=erreur,StringFormat={}({0})}" FontFamily="Calibri" FontSize="12" Margin="2"
+                             Foreground="red" MinWidth="50" TextWrapping="WrapWithOverflow" FontStyle="Italic">
+                <TextBlock.DataContext>
+                    <XmlDataProvider x:Uid="ErreurDataProvider" x:Name="ErreurDataProvider"  XPath="DISCOGS"  />
+                 </TextBlock.DataContext>
+            </TextBlock>
+        </StackPanel> <!--Panneau affichage erreur-->
+        <!--*********************************** PANNEAU AFFICHAGE RELEASE*****************************************-->
+        <Grid x:Uid="PageRelease" Name="PageRelease" Grid.Row="1" Visibility="Hidden"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition x:Uid="RowDefinition_3" Height="Auto" MinHeight="40"/>
+                <RowDefinition x:Uid="RowDefinition_4" Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- .............................AFFICHAGE ENTETE ARTISTE ET TITRE................................-->
+            <Grid x:Uid="ReleaseEntete" Name="ReleaseEntete" Grid.Row="0" Grid.ColumnSpan="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Uid="ColumnDefinition_3" Width="*"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_4" Width="35"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Uid="Border_1" Margin="4,0,4,0"  BorderBrush="Black" BorderThickness="0,0,0,2"/>
+                <DockPanel x:Uid="DockPanel_1" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ListBox  x:Uid="tagNomArtiste" Name="tagNomArtiste" Grid.Row="1" Style="{StaticResource GBListBoxStatic}" Margin="0"
+                                                      BorderThickness="0" Background="Transparent"
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="18" Width="Auto" MinWidth="20" Height="Auto"
+                                                      ItemsSource="{Binding XPath=artists,
+                                                            Converter={StaticResource ConverterDiscogsConcatArtistsCollection}}"
+                                                        >
+                    </ListBox>
+                    <TextBlock x:Uid="TextBlock_1" Text=" - " FontFamily="Calibri" FontSize="18" Margin="2"
+                                                           MinWidth="0" TextWrapping="WrapWithOverflow"  />
+                    <TextBlock x:Uid="tagTitre" Text="{Binding XPath=title}" FontFamily="Calibri" FontSize="18" Name="tagTitre" Margin="2,2,10,2"
+                                                           MinWidth="50" TextWrapping="WrapWithOverflow"  />
+                </DockPanel>
+                <Grid x:Uid="Grid_2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Image x:Uid="Drapeau" Name="Drapeau" Height="20" Style="{StaticResource GBImage}"
+                                                       Stretch="Fill"
+                                                        
+                                                       Width="24" 
+                                                       Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       Source="{Binding XPath=country,
+                                                                Converter={StaticResource ConverterStringToFlagPath},
+                                                                ConverterParameter=/GBPlayer;component/Images/Pays/}">
+                    </Image>
+                </Grid>
+            </Grid> <!--Grille Artiste - Titre-->
+            <!-- .............................AFFICHAGE INFORMATIONS COMPLEMENTAIRES...........................-->
+            <gbDev:ScrollViewerAlwaysScroll x:Uid="ReleaseInfoScrollable" x:Name="ReleaseInfoScrollable" Grid.Column="1" Grid.Row="1" Margin="5,10,0,0"
+                            Style="{StaticResource GBStyleScrollViewer}"
+                            Foreground="Black"
+                            Background="White" HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto">
+                <Grid x:Uid="Grid_3" Margin="5,0,0,0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto" MinWidth="70"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_6" Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Uid="RowDefinition_5" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_6" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_7" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_8" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_9" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_10" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_11" Height="Auto"/>
+                        <RowDefinition x:Uid="RowDefinition_12" Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Uid="TextBlock_2" Text="Label :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,3" />
+                    <ListBox x:Uid="tagLabel" Grid.Row="0" Grid.Column="1" Name="tagLabel" Style="{StaticResource GBListBoxStatic}" Margin="0"
+                                                      BorderThickness="0" Background="Transparent" VerticalAlignment="Center"
+                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"             
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="12" Width="Auto" MinWidth="80" Height="Auto"
+                                                      ItemsSource="{Binding XPath=labels,
+                                                                Converter={StaticResource ConverterDiscogsConcatLabelsCollection}}"
+                                                        />
+                   <TextBlock x:Uid="TextBlock_3" Grid.Row="1" Text="Format :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,3" />
+                    <DockPanel x:Uid="DockPanel_2" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Uid="tagDescriptionName" Text="{Binding XPath=formats/name,StringFormat={}{0}: }" FontFamily="Calibri" Name="tagDescriptionName" 
+                               VerticalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+                        <ListBox  x:Uid="tagDescription" Name="tagDescription" Style="{StaticResource GBListBoxStatic}" Margin="0"
+                                                      BorderThickness="0" Background="Transparent" VerticalAlignment="Center"
+                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"             
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="12" Width="Auto" MinWidth="80" Height="Auto"
+                                                      ItemsSource="{Binding XPath=formats/descriptions,
+                                                                Converter={StaticResource ConverterDiscogsConcatStringCollection}}"
+                                                        />
+                    </DockPanel>
+                    <TextBlock x:Uid="TextBlock_4" Grid.Row="2" Text="Année :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,3" />
+                    <TextBlock x:Uid="tagAnnee" Grid.Row="2" Grid.Column="1" Text="{Binding XPath=released,Converter={StaticResource ConverterDiscogsReleasedToYear}}" FontFamily="Calibri" Name="tagAnnee" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+
+                    <TextBlock x:Uid="TextBlock_5" Grid.Row="3" Text="Genre :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Bottom" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,0,0,3" />
+                    <ListBox  x:Uid="tagGenreRelease" Grid.Row="3" Grid.Column="1" Name="tagGenreRelease" Style="{StaticResource GBListBoxStatic}"
+                                                      BorderThickness="0" Background="Transparent" VerticalAlignment="Center"
+                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"             
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="12" Width="Auto" MinWidth="80" Height="Auto"
+                                                      ItemsSource="{Binding XPath=genres,
+                                                                Converter={StaticResource ConverterDiscogsConcatStringCollection}}"
+                                                        />
+                    <TextBlock x:Uid="TextBlock_6" Grid.Row="4" Text="Style :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,3" />
+                    <ListBox  x:Uid="tagStyleRelease" Grid.Row="4" Grid.Column="1" Name="tagStyleRelease" Style="{StaticResource GBListBoxStatic}"
+                                                      BorderThickness="0" Background="Transparent" VerticalAlignment="Center"
+                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"             
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="12" Width="Auto" MinWidth="80" Height="Auto"
+                                                      ItemsSource="{Binding XPath=styles,
+                                                                Converter={StaticResource ConverterDiscogsConcatStringCollection}}"
+                                                        />
+                    <TextBlock x:Uid="TextBlock_7" Grid.Row="5" Text="Master :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Bottom" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,0,0,3" />
+                    <TextBlock x:Uid="tagLinkMaster" Grid.Row="5" Grid.Column="1" Text="{Binding XPath=master_id}" FontFamily="Calibri" Name="tagLinkMaster" 
+                           VerticalAlignment="Center" MinWidth="0" TextWrapping="WrapWithOverflow" Tag="{Binding XPath=master_id}" />
+                    <!-- .................................AFFICHAGE TRACKS LIST.....................................-->
+                    <Grid x:Uid="ReleaseTracks" Name="ReleaseTracks"  Grid.ColumnSpan="2" Grid.Row="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_13" Height="Auto" MinHeight="30"/>
+                            <RowDefinition x:Uid="RowDefinition_14" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border x:Uid="Border_2" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,1.5,0,0"/>
+                        <Expander x:Uid="TracksExpander" IsExpanded="False" Name="TracksExpander">
+                            <Expander.Header>
+                                <TextBlock x:Uid="TextBlock_8" Text="Tracks :" FontFamily="Calibri" MinWidth="20" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" />
+                            </Expander.Header>
+                        </Expander>
+                        <ListView x:Uid="XMLTracksSimple" Grid.Row="1" x:Name="XMLTracksSimple" Width="Auto" Margin="2"
+                                IsSynchronizedWithCurrentItem="True"
+                                ItemsSource="{Binding XPath=tracklist}"
+                                Style="{StaticResource GBListViewNoHeader}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                ItemContainerStyle="{StaticResource GBListViewItemStyleNoSelect}"
+                                Height="{Binding ElementName=TracksExpander, Path=IsExpanded,
+                                         Converter={StaticResource ConverterBoolToHeight}, ConverterParameter=False}">
+                            <ListView.View>
+                                <GridView x:Uid="GridView_1">
+                                    <GridViewColumn x:Uid="GridViewColumn_1" Width="50">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_1">
+                                                <Grid x:Uid="Grid_4" Margin="0,0,10,0">
+                                                    <TextBlock x:Uid="tagPositionPiste" Text="{Binding XPath=position}" FontFamily="Calibri" Name="tagPositionPiste"
+                                                       VerticalAlignment="Top"   Width="Auto" MinWidth="40" 
+                                                       TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn  x:Uid="GridViewColumn_2" Width="170" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_2">
+                                                <Grid x:Uid="Grid_5">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition x:Uid="ColumnDefinition_7" Width="Auto" />
+                                                        <ColumnDefinition x:Uid="ColumnDefinition_8" Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition x:Uid="RowDefinition_15" Height="Auto"/>
+                                                        <RowDefinition x:Uid="RowDefinition_16" Height="*"/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock x:Uid="tagTitrePiste" Text="{Binding XPath=title}" FontFamily="Calibri" Name="tagTitrePiste"
+                                                       Grid.ColumnSpan="2" 
+                                                       MinWidth="150" TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_3" Width="60" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_3">
+                                                <Grid x:Uid="Grid_6">
+                                                    <TextBlock x:Uid="tagDureePiste" Text="{Binding XPath=duration}" FontFamily="Calibri" Name="tagDureePiste"
+                                                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                                                           MinWidth="50" TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView> <!--Liste des pistes simple-->
+                        <ListView x:Uid="XMLTracksComplete" Grid.Row="1" Name="XMLTracksComplete" Width="Auto" Margin="2"
+                                IsSynchronizedWithCurrentItem="True"
+                                ItemsSource="{Binding XPath=tracklist}"
+                                Style="{StaticResource GBListViewNoHeader}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                ItemContainerStyle="{StaticResource GBListViewItemStyleNoSelect}"
+                                Height="{Binding ElementName=TracksExpander, Path=IsExpanded,
+                                        Converter={StaticResource ConverterBoolToHeight}, ConverterParameter=True}">
+                            <ListView.View>
+                                <GridView x:Uid="GridView_2">
+                                    <GridViewColumn x:Uid="GridViewColumn_4" Width="50">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_4">
+                                               <Grid x:Uid="Grid_7" Margin="0,0,10,0">
+                                                    <TextBlock x:Uid="TextBlock_9" Text="{Binding XPath=position}" FontFamily="Calibri" Name="tagPositionPiste"
+                                                       VerticalAlignment="Top"   Width="Auto" MinWidth="40" 
+                                                       TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_5" Width="Auto" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_5">
+                                                <Grid x:Uid="Grid_8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition x:Uid="ColumnDefinition_9" Width="15" />
+                                                        <ColumnDefinition x:Uid="ColumnDefinition_10" Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition x:Uid="RowDefinition_17" Height="Auto"/>
+                                                        <RowDefinition x:Uid="RowDefinition_18" Height="*"/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock x:Uid="TextBlock_10" Text="{Binding XPath=title}" FontFamily="Calibri" Name="tagTitrePiste"
+                                                       Grid.ColumnSpan="2" 
+                                                       MinWidth="150" TextWrapping="WrapWithOverflow"/>
+                                                   <ListBox  x:Uid="tagExtraArtists" Name="tagExtraArtists"
+                                                      Style="{StaticResource GBListBoxStatic}"
+                                                      Margin="0"
+                                                      BorderThickness="0"
+                                                      Background="Transparent"
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      Grid.Column="1" Grid.Row="1"
+                                                      FontFamily="Calibri" FontSize="11"
+                                                      ItemsSource="{Binding XPath=extraartists,
+                                                            Converter={StaticResource ConverterDiscogsListExtraTracksCollection}}"
+                                                    Width="Auto" MinWidth="150" Height="Auto" >
+                                                    </ListBox>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_6" Width="60" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_6">
+                                                <Grid x:Uid="Grid_9">
+                                                    <TextBlock x:Uid="TextBlock_11" Text="{Binding XPath=duration}" FontFamily="Calibri" Name="tagDureePiste"
+                                                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                                                           MinWidth="50" TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>  <!--Liste des pistes complete-->
+                    </Grid>
+                    <!-- .................................AFFICHAGE CREDITS ET VERSIONS.............................-->
+                    <Grid x:Uid="ReleaseVersions" Name="ReleaseVersions" Grid.ColumnSpan="2" Grid.Row="7">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_19" Height="Auto" MinHeight="30"/>
+                            <RowDefinition x:Uid="RowDefinition_20" Height="Auto" MinHeight="30"/>
+                            <RowDefinition x:Uid="RowDefinition_21" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Uid="ColumnDefinition_11" Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Uid="BordureReferenceLargeur" Name="BordureReferenceLargeur"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,1.5,0,0"/>
+                        <Expander x:Uid="Expander_1" IsExpanded="False" Width="Auto">
+                            <Expander.Header>
+                                <TextBlock x:Uid="TextBlock_12" Text="Crédits :" FontFamily="Calibri" MinWidth="20" 
+                                    VerticalAlignment="Center" 
+                                    HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" />
+                            </Expander.Header>
+                            <Expander.Content>
+                                    <ListView x:Uid="ListView_1" Height="Auto" Margin="2" HorizontalAlignment="Left" 
+                                        ItemsSource="{Binding XPath=extraartists, Converter={StaticResource ConverterDiscogsListExtraTracksCollection}}"
+                                        Style="{StaticResource GBListViewNoHeader}"
+                                        ScrollViewer.CanContentScroll="False"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ItemContainerStyle="{StaticResource GBListViewItemStyleNoSelectNoGrid}">
+                                     </ListView>
+                            </Expander.Content>
+                        </Expander>
+                        <Border x:Uid="Border_3" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,1.5,0,0"/>
+                        <Expander x:Uid="ExpanderMasterReleases" Grid.Row="1" Name="ExpanderMasterReleases" IsExpanded="False">
+                            <Expander.Header>
+                              <TextBlock x:Uid="TextBlock_13" Text="Versions :" FontFamily="Calibri" MinWidth="20" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" />
+                            </Expander.Header>
+                            <Expander.DataContext>
+                                    <XmlDataProvider x:Uid="DataProviderMasterVersions" x:Name="DataProviderMasterVersions" XPath="resp/discogs"  />
+                            </Expander.DataContext>
+                            <Expander.Content>
+                                <ListView x:Uid="ListView_2" Grid.Row="0" Height="Auto" Width="Auto" Margin="2"
+                                    ItemsSource="{Binding XPath=versions}"
+                                    Style="{StaticResource GBListViewNoHeader}"
+                                    ScrollViewer.CanContentScroll="False"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ItemContainerStyle="{StaticResource GBListViewItemStyleNoSelect}">
+                                    <ListView.View>
+                                        <GridView x:Uid="GridView_3">
+                                            <GridViewColumn x:Uid="GridViewColumn_7" Width="Auto" >
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate x:Uid="DataTemplate_7">
+                                                        <TextBlock x:Uid="TextBlock_14" Text="{Binding XPath=released,Converter={StaticResource ConverterDiscogsReleasedToYear}}" FontFamily="Calibri"
+                                                           Width="Auto" TextWrapping="WrapWithOverflow" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_8" Width="40" >
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate x:Uid="DataTemplate_8">
+                                                        <Grid x:Uid="Grid_10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                            <Image x:Uid="Image_1" Name="Drapeau" Height="20" Style="{StaticResource GBImage}"
+                                                                Stretch="Fill"
+                                                                Width="24" 
+                                                                Grid.Row="0"
+                                                                Grid.Column="0"
+                                                                Source="{Binding XPath=country,
+                                                                    Converter={StaticResource ConverterStringToFlagPath},
+                                                                    ConverterParameter=/GBPlayer;component/Images/Pays/}">
+                                                            </Image>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Uid="GridViewColumn_9" Width="Auto" >
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate x:Uid="DataTemplate_9">
+                                                        <StackPanel x:Uid="StackPanel_1">
+                                                            <WrapPanel x:Uid="WrapPanel_1">
+                                                                <TextBlock x:Uid="tagLinkRelease" Text="{Binding XPath=title}" FontFamily="Calibri" FontSize="14" Name="tagLinkRelease"
+                                                           Width="Auto" TextWrapping="WrapWithOverflow" Tag="{Binding XPath=id}" HorizontalAlignment="Left"/>
+                                                                <TextBlock x:Uid="TextBlock_15" Text="{Binding XPath=format,StringFormat={} [ {0} ]}" FontFamily="Calibri" HorizontalAlignment="Right"
+                                                          Width="Auto"  TextWrapping="WrapWithOverflow" Foreground="BurlyWood" VerticalAlignment="Center"/>
+                                                            </WrapPanel>
+                                                            <WrapPanel x:Uid="WrapPanel_2">
+                                                                <TextBlock x:Uid="TextBlock_16" Text="{Binding XPath=label}" FontFamily="Calibri" Foreground="Brown" 
+                                                          Width="Auto"  TextWrapping="WrapWithOverflow" HorizontalAlignment="Left" />
+                                                                <TextBlock x:Uid="TextBlock_17" Text="{Binding XPath=catno,StringFormat={}  [ {0} ]}" FontFamily="Calibri" Foreground="Brown"
+                                                          Width="Auto"  TextWrapping="WrapWithOverflow"  />
+                                                            </WrapPanel>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                         </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Expander.Content>
+                         </Expander>
+                        
+                    </Grid>
+                </Grid>
+            </gbDev:ScrollViewerAlwaysScroll> <!--Grille infos label, format, annee...-->
+            <!-- .............................AFFICHAGE IMAGES.................................................-->
+            <gbDev:ScrollViewerAlwaysScroll x:Uid="ReleaseImagesScrollable" x:Name="ReleaseImagesScrollable" Grid.Row="1" Grid.Column="0" Margin="2,10,0,0"
+                            Style="{StaticResource GBStyleScrollViewer}"
+                            Foreground="Black"
+                            Background="White" HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto">
+                <ListBox  x:Uid="tagImages" Name="tagImages" 
+                          HorizontalAlignment="Center"
+                          Style="{StaticResource GBListBoxStatic}"                    
+                          ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                          BorderThickness="0"                 
+                          Background="Transparent"                                
+                          FontFamily="Calibri" FontSize="12"                     
+                                        
+                          Width="Auto" MinWidth="80"
+                          Height="Auto">
+                    <!--ItemsSource="{Binding XPath=images,Converter={StaticResource ConverterDiscogsConcatImagesCollection}}"-->
+                </ListBox>
+            </gbDev:ScrollViewerAlwaysScroll> <!--Grille images...-->
+        </Grid> <!--Page release-->
+        <!--*********************************** PANNEAU AFFICHAGE MASTER*****************************************-->
+        <Grid x:Uid="PageMaster" Name="PageMaster" Grid.Row="1" Visibility="{Binding XPath=status ,
+                                            Converter={StaticResource ConverterStringToVisibility},ConverterParameter=not_Erreur}"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Uid="ColumnDefinition_12" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_13" Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition x:Uid="RowDefinition_22" Height="Auto" MinHeight="40"/>
+                <RowDefinition x:Uid="RowDefinition_23" Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- .............................AFFICHAGE ENTETE ARTISTE ET TITRE................................-->
+            <Grid x:Uid="MasterEntete" Name="MasterEntete" Grid.Row="0" Grid.ColumnSpan="3" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Uid="ColumnDefinition_14" Width="*"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_15" Width="35"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Uid="Border_4" Margin="4,0,4,0"  BorderBrush="Black" BorderThickness="0,0,0,2"/>
+                <DockPanel x:Uid="DockPanel_3" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ListBox  x:Uid="tagNomArtisteMaster" Name="tagNomArtisteMaster" Grid.Row="1" Style="{StaticResource GBListBoxStatic}" Margin="0"
+                                                      BorderThickness="0" Background="Transparent"
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="18" Width="Auto" MinWidth="20" Height="Auto"
+                                                      ItemsSource="{Binding XPath=artists,
+                                                      Converter={StaticResource ConverterDiscogsConcatArtistsCollection}}"
+                                                        >
+                    </ListBox>
+                    <TextBlock x:Uid="TextBlock_18" Text=" - " FontFamily="Calibri" FontSize="18" Margin="2"
+                                                           MinWidth="0" TextWrapping="WrapWithOverflow"  />
+                    <TextBlock x:Uid="tagTitreMaster" Text="{Binding XPath=title}" FontFamily="Calibri" FontSize="18" Name="tagTitreMaster" Margin="2,2,10,2"
+                                                           MinWidth="50" TextWrapping="WrapWithOverflow"  />
+                </DockPanel>
+            </Grid>
+            <!--Grille Artiste - Titre-->
+            <!-- .............................AFFICHAGE INFORMATIONS COMPLEMENTAIRES...........................-->
+            <gbDev:ScrollViewerAlwaysScroll x:Uid="MasterInfoScrollable" x:Name="MasterInfoScrollable" Grid.Column="1" Grid.Row="1" Margin="5,10,0,0"
+                            Style="{StaticResource GBStyleScrollViewer}"
+                            Foreground="Black"
+                            Background="White" HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto">
+                <Grid x:Uid="Grid_11" Margin="5,0,0,0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Uid="ColumnDefinition_16" Width="Auto" MinWidth="70"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_17" Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Uid="RowDefinition_24" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_25" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_26" Height="Auto" MinHeight="20"/>
+                        <RowDefinition x:Uid="RowDefinition_27" Height="Auto"/>
+                        <RowDefinition x:Uid="RowDefinition_28" Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Uid="TextBlock_19" Grid.Row="0" Text="Genre :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Bottom" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,0,0,3" />
+                    <ListBox  x:Uid="tagGenreMaster" Grid.Row="0" Grid.Column="1" Name="tagGenreMaster" Style="{StaticResource GBListBoxStatic}"
+                                                      BorderThickness="0" Background="Transparent" VerticalAlignment="Center"
+                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"             
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="12" Width="Auto" MinWidth="80" Height="Auto"
+                                                      ItemsSource="{Binding XPath=genres,
+                                                                Converter={StaticResource ConverterDiscogsConcatStringCollection}}"
+                                                        />
+                    <TextBlock x:Uid="TextBlock_20" Grid.Row="1" Text="Style :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,3" />
+                    <ListBox  x:Uid="tagStyleMaster" Grid.Row="1" Grid.Column="1" Name="tagStyleMaster" Style="{StaticResource GBListBoxStatic}"
+                                                      BorderThickness="0" Background="Transparent" VerticalAlignment="Center"
+                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"             
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="12" Width="Auto" MinWidth="80" Height="Auto"
+                                                      ItemsSource="{Binding XPath=styles,
+                                                                Converter={StaticResource ConverterDiscogsConcatStringCollection}}"
+                                                        />
+                    <TextBlock x:Uid="TextBlock_21" Grid.Row="2" Text="Année :" FontFamily="Calibri" MinWidth="40" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Margin="0,3" />
+                    <TextBlock x:Uid="tagAnneeMaster" Grid.Row="2" Grid.Column="1" Text="{Binding XPath=year,Converter={StaticResource ConverterDiscogsReleasedToYear}}" FontFamily="Calibri" Name="tagAnneeMaster" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+                    <TextBlock x:Uid="TextBlock_22" Grid.Row="0" Grid.Column="1" Text="Sortie originale" FontFamily="Calibri" FontSize="13" MinWidth="40" 
+                               VerticalAlignment="Bottom"  Name="tagLinkRelease" Tag="{Binding XPath=main_release}"
+                               HorizontalAlignment="Right" TextWrapping="WrapWithOverflow" Margin="0,0,10,0" FontStretch="ExtraCondensed" >
+                    </TextBlock>
+                    <Grid x:Uid="MasterTracks" Name="MasterTracks" Grid.ColumnSpan="2" Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_29" Height="Auto" MinHeight="30"/>
+                            <RowDefinition x:Uid="RowDefinition_30" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border x:Uid="Border_5" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,1.5,0,0"/>
+                        <TextBlock x:Uid="TextBlock_23" Text="Tracks :" FontFamily="Calibri" MinWidth="20" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" />
+                        <ListView x:Uid="XMLTracksMaster" Grid.Row="1" Height="Auto" Name="XMLTracksMaster" Width="Auto" Margin="2"
+                                IsSynchronizedWithCurrentItem="True"
+                               ItemsSource="{Binding XPath=tracklist}"
+                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                               ScrollViewer.CanContentScroll="False"
+                               Style="{StaticResource GBListViewNoHeader}"
+                               ItemContainerStyle="{StaticResource GBListViewItemStyleNoSelect}">
+                            <ListView.View>
+                                <GridView x:Uid="GridView_4">
+                                    <GridViewColumn x:Uid="GridViewColumn_10" Width="50">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_10">
+                                                <Grid x:Uid="Grid_12" Margin="0,0,10,0">
+                                                    <TextBlock x:Uid="TextBlock_24" Text="{Binding XPath=position}" FontFamily="Calibri" Name="tagPositionPiste"
+                                                       VerticalAlignment="Top"   Width="Auto" MinWidth="40" 
+                                                       TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_11" Width="170" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_11">
+                                                <Grid x:Uid="Grid_13">
+                                                   <TextBlock x:Uid="TextBlock_25" Text="{Binding XPath=title}" FontFamily="Calibri" Name="tagTitrePiste"
+                                                       Grid.ColumnSpan="2" 
+                                                       MinWidth="50" TextWrapping="WrapWithOverflow"/>
+                                               </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_12" Width="60" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_12">
+                                                <Grid x:Uid="Grid_14">
+                                                    <TextBlock x:Uid="TextBlock_26" Text="{Binding XPath=duration}" FontFamily="Calibri" Name="tagDureePiste"
+                                                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                                                           MinWidth="50" TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <!--Liste des pistes-->
+                    </Grid>
+                   <Grid x:Uid="MasterVersions" Name="MasterVersions" Grid.ColumnSpan="2" Grid.Row="4">
+                        <Grid.DataContext>
+                            <XmlDataProvider x:Uid="DataProviderMasterReleases" x:Name="DataProviderMasterReleases" XPath="resp/discogs"  />
+                        </Grid.DataContext>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_31" Height="Auto" MinHeight="30"/>
+                            <RowDefinition x:Uid="RowDefinition_32" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border x:Uid="Border_6" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,1.5,0,0"/>
+                        <TextBlock x:Uid="TextBlock_27" Text="Releases :" FontFamily="Calibri" MinWidth="20" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" />
+                        <ListView x:Uid="ListesReleasesMaster" Grid.Row="1" Height="Auto" Name="ListesReleasesMaster" Width="Auto" Margin="2"
+                               ItemsSource="{Binding XPath=versions}"
+                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                               ScrollViewer.CanContentScroll="False"
+                                Style="{StaticResource GBListViewNoHeader}"
+                               ItemContainerStyle="{StaticResource GBListViewItemStyleNoSelect}">
+                            <ListView.View>
+                                <GridView x:Uid="GridView_5">
+                                    <GridViewColumn x:Uid="GridViewColumn_13" Width="Auto" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_13">
+                                                <TextBlock x:Uid="TextBlock_28" Text="{Binding XPath=released}" FontFamily="Calibri"
+                                                           Width="Auto" TextWrapping="WrapWithOverflow" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Uid="GridViewColumn_14" Width="40" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_14">
+                                                <Grid x:Uid="Grid_15" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <Image x:Uid="Image_2" Name="Drapeau" Height="20" Style="{StaticResource GBImage}"
+                                                       Stretch="Fill"
+                                                       Width="24" 
+                                                       Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       Source="{Binding XPath=country,
+                                                                Converter={StaticResource ConverterStringToFlagPath},
+                                                                ConverterParameter=/GBPlayer;component/Images/Pays/}">
+                                                    </Image>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>                                   
+                                    <GridViewColumn x:Uid="GridViewColumn_15" Width="Auto" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_15">
+                                                <StackPanel x:Uid="StackPanel_2">
+                                                    <WrapPanel x:Uid="WrapPanel_3">
+                                                        <TextBlock x:Uid="TextBlock_29" Text="{Binding XPath=title}" FontFamily="Calibri" FontSize="14" Name="tagLinkRelease"
+                                                           Width="Auto" TextWrapping="WrapWithOverflow" Tag="{Binding XPath=id}" HorizontalAlignment="Left"/>
+                                                        <TextBlock x:Uid="TextBlock_30" Text="{Binding XPath=format,StringFormat={} [ {0} ]}" FontFamily="Calibri" HorizontalAlignment="Right"
+                                                          Width="Auto"  TextWrapping="WrapWithOverflow" Foreground="BurlyWood" VerticalAlignment="Center"/>
+                                                    </WrapPanel>
+                                                    <WrapPanel x:Uid="WrapPanel_4">
+                                                        <TextBlock x:Uid="TextBlock_31" Text="{Binding XPath=label}" FontFamily="Calibri" Foreground="Brown" 
+                                                          Width="Auto"  TextWrapping="WrapWithOverflow" HorizontalAlignment="Left" />
+                                                        <TextBlock x:Uid="TextBlock_32" Text="{Binding XPath=catno,StringFormat={}  [ {0} ]}" FontFamily="Calibri" Foreground="Brown"
+                                                          Width="Auto"  TextWrapping="WrapWithOverflow"  />
+                                                    </WrapPanel>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </Grid>
+            </gbDev:ScrollViewerAlwaysScroll>
+            <!--Grille infos label, format, annee...-->
+            <!-- .............................AFFICHAGE IMAGES.................................................-->
+            <gbDev:ScrollViewerAlwaysScroll x:Uid="MasterImagesScrollable" x:Name="MasterImagesScrollable" Grid.Row="1" Grid.Column="0" Margin="2,10,0,0"
+                            Style="{StaticResource GBStyleScrollViewer}"
+                            Foreground="Black"
+                            Background="White" HorizontalScrollBarVisibility="Disabled"
+                             Width="Auto"               
+                            VerticalScrollBarVisibility="Auto">
+                <ListBox  x:Uid="tagImagesMaster" Name="tagImagesMaster" 
+                          HorizontalAlignment="Center"
+                          Style="{StaticResource GBListBoxStatic}"                    
+                          ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                          BorderThickness="0"                 
+                          Background="Transparent"                                
+                          FontFamily="Calibri" FontSize="12"                     
+                          ItemsSource="{Binding XPath=images,Converter={StaticResource ConverterDiscogsConcatImagesCollection}}"              
+                          Width="Auto" MinWidth="80"
+                          Height="Auto">
+                </ListBox> 
+            </gbDev:ScrollViewerAlwaysScroll>
+            <!--Grille images...-->
+        </Grid> <!--Page Master-->
+    </Grid>
+</UserControl>

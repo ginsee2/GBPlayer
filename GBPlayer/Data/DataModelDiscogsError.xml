@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resp>
+  <discogs>
+    <status>Erreur</status>
+    <alerte>Echec de la requête 'release' sur le site Discogs </alerte>
+    <messages>Vérifier les points suivants pouvant générer cette erreur :</messages>
+    <messages> - Numéro de release inexistant</messages>
+    <messages> - Connexion réseau impossible</messages>
+    <messages> - Autorisation du proxy refusée</messages>
+  </discogs>
+</resp>

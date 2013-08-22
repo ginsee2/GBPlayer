@@ -1,0 +1,771 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <UICulture>fr-FR</UICulture>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{FEBFF3E4-844C-498B-AA74-D218A0682961}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>gbDev</RootNamespace>
+    <AssemblyName>GBPlayer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <MyType>Custom</MyType>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>D:\Data\Visual Studio 2010\Projects\GBPlayer\GBPlayer\publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Background</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://gbdev.free.fr/gbplayer/</InstallUrl>
+    <TargetCulture>fr</TargetCulture>
+    <ProductName>GBPLayer 3</ProductName>
+    <PublisherName>GBDvlp</PublisherName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>gbplayer.html</WebPage>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>21</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <BootstrapperComponentsUrl>D:\Data\Visual Studio 2010\Projects\GBPlayer\GBPlayer\publish</BootstrapperComponentsUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <IncrementalBuild>true</IncrementalBuild>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>GBPlayer.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <IncrementalBuild>false</IncrementalBuild>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>GBPlayer.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>B8EF6D7E748887C48BE50B1AB10DA826D351CDBB</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\IconGBPlayer.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SigantureAssembly.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="gbdev">
+      <HintPath>..\..\gbdev\gbdev\bin\Release\gbdev.dll</HintPath>
+    </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\wpf-notifyicon\NotifyIconWpf\bin\Release\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Json40r2\Bin\Net\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Serializer">
+      <HintPath>..\serializer\Serializer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WpfDataObjectExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WpfDataObjectExtensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="Application.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Class\Validator\FloatValidator.vb" />
+    <Compile Include="Class\Converters\ConverterDecomposeString.vb" />
+    <Compile Include="Class\Converters\ConverterStringToFlagPath.vb" />
+    <Compile Include="Class\Converters\ConverterBoolToOpacity.vb" />
+    <Compile Include="Class\Converters\ConverterValueDivision.vb" />
+    <Compile Include="Class\Converters\ConverterGetBitmapImage.vb" />
+    <Compile Include="Class\Converters\ConverterBoolToVisibility.vb" />
+    <Compile Include="Class\Converters\ConverterListViewBackground.vb" />
+    <Compile Include="Class\Converters\ConverterListBoxBackground.vb" />
+    <Compile Include="Class\Converters\ConverterIdReleaseToImagePath.VB" />
+    <Compile Include="Class\Converters\ConverterBoolToHeight.vb" />
+    <Compile Include="Class\Converters\ConverterStringToVisibility.vb" />
+    <Compile Include="Class\Converters\ConverterDiscogsReleasedToYear.vb" />
+    <Compile Include="Class\Converters\ConverterDiscogsConcatStringCollection.vb" />
+    <Compile Include="Class\Converters\ConverterDiscogsConcatLabelsCollection.vb" />
+    <Compile Include="Class\Converters\ConverterDiscogsConcatArtistsCollection.vb" />
+    <Compile Include="Class\Converters\ConverterDiscogsSellIdToImagePath.vb" />
+    <Compile Include="Class\Converters\ConverterStringToOpacity.vb" />
+    <Compile Include="Class\Converters\ob-ConverterDiscogsConcatImagesCollection.vb" />
+    <Compile Include="Class\Converters\ConverterDiscogsListExtraTracksCollection.vb" />
+    <Compile Include="Class\Converters\ConverterMiseEnFormeTemps.vb" />
+    <Compile Include="Class\Converters\ConverterIdToImagePath.vb" />
+    <Compile Include="Class\Converters\ConverterDiscogsIdToImagePath.vb" />
+    <Compile Include="Class\Converters\ConverterWindowsStateToVisibility.vb" />
+    <Compile Include="Class\Converters\ConverterWindowStateToBoolean.vb" />
+    <Compile Include="Class\Discogs\DiscogsServer.vb" />
+    <Compile Include="Class\Files\fileCdAudio.vb" />
+    <Compile Include="Class\FreeServer\FreeServer.vb" />
+    <Compile Include="Class\FreeServer\WIN32.vb" />
+    <Compile Include="Class\Sound\BassSystem.vb" />
+    <Compile Include="Class\Sound\BassStream.vb" />
+    <Compile Include="Class\Sound\BASS.vb" />
+    <Compile Include="Class\Sound\BassFXBpm.vb" />
+    <Compile Include="Class\Sound\BASS_FX.vb" />
+    <Compile Include="Class\Files\Decoder\LAME_ENC.vb" />
+    <Compile Include="Class\Files\Decoder\fileEncoderMp3.vb" />
+    <Compile Include="Class\Files\Decoder\fileConverter.vb" />
+    <Compile Include="Class\Files\Decoder\fileDecoderMp3.vb" />
+    <Compile Include="Class\Files\Decoder\ACM.vb" />
+    <Compile Include="Class\Files\fileAudio.vb" />
+    <Compile Include="Class\Files\fileMp3.vb" />
+    <Compile Include="Class\Files\fileWave.vb" />
+    <Compile Include="Class\Sound\BASS_CD.vb" />
+    <Compile Include="Class\Sound\BassCDDrive.vb" />
+    <Compile Include="Class\Sound\BASS_Enum.vb" />
+    <Compile Include="Class\Sound\BassCDDisc.vb" />
+    <Compile Include="Class\Sound\BASS_VST.vb" />
+    <Compile Include="Class\Sound\dxMixerLine.vb" />
+    <Compile Include="Class\Sound\dxMixer.vb" />
+    <Compile Include="Class\oAuthLib\oAuthAccessToken.vb" />
+    <Compile Include="Class\oAuthLib\oAuthUser.vb" />
+    <Compile Include="Class\oAuthLib\oAuthRequestToken.vb" />
+    <Compile Include="Class\oAuthLib\oAuthParameter.vb" />
+    <Compile Include="Class\oAuthLib\oAuthDiscogs.vb" />
+    <Compile Include="Class\tagID3\iNotifyShellUpdate.vb" />
+    <Compile Include="Class\UpdateManagement\iNotifyWantListUpdate.vb" />
+    <Compile Include="Class\UpdateManagement\iNotifyCollectionUpdate.vb" />
+    <Compile Include="Class\UpdateManagement\UpdateManager.vb" />
+    <Compile Include="Class\wpf\wpfFolderBrowser.xaml.vb">
+      <DependentUpon>wpfFolderBrowser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Class\wpf\wpfDrives.vb" />
+    <Compile Include="CustomControls\EqualSlider.vb" />
+    <Compile Include="Data\ConfigPerso\Config.vb" />
+    <Compile Include="Data\StringTab.vb" />
+    <Compile Include="FenetreInfo.xaml.vb">
+      <DependentUpon>FenetreInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\AbornerSort.vb" />
+    <Compile Include="CustomControls\ScrollViewerAlwaysScroll.vb" />
+    <Compile Include="UserControls\UserControlPhoneSynchro.xaml.vb">
+      <DependentUpon>UserControlPhoneSynchro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\userControlSellList.xaml.vb">
+      <DependentUpon>userControlSellList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\WaveFormTimeLine.xaml.vb">
+      <DependentUpon>WaveFormTimeLine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\userControlWantList.xaml.vb">
+      <DependentUpon>userControlWantList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PistePlayer.xaml.vb">
+      <DependentUpon>PistePlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\userControlCDList.xaml.vb">
+      <DependentUpon>userControlCDList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\userControlDiscogsInfos.xaml.vb">
+      <DependentUpon>userControlDiscogsInfos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Class\tagID3\tagID3Bibliotheque.vb" />
+    <Compile Include="Data\ConfigPerso\ConfigPerso.vb" />
+    <Compile Include="Class\Converters\ConverterBoolToImageSource.vb" />
+    <Compile Include="UserControls\WindowPlayerMinimized.xaml.vb">
+      <DependentUpon>WindowPlayerMinimized.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WindowsRecorder.xaml.vb">
+      <DependentUpon>WindowsRecorder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WindowConfig.xaml.vb">
+      <DependentUpon>WindowConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WindowPlayer2.xaml.vb">
+      <DependentUpon>WindowPlayer2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WindowPlayer.xaml.vb">
+      <DependentUpon>WindowPlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Class\Discogs\DiscogsCompositeur.vb" />
+    <Compile Include="Class\Discogs\DiscogsNomRelease.vb" />
+    <Compile Include="Class\Discogs\DiscogsBaseRelease.vb" />
+    <Compile Include="Class\Discogs\DiscogsRelease.vb" />
+    <Compile Include="Class\Discogs\DiscogsMaster.vb" />
+    <Compile Include="Class\Discogs\DiscogsNomArtiste.vb" />
+    <Compile Include="Class\Discogs\DiscogsArtiste.vb" />
+    <Compile Include="Class\Discogs\DiscogsNomLabel.vb" />
+    <Compile Include="Class\Discogs\DiscogsLabel.vb" />
+    <Compile Include="Class\Discogs\DiscogsPiste.vb" />
+    <Compile Include="Class\Discogs\DiscogsImage.vb" />
+    <Compile Include="Class\Discogs\DiscogsObjet.vb" />
+    <Compile Include="Class\Discogs\Discogs.vb" />
+    <Compile Include="Windows\WindowUpdateProgress.xaml.vb">
+      <DependentUpon>WindowUpdateProgress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\CheckedComboBox.vb" />
+    <Compile Include="Windows\WindowWebBrowser.xaml.vb">
+      <DependentUpon>WindowWebBrowser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\GridTextBox.vb" />
+    <Compile Include="UserControls\userControlCollectorList.xaml.vb">
+      <DependentUpon>userControlCollectorList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\userControlTagListView.xaml.vb">
+      <DependentUpon>userControlTagListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlTagEditor.xaml.vb">
+      <DependentUpon>UserControlTagEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Class\tagID3\tagID3FilesInfos.vb" />
+    <Compile Include="Class\tagID3\tagID3FilesInfosUpdate.vb" />
+    <Compile Include="Windows\WindowsDiscogs.xaml.vb">
+      <DependentUpon>WindowsDiscogs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window1.xaml.vb">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Class\wpf\wpfMsgBox.xaml.vb">
+      <DependentUpon>wpfMsgBox.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Data\DataModelDiscogsError.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="SigantureAssembly.pfx" />
+    <Resource Include="Images\Icons\IconImage16.png" />
+    <Resource Include="Images\Icons\IconMp316.png" />
+    <Resource Include="Images\Icons\IconDisque16.png" />
+    <Resource Include="Images\Icons\IconFlecheCroisee16.png" />
+    <Resource Include="Images\Icons\IconFlecheBasDroite16.png" />
+    <Resource Include="Images\Icons\IconRecherche16.png" />
+    <Resource Include="Images\Icons\IconDefaire32.png" />
+    <Resource Include="Images\Icons\horloge.png" />
+    <Resource Include="Images\Icons\IconHorloge16.png" />
+    <Resource Include="Images\Icons\IconCercleOrange16.png" />
+    <Resource Include="Images\Icons\IconCercleRouge16.png" />
+    <Resource Include="Images\Icons\IconCercleVert16.png" />
+    <Resource Include="Images\Icons\IconCercleBleu16.png" />
+    <Resource Include="Images\Icons\IconDecoupe16.png" />
+    <Resource Include="Images\Icons\IconCarre16.png" />
+    <Resource Include="Images\Icons\IconCercle16.png" />
+    <Resource Include="Images\Icons\IconCrayon16.png" />
+    <Resource Include="Images\Icons\IconAnnulation16.png" />
+    <Resource Include="Images\Icons\IconEditRepos16.png" />
+    <Resource Include="Images\Icons\IconEditTravail16.png" />
+    <Resource Include="Images\Icons\IconEnregistrer32.png" />
+    <Resource Include="Images\IconGBPlayer.ico" />
+    <Resource Include="Images\VinylComplet128.png" />
+    <Resource Include="Images\Icons\IconValidation16.png" />
+    <Resource Include="Images\Icons\IconCroix16.png" />
+    <Resource Include="Images\Icons\IconPlus16.png" />
+    <Resource Include="Images\Icons\IconVerrouille32.png" />
+    <Resource Include="Images\Icons\IconDeverrouille32.png" />
+    <Resource Include="Images\Icons\IconInterdit32.png" />
+    <Resource Include="Images\Icons\IconAjouter.png" />
+    <Resource Include="Images\Icons\IconSuppression.png" />
+    <Resource Include="Images\ImageVinylVierge.png" />
+    <None Include="Images\ImageDemarrage.png" />
+    <Resource Include="Images\VinylComplet.png" />
+    <Resource Include="Images\alphaImageVinyl.png" />
+    <Page Include="Class\wpf\wpfFolderBrowser.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FenetreInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\DataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleDataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBColors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleCheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleImageVinyl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleRadioButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Shared.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleTabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\UserControlPhoneSynchro.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\userControlSellList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\WaveFormTimeLine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\userControlWantList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\PistePlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\userControlCDList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\WindowPlayerMinimized.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\WindowsRecorder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\WindowConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\WindowPlayer2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\WindowsDiscogs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\userControlDiscogsInfos.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Window1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Class\wpf\wpfMsgBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="Images\Icons\IconTransport.png" />
+    <Resource Include="Images\Icons\IconEuro.png" />
+    <Resource Include="Images\Icons\IconTransparent.png" />
+    <Resource Include="Images\Icons\IconVinyl.png" />
+    <Resource Include="Images\Icons\IconCollection.png" />
+    <Resource Include="Images\Icons\IconSell.png" />
+    <Resource Include="Images\Icons\IconWanted.png" />
+    <Page Include="UserControls\UserControlTagEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="Images\Icons\IconAfficherSource.png" />
+    <Resource Include="Images\Icons\IConInterrogation.png" />
+    <Resource Include="Images\Icons\IconNouvelleSource.png" />
+    <Resource Include="Images\Icons\IconParamétrage.png" />
+    <Resource Include="Images\Icons\IconPersonnage.png" />
+    <Resource Include="Images\Icons\IconSuivant.png" />
+    <Resource Include="Images\Icons\IconVoirDocument.png" />
+    <Resource Include="Images\Icons\IconPrecedent.png" />
+    <Resource Include="Images\bpPause.png" />
+    <Resource Include="Images\bpStop.png" />
+    <Resource Include="Images\bpPlay.png" />
+    <Resource Include="Images\bpvVerrou16.png" />
+    <Resource Include="Images\bpvDeverrou16.png" />
+    <EmbeddedResource Include="Data\DataModelCollectorList.xml" />
+    <EmbeddedResource Include="Images\Pays\Sweden.png" />
+    <EmbeddedResource Include="Images\Pays\UK.png" />
+    <EmbeddedResource Include="Images\Pays\US.png" />
+    <EmbeddedResource Include="Images\Pays\France.png" />
+    <EmbeddedResource Include="Images\Pays\Italy.png" />
+    <EmbeddedResource Include="Images\Pays\Belgium.png" />
+    <EmbeddedResource Include="Images\Pays\Switzerland.png" />
+    <EmbeddedResource Include="Images\Pays\Netherlands.png" />
+    <EmbeddedResource Include="Images\Pays\Germany.png" />
+    <EmbeddedResource Include="Images\Pays\Portugal.png" />
+    <EmbeddedResource Include="Images\Pays\Canada.png" />
+    <EmbeddedResource Include="Images\Pays\Spain.png" />
+    <EmbeddedResource Include="Images\Pays\Europe.png" />
+    <EmbeddedResource Include="Data\ConfigPerso\ConfigPerso.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\DataModelPersonalList.xml" />
+    <Compile Include="Class\tagID3\tagID3FilesInfosDO.vb" />
+    <Compile Include="UserControls\userControlDirectoriesList.xaml.vb">
+      <DependentUpon>userControlDirectoriesList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TagID3\TagID3Data.vb" />
+    <Compile Include="Class\wpf\wpfApplication.vb" />
+    <Page Include="Windows\WindowWebBrowser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\userControlCollectorList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\userControlTagListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="Images\ID3.png" />
+    <Page Include="Windows\WindowPlayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\WindowUpdateProgress.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleSlider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleScrollView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GBStyleTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\userControlDirectoriesList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Resource Include="Images\alphaImage.png" />
+    <Page Include="Styles\GBStyleImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Application.xaml.vb">
+      <DependentUpon>Application.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Class\Files\fileBinary.vb" />
+    <Compile Include="Class\tagID3\tagID3Object.vb" />
+    <Compile Include="MainWindow.xaml.vb">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows" />
+    <Import Include="System.Windows.Controls" />
+    <Import Include="System.Windows.Data" />
+    <Import Include="System.Windows.Documents" />
+    <Import Include="System.Windows.Input" />
+    <Import Include="System.Windows.Shapes" />
+    <Import Include="System.Windows.Media" />
+    <Import Include="System.Windows.Media.Imaging" />
+    <Import Include="System.Windows.Navigation" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="My Project\AssemblyInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="My Project\MyExtensions\MyWpfExtension.vb">
+      <VBMyExtensionTemplateID>Microsoft.VisualBasic.WPF.MyExtension</VBMyExtensionTemplateID>
+      <VBMyExtensionTemplateVersion>1.0.0.0</VBMyExtensionTemplateVersion>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="My Project\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="My Project\DataSources\Mp3.datasource" />
+    <None Include="My Project\DataSources\Vinyl.datasource" />
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <AppDesigner Include="My Project\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Desert.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\TagID3\TagID3Data.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 et x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bass.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="basscd.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bass_fx.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\Controls\FondVueMetre.png" />
+    <Resource Include="Images\Icons\Iconajouter16.png" />
+    <Resource Include="Images\Icons\IconSupprimer16.png" />
+    <Resource Include="Images\Icons\IconAjouter216.png" />
+    <Resource Include="Images\Icons\IconAjouter316.png" />
+    <Resource Include="Images\imgmenus\ajouterimage24.png" />
+    <Resource Include="Images\imgmenus\supprimerimage24.png" />
+    <Resource Include="Images\imgboutons\verroulock24.png" />
+    <Resource Include="Images\imgboutons\verrouunlocked24.png" />
+    <Resource Include="Images\imgmenus\atteindredossier24.png" />
+    <Resource Include="Images\imgmenus\recherche24.png" />
+    <Resource Include="Images\imgmenus\information24.png" />
+    <Resource Include="Images\imgmenus\extraction24.png" />
+    <Resource Include="Images\imgmenus\modifierpays.png" />
+    <Resource Include="Images\imgmenus\effacer24.png" />
+    <Resource Include="Images\imgmenus\ajoutervinyl24.png" />
+    <Resource Include="Images\imgmenus\supprimervinyl24.png" />
+    <Resource Include="Images\imgmenus\ajouterrepertoire24.png" />
+    <Resource Include="Images\imgmenus\supprimerrepertoire24.png" />
+    <Resource Include="Images\imgboutons\enregistrer24.png" />
+    <Resource Include="Images\imgboutons\retour24.png" />
+    <Resource Include="Images\imgboutons\disque24.png" />
+    <Resource Include="Images\imgboutons\fichiermusic24.png" />
+    <Resource Include="Images\imgboutons\rechercheliee24.png" />
+    <Resource Include="Images\imgboutons\recherchenonliee24.png" />
+    <Resource Include="Images\imgboutons\recherche24.png" />
+    <Resource Include="Images\imgboutons\annuler24ex.png" />
+    <Resource Include="Images\Controls\FondVueMetre2.png" />
+    <SplashScreen Include="Images\imgGenerales\EcranLancement.png" />
+    <Resource Include="Images\LabelVierge.png" />
+    <Resource Include="Images\imgboutons\discogs50x20.png" />
+    <Resource Include="Images\imgboutons\id3v224.png" />
+    <Resource Include="Images\imgboutons\update24.png" />
+    <Resource Include="Images\imgboutons\Enchainement24.png" />
+    <Resource Include="Images\imgboutons\NonEnchainement24.png" />
+    <Resource Include="Images\imgboutons\id3Absent32.jpg" />
+    <Resource Include="Images\imgboutons\id3Present32.jpg" />
+    <Resource Include="Images\imgboutons\id3Absent32.png" />
+    <Resource Include="Images\imgboutons\id3Present32.png" />
+    <Resource Include="Images\imgboutons\extractionDiscogs24.png" />
+    <Resource Include="Images\imgboutons\modeexploration24.png" />
+    <Resource Include="Images\imgboutons\moderechercheBD24.png" />
+    <Content Include="bass_vst.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Images\ImageVinylVierge2.png" />
+    <Resource Include="Images\imgboutons\mvtarriere24.png" />
+    <Resource Include="Images\imgboutons\mvtavant24.png" />
+    <Resource Include="Images\imgboutons\sautarriere24.png" />
+    <Resource Include="Images\imgboutons\sautavant24.png" />
+    <Resource Include="Images\imgboutons\pause24.png" />
+    <Resource Include="Images\imgboutons\play24.png" />
+    <Resource Include="Images\imgboutons\record24.png" />
+    <Resource Include="Images\imgboutons\stop24.png" />
+    <Resource Include="Images\imgboutons\playtravail24.png" />
+    <Resource Include="Images\imgboutons\pausetravail24.png" />
+    <Resource Include="Images\imgboutons\stoptravail24.png" />
+    <Resource Include="Images\imgboutons\recordtravail24.png" />
+    <Resource Include="Images\imgboutons\sautavanttravail24.png" />
+    <Resource Include="Images\imgboutons\sautarrieretravail24.png" />
+    <Resource Include="Images\imgboutons\mvtavanttravail24.png" />
+    <Resource Include="Images\imgboutons\mvtarrieretravail24.png" />
+    <Resource Include="Images\imgboutons\excel24.png" />
+    <Resource Include="Images\imgboutons\validation24.png" />
+    <Resource Include="Images\imgboutons\annuler24.png" />
+    <Resource Include="Images\imgboutons\envoyerinfo24.png" />
+    <Resource Include="Images\imgboutons\restauresauvegarde24.png" />
+    <Resource Include="Images\imgmenus\update24.png" />
+    <Content Include="lame_enc.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\imgicones\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MSHTML">
+      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
+      <VersionMajor>4</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="SHDocVw">
+      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="Microsoft.DirectX">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+</Project>

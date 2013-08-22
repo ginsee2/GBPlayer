@@ -1,0 +1,122 @@
+﻿<Window x:Uid="Window_1" x:Class="WindowWebBrowser"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gbDev="clr-namespace:gbDev"
+    Title="GBBrowser" Icon="/GBPlayer;component/Images/IconGBPlayer.ico"
+        SnapsToDevicePixels="true">
+    <Window.Resources>
+    <ResourceDictionary x:Uid="ResourceDictionary_1">
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary x:Uid="ResourceDictionary_2" Source="/Styles/GBStyleProgressBar.xaml"/>
+           <ResourceDictionary x:Uid="ResourceDictionary_3" Source="/Styles/GBStyleTextBox.xaml"/>
+        </ResourceDictionary.MergedDictionaries>
+            <gbDev:ConverterBoolToVisibility x:Uid="gbDev:ConverterBoolToVisibility_1" x:Key="ConverterBoolToVisibility"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Uid="Grid_1" Background="{StaticResource W8Background}">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="30"/>
+            <RowDefinition x:Uid="RowDefinition_2"/>
+            <RowDefinition x:Uid="RowDefinition_3" Height="16"/>
+        </Grid.RowDefinitions>
+        <DockPanel x:Uid="DockPanel_1" Grid.Row="0" Background="{DynamicResource W8Background}">
+ 
+            <Border x:Uid="BordureZoneRecherche" Margin="1" Name="BordureZoneRecherche"  VerticalAlignment="Center" Height="24" Width="500"
+                    Background="Beige" BorderBrush="{StaticResource ScrollButtonColor2}" 
+                    BorderThickness="1" CornerRadius="2">
+                <Grid x:Uid="Grid_2" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border x:Uid="Border_1" Margin="-1" Grid.Column="0" BorderThickness="1" BorderBrush="{StaticResource ScrollButtonColor2}"
+                            Background="Beige"
+                                CornerRadius="2,0,0,2" Width="Auto" Visibility="{Binding ElementName=RecherchePrecedente, Path=IsEnabled, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=True}">
+                        <DockPanel x:Uid="DockPanel_2">
+                            <Button x:Uid="BoutonBack" Grid.Column="1" Style="{StaticResource GBButtonIcone}" Height="22" IsEnabled="False"
+                                Name="BoutonBack"
+                                ToolTip="Revenir à la page précédente"
+                                Visibility="{Binding ElementName=BoutonBack, Path=IsEnabled, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=True}"
+                                        Width="22">
+                                <Button.Content>
+                                    <Image x:Uid="Image_1" Stretch="Fill"  Height="16" Width="16"
+                                       HorizontalAlignment="Center" Source="/GBPlayer;component/Images/imgboutons/mvtarriere24.png">
+                                    </Image>
+                                </Button.Content>
+                            </Button>
+                            <Button x:Uid="BoutonNext" Grid.Column="2" Style="{StaticResource GBButtonIcone}" Height="22" IsEnabled="false"
+                                ToolTip="Passer à la page suivante"
+                                Name="BoutonNext" 
+                                Visibility="{Binding ElementName=BoutonNext, Path=IsEnabled, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=True}"
+                                Width="22" HorizontalAlignment="Left">
+                                <Button.Content>
+                                    <Image x:Uid="Image_2" Stretch="Fill"  Height="16" Width="16"
+                                       HorizontalAlignment="Center" Source="/GBPlayer;component/Images/imgboutons/mvtavant24.png"></Image>
+                                </Button.Content>
+                            </Button>
+                        </DockPanel>
+                    </Border>
+                    <TextBox x:Uid="CheminPage" Grid.Column="1" MinWidth="200" Name="CheminPage" Margin="2,0,2,0" Style="{StaticResource GridEditStyle}"
+                                                         Background="#FFFEFEFE"
+                                                         TextAlignment="Left"
+                                 VerticalAlignment="Center"
+                                MaxWidth="500"
+                                 Height="20"
+                                 FontFamily="Calibri"
+                                 FontSize="12"
+                                 Text="" HorizontalAlignment="Stretch"/>
+                    <Border x:Uid="Border_2" Margin="-1" Grid.Column="2" BorderThickness="1" BorderBrush="{StaticResource ScrollButtonColor2}"
+                            Background="Beige"
+                                CornerRadius="0,2,2,0" Width="Auto" Visibility="{Binding ElementName=RecherchePrecedente, Path=IsEnabled, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=True}">
+                        <DockPanel x:Uid="DockPanel_3">
+                            <Button x:Uid="BoutonTransfert" Height="22" Width="22" Style="{StaticResource GBButtonIcone}" Grid.Column="2" 
+                                    Name="BoutonTransfert" 
+                                    HorizontalAlignment="Right"
+                                    Visibility="Visible" ToolTip="Transfert de l'URL vers le tag PageWeb" >
+                                <Button.Content>
+                                    <Image x:Uid="Image_3" Height="16" Width="16"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                        Source="/GBPlayer;component/Images/imgboutons/envoyerinfo24.png"></Image>
+                                </Button.Content>
+                            </Button>
+                            <Button x:Uid="BoutonRechercheId" Height="22" Width="22" Style="{StaticResource GBButtonIcone}" Grid.Column="2" 
+                                    Name="BoutonRechercheId" 
+                                    HorizontalAlignment="Right"
+                                    Visibility="Visible" ToolTip="Recherche id release dans base de données" >
+                                <Button.Content>
+                                    <Image x:Uid="Image_4" Height="16" Width="16"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                        Source="/GBPlayer;component/Images/imgboutons/recherche24.png"></Image>
+                                </Button.Content>
+                            </Button>
+                            <Button x:Uid="ExportInfosDiscogs" Height="22" Width="22" Style="{StaticResource GBButtonIcone}" Grid.Column="2" 
+                                    Name="ExportInfosDiscogs" 
+                                    HorizontalAlignment="Right"
+                                    Visibility="Visible" ToolTip="Exportation des infos Discogs vers autres logiciels" >
+                                <Button.Content>
+                                    <Image x:Uid="Image_5" Height="16" Width="16"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                        Source="/GBPlayer;component/Images/imgboutons/excel24.png"></Image>
+                                </Button.Content>
+                            </Button>
+                        </DockPanel>
+                    </Border>                </Grid>
+            </Border>
+            <DockPanel x:Uid="DockPanel_4" HorizontalAlignment="Right">
+            </DockPanel>
+        </DockPanel>
+        <Border x:Uid="BordureAffichageWeb" Margin="0,2,0,0" Grid.Row="1" Name="BordureAffichageWeb" Height="Auto" Opacity="1" 
+                 BorderThickness="0,1,0,0"
+                Background="{DynamicResource W8Background}" BorderBrush="{DynamicResource W8BackgroundSelectItem}">
+            <WebBrowser x:Uid="Navigateur" Margin="5"  Name="Navigateur" HorizontalAlignment="Center" VerticalAlignment="Center">
+            </WebBrowser>
+        </Border>
+        <DockPanel x:Uid="BasPage" Margin="2" Grid.Row="2" Width="Auto" Name="BasPage">
+            <ProgressBar x:Uid="Progression" Style="{StaticResource gbProgressBar}" Height="8" Name="Progression" 
+                             Value="75" HorizontalAlignment="Left" Width="{Binding ElementName=BasPage, Path=ActualWidth}" Visibility="Visible"  />
+        </DockPanel>
+    </Grid>
+</Window>

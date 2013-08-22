@@ -1,0 +1,210 @@
+﻿<ResourceDictionary 
+  x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gbDev="clr-namespace:gbDev">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary x:Uid="ResourceDictionary_2" Source="../Styles/GBColors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--SliderThumb STANDARD-->
+    <Style x:Uid="Style_1" x:Key="SliderThumb" TargetType="{x:Type Thumb}" BasedOn="{x:Null}">
+        <Setter x:Uid="Setter_1" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_1" TargetType="{x:Type Thumb}">
+                    <Grid x:Uid="Grid" x:Name="Grid" Margin="1,1,1,1">
+                        <Rectangle x:Uid="Rectangle" x:Name="Rectangle"
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch" 
+                            Width="Auto" 
+                            Height="Auto" 
+                            RadiusX="3" 
+                            RadiusY="3" 
+                            Fill="White" 
+                            Stroke="{x:Null}" 
+                            Opacity="0.7"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger x:Uid="Trigger_1" Property="IsFocused" Value="True"/>
+                        <Trigger x:Uid="Trigger_2" Property="IsMouseOver" Value="True">
+                            <Setter x:Uid="Setter_2" TargetName="Rectangle" 
+                                Property="Fill" 
+                                Value="{StaticResource W8BackgroundProgress}"/>
+                            <Setter x:Uid="Setter_3" TargetName="Rectangle" 
+                                Property="Opacity" 
+                                Value="1"/>
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_3" Property="IsEnabled" Value="False"/>
+                        <Trigger x:Uid="Trigger_4" Property="IsDragging" Value="True"/>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--SliderRepeatButtonStyle STANDARD-->
+    <Style x:Uid="Style_2" x:Key="SliderRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter x:Uid="Setter_4" Property="OverridesDefaultStyle" Value="true"/>
+        <Setter x:Uid="Setter_5" Property="IsTabStop" Value="false"/>
+        <Setter x:Uid="Setter_6" Property="Focusable" Value="false"/>
+        <Setter x:Uid="Setter_7" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_2" TargetType="{x:Type RepeatButton}">
+                    <Rectangle x:Uid="Rectangle_1" Fill="Transparent"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--SLIDER PERSONNALISE STANDARD-->
+    <Style x:Uid="Style_3" x:Key="GBSlider" TargetType="{x:Type Slider}">
+        <Setter x:Uid="Setter_8" Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+        <Setter x:Uid="Setter_9" Property="SnapsToDevicePixels" Value="true" />
+        <Setter x:Uid="Setter_10" Property="Background" Value="Transparent"/>
+        <Setter x:Uid="Setter_11" Property="Foreground" Value="#FFC4C4C4"/>
+        <Setter x:Uid="Setter_12" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_3" TargetType="{x:Type Slider}">
+                    <Border x:Uid="Fond" x:Name="Fond" CornerRadius="3" SnapsToDevicePixels="true" 
+                            Background="{StaticResource W8BackgroundBorder}"
+                            BorderBrush="{StaticResource W8BorderGray}" BorderThickness="1">
+                            <Track x:Uid="PART_Track" x:Name="PART_Track">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton x:Uid="RepeatButton_1" Style="{StaticResource SliderRepeatButtonStyle}" Command="{x:Static Slider.DecreaseLarge}"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton x:Uid="RepeatButton_2" Style="{StaticResource SliderRepeatButtonStyle}" Command="{x:Static Slider.IncreaseLarge}"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                <Thumb x:Uid="Thumb" x:Name="Thumb" VerticalAlignment="Center" Background="{StaticResource W8BorderGray}" Width="30" Height="8" 
+                                           Margin="1"  Style="{StaticResource SliderThumb}"/>
+                                </Track.Thumb>
+                            </Track>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger x:Uid="Trigger_5" Property="Orientation" Value="Vertical">
+                <Setter x:Uid="Setter_13" Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate x:Uid="ControlTemplate_4" TargetType="{x:Type Slider}">
+                            <Border  x:Uid="Border_1" CornerRadius="3" SnapsToDevicePixels="true" Background="{StaticResource W8BackgroundBorder}" 
+                                     BorderBrush="{StaticResource W8BorderGray}" BorderThickness="1">
+                                     <Track x:Uid="Track_1" x:Name="PART_Track">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton x:Uid="RepeatButton_3" Style="{StaticResource SliderRepeatButtonStyle}" 
+                                                          Command="{x:Static Slider.DecreaseLarge}"/>
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton x:Uid="RepeatButton_4" Style="{StaticResource SliderRepeatButtonStyle}" 
+                                                          Command="{x:Static Slider.IncreaseLarge}"/>
+                                        </Track.IncreaseRepeatButton>
+                                        <Track.Thumb>
+                                        <Thumb x:Uid="Thumb_1" Margin="1" x:Name="Thumb" HorizontalAlignment="Center" Width="8" Height="30" 
+                                               Style="{StaticResource SliderThumb}" Background="{StaticResource W8BorderGray}"/>
+                                        </Track.Thumb>
+                                    </Track>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--SliderThumb ROND POUR SLIDER FIN-->
+    <Style x:Uid="Style_4" x:Key="SliderThumbFin" TargetType="{x:Type Thumb}" BasedOn="{x:Null}">
+        <Setter x:Uid="Setter_14" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_5" TargetType="{x:Type Thumb}">
+                    <Grid x:Uid="Grid_1" x:Name="Grid">
+                        <Ellipse x:Uid="Ellipse_1" x:Name="Rectangle"
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" 
+                            Width="10" 
+                            Height="10" 
+                            Fill="White" 
+                            Stroke="{x:Null}" 
+                            Opacity="1">     
+                        </Ellipse>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger x:Uid="Trigger_6" Property="IsFocused" Value="True"/>
+                        <Trigger x:Uid="Trigger_7" Property="IsMouseOver" Value="True">
+                            <Setter x:Uid="Setter_15" TargetName="Rectangle" 
+                                Property="Fill" 
+                                Value="{StaticResource W8BackgroundProgress}"/>
+                            <Setter x:Uid="Setter_16" TargetName="Rectangle" 
+                                Property="Opacity" 
+                                Value="1"/>
+                        </Trigger>
+                        <Trigger x:Uid="Trigger_8" Property="IsEnabled" Value="False"/>
+                        <Trigger x:Uid="Trigger_9" Property="IsDragging" Value="True"/>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--SLIDER AVEC POINT CENTRAL DU CUSTOM CONTROL EQUALSLIDER-->
+    <Style x:Uid="Style_5" TargetType="{x:Type gbDev:EqualSlider}" BasedOn="{StaticResource {x:Type Slider}}">
+        <Setter x:Uid="Setter_17" Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+        <Setter x:Uid="Setter_18" Property="SnapsToDevicePixels" Value="true" />
+        <Setter x:Uid="Setter_19" Property="Background" Value="Transparent"/>
+        <Setter x:Uid="Setter_20" Property="Foreground" Value="#FFC4C4C4"/>
+        <Setter x:Uid="Setter_21" Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Uid="ControlTemplate_6" TargetType="{x:Type Slider}">
+                    <Grid x:Uid="Grid_2">
+                        <Border x:Uid="Border_2" x:Name="Fond" Margin="3,0,3,0"  CornerRadius="2" SnapsToDevicePixels="true" 
+                            Background="{StaticResource W8BackgroundBorder}"
+                            BorderBrush="{StaticResource W8BorderGray}" BorderThickness="1">
+                    </Border>
+                        <Track x:Uid="Track_2" x:Name="PART_Track">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton x:Uid="RepeatButton_5" Style="{StaticResource SliderRepeatButtonStyle}" Command="{x:Static Slider.DecreaseLarge}"/>
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton x:Uid="RepeatButton_6" Style="{StaticResource SliderRepeatButtonStyle}" Command="{x:Static Slider.IncreaseLarge}"/>
+                            </Track.IncreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb x:Uid="Thumb_2" x:Name="Thumb" VerticalAlignment="Center" Background="{StaticResource W8BorderGray}" 
+                                       Width="10" Height="10" 
+                                           Style="{StaticResource SliderThumbFin}"/>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger x:Uid="Trigger_10" Property="Orientation" Value="Vertical">
+                <Setter x:Uid="Setter_22" Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate x:Uid="ControlTemplate_7" TargetType="{x:Type Slider}">
+                            <Grid x:Uid="Grid_3">
+                            <Border x:Uid="Border_3" Margin="3,0,3,0"  CornerRadius="2" SnapsToDevicePixels="true" Background="{StaticResource W8BackgroundBorder}" 
+                                     BorderBrush="{StaticResource W8BorderGray}" BorderThickness="1">
+                            </Border>
+                                <Track x:Uid="Track_3" x:Name="PART_Track">
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton x:Uid="RepeatButton_7" Style="{StaticResource SliderRepeatButtonStyle}" 
+                                                          Command="{x:Static Slider.DecreaseLarge}"/>
+                                    </Track.DecreaseRepeatButton>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton x:Uid="RepeatButton_8" Style="{StaticResource SliderRepeatButtonStyle}" 
+                                                          Command="{x:Static Slider.IncreaseLarge}"/>
+                                    </Track.IncreaseRepeatButton>
+                                    <Track.Thumb>
+                                        <Thumb x:Uid="Thumb_3" x:Name="Thumb" HorizontalAlignment="Center" Width="10" Height="10" 
+                                               Style="{StaticResource SliderThumbFin}" Background="{StaticResource W8BorderGray}"/>
+                                    </Track.Thumb>
+                                </Track>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

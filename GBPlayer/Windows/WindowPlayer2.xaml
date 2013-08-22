@@ -1,0 +1,246 @@
+﻿<Window x:Uid="Player" x:Class="WindowPlayer2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:gbdev="clr-namespace:gbDev"
+        Name="Player" Title="Player" Height="225" Width="398" WindowStyle="None"  ResizeMode="NoResize" 
+        AllowsTransparency="true" 
+    Background="Blue" ShowInTaskbar="False">
+    <Window.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="/Styles/GBStyleImageVinyl.xaml"/>
+                <ResourceDictionary x:Uid="ResourceDictionary_3" Source="/Styles/GBStyleProgressBar.xaml"/>
+                <ResourceDictionary x:Uid="ResourceDictionary_4" Source="/Styles/GBStyleSlider.xaml"/>
+                <ResourceDictionary x:Uid="ResourceDictionary_5" Source="/Styles/GBStyleTextBox.xaml"/>
+                <ResourceDictionary x:Uid="ResourceDictionary_6">
+                    <gbdev:tagID3FilesInfosDO x:Uid="gbdev:tagID3FilesInfosDO_1" x:Key="InfosFichier" />
+                    <gbdev:ConverterValueDivision x:Uid="gbdev:ConverterValueDivision_1" x:Key="ConverterValueDivision"/>
+                    <gbdev:ConverterBoolToImageSource x:Uid="gbdev:ConverterBoolToImageSource_1" x:Key="ConverterBoolToImage"/>
+                    <gbdev:ConverterGetBitmapImage x:Uid="gbdev:ConverterGetBitmapImage_1" x:Key="ConverterGetBitmapImage"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+           <!-- <Storyboard x:Key="AffichageProgressif">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="{x:Null}" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <LinearDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <LinearDoubleKeyFrame KeyTime="00:00:00.2" Value="0"/>
+                    <LinearDoubleKeyFrame KeyTime="00:00:02" Value="195"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>-->
+           <!-- <Storyboard x:Key="AnimationRotation" RepeatBehavior="Forever">
+                <DoubleAnimation BeginTime="00:00:00" Duration="00:00:01.81" From="0" To="360" Storyboard.TargetName="RotationImage" Storyboard.TargetProperty="Angle"/>
+            </Storyboard>-->
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Triggers><!--
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource AffichageProgressif}"/>
+        </EventTrigger>-->
+    </Window.Triggers>
+    <!--DEFINITION DES GRADIENTS TYPE-->
+    <Window.ContextMenu>
+        <ContextMenu x:Uid="ContextMenu_1">
+            <MenuItem x:Uid="Recherche" Name="Recherche" Header="Rechercher" Click="Recherche_Click">
+                <MenuItem.Icon>
+                    <Image  x:Uid="Image_1" Height="16" Width="16" Source="/GBPlayer;component/Images/imgmenus/recherche24.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator x:Uid="Separator_1"/>
+            <MenuItem x:Uid="Extraction" Name="Extraction" Header="Extraction informations..." Click="Extraction_Click">
+                <MenuItem.Icon>
+                    <Image  x:Uid="Image_2" Height="16" Width="16" Source="/GBPlayer;component/Images/imgmenus/extraction24.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.ContextMenu>
+    <Grid x:Uid="Grid_1" Height="205" Width="398" Background="Transparent" DataContext="{StaticResource InfosFichier}">
+        <MediaElement x:Uid="Lecteur" Height="14" Name="Lecteur" Width="95" Visibility="Hidden" />
+        <Border x:Uid="BordureGlobale" Name="BordureGlobale" CornerRadius="4" Background="Transparent">
+        </Border>
+        <StackPanel x:Uid="StackPanel_1" Margin="2,2,3,0" Background="Transparent">
+            <Border  x:Uid="EnteteLecteur" Name="EnteteLecteur" AllowDrop="True" CornerRadius="4" Margin="1,1,2,2" 
+                     Background="{StaticResource W8Background}"
+                            BorderBrush="{StaticResource APBrushHautFenetre}"
+                     BorderThickness="1,1,0,0">
+                 <DockPanel x:Uid="DockPanel_1">
+                    <Label x:Uid="Entete" Name="Entete" Width="Auto" Content="Player" Foreground="{StaticResource W8ForegroundWhite}"
+                       FontFamily="Calibri" FontSize="14">
+                    </Label>
+                </DockPanel>
+            </Border>
+            <DockPanel x:Uid="DockPanel_2" Background="{StaticResource W8Background}">
+                 <Grid x:Uid="Grid_2" Margin="2,2,2,2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+                            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+                            <ColumnDefinition x:Uid="ColumnDefinition_2"/>
+                        </Grid.ColumnDefinitions>
+                    <DockPanel x:Uid="DockPanel_3" Grid.RowSpan="2">
+                        <ProgressBar x:Uid="Gauche" Style="{StaticResource gbVueMetre}" Height="Auto" Orientation="Vertical"
+                                        Margin="2,0,1,0" Name="Gauche" Width="8" Maximum="330"
+                                        Background="{StaticResource APBrushBoutonBackground}"/>
+                        <ProgressBar x:Uid="Droite" Style="{StaticResource gbVueMetre}" Height="Auto" Orientation="Vertical"
+                                        Margin="0,0,2,0" Name="Droite" Width="8" Maximum="330" 
+                                        Background="{StaticResource APBrushBoutonBackground}"/>
+                    </DockPanel>
+                    <Grid x:Uid="Grid_3" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image x:Uid="VinylImage" Grid.Column="1" Margin="-2,0,-1,-6" Name="VinylImage" Visibility="Hidden" Source="/Images/VinylComplet128.png" Stretch="Uniform" Height="128" Width="128">
+                                <Image.Effect>
+                                    <DropShadowEffect x:Uid="DropShadowEffect_1" BlurRadius="10" Color="#FFB78859" Direction="345" RenderingBias="Quality" ShadowDepth="5" />
+                                </Image.Effect>
+                            </Image>
+                            <Image x:Uid="tagImage" Grid.Column="1" Margin="2,3,2,0" Name="tagImage"  Style="{StaticResource GBImageVinyl}" Height="60" Stretch="Fill" Width="60" 
+                       Source="{Binding Path=ImageLecteur}" AllowDrop="true" >
+                                <Image.RenderTransform>
+                                    <RotateTransform x:Uid="RotationImage" x:Name="RotationImage" CenterX="30"
+                                             CenterY="30"
+                                             Angle="0"></RotateTransform>
+                                </Image.RenderTransform>
+                                <Image.ToolTip>
+                                    <DockPanel x:Uid="DockPanel_4">
+                                        <Image x:Uid="Image_3" Margin="2" Style="{StaticResource GBImage}" Height="150" Stretch="Fill" 
+                                                                    Width="150" Source="{Binding Path=Image}"/>
+                                        <Image x:Uid="Image_4" Margin="2" Style="{StaticResource GBImage}" MaxHeight="150" Stretch="Fill" 
+                                                                    MaxWidth="150" Source="{Binding Path=ImageLabel}"/>
+                                        <Image x:Uid="Image_5" Margin="2" Style="{StaticResource GBImage}" MaxHeight="150" Stretch="Fill" 
+                                                                    MaxWidth="150" Source="{Binding Path=ImageDosPochette}"/>
+                                    </DockPanel>
+                                </Image.ToolTip>
+                            </Image>
+                            <DockPanel x:Uid="EnsembleBoutons" Grid.Column="1"  Name="EnsembleBoutons" Opacity="1" Height="20" Width="Auto" HorizontalAlignment="Center" 
+                                       VerticalAlignment="Bottom" Margin="0,0,0,2" >
+                                <Button x:Uid="BPPlay" Height="20" Width="20" Style="{StaticResource GBButtonIcone}"  Margin="1,1,0,0" Name="BPPlay" Visibility="Visible"
+                                Click="BPPlay_Click" >
+                                    <Button.Content>
+                                        <Image x:Uid="imBpPlay" Name="imBpPlay"  Stretch="Fill" Height="16" Width="16"  HorizontalAlignment="Left" 
+                                       Source="/GBPlayer;component/Images/Boutons/bpPlayRepos32.png"></Image>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Uid="BPPause" Style="{StaticResource GBButtonIcone}" Height="20" Width="20" Margin="1,1,0,0" Name="BPPause" Visibility="Visible"
+                                Click="BPPause_Click">
+                                    <Button.Content>
+                                        <Image x:Uid="imBpPause" Name="imBpPause"  Stretch="Fill" Height="16" Width="16" HorizontalAlignment="Left" 
+                                       Source="/GBPlayer;component/Images/Boutons/bpPauseRepos32.png"></Image>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Uid="BPStop" Style="{StaticResource GBButtonIcone}" Height="20" Width="20"  Margin="1,1,0,0" Name="BPStop" Visibility="Visible" 
+                                Click="BPStop_Click">
+                                    <Button.Content>
+                                        <Image x:Uid="imBpStop" Name="imBpStop"  Stretch="Fill" Height="16" Width="16"   HorizontalAlignment="Left" 
+                                       Source="/GBPlayer;component/Images/Boutons/bpStopRepos32.png"></Image>
+                                    </Button.Content>
+                                </Button>
+                            </DockPanel>
+                        </Grid>
+                    <Grid x:Uid="Grid_4" Grid.Row="1" Grid.Column="1">
+                           <Border x:Uid="Border_1" HorizontalAlignment="Center" Height="20" Width="30" Margin="1,1,1,1" CornerRadius="2" 
+                            VerticalAlignment="Top">
+                                <TextBlock x:Uid="BpmAff" Background="Transparent" Margin="1,1,1,1" Name="BpmAff" Text="00.0" Foreground="#FF444444" 
+                                       VerticalAlignment="Center" TextAlignment="Center"  FontFamily="Calibri" FontSize="10" 
+                                       FontWeight="Bold">
+                                </TextBlock>
+                            </Border>
+
+                        <DockPanel x:Uid="DockPanel_5" Grid.Column="1">
+                            <Border x:Uid="Border_2" HorizontalAlignment="Left" Width="40" Margin="1,1,1,1" CornerRadius="4" Background="{StaticResource ScrollBackground}">
+                                <TextBlock x:Uid="Temps" Background="Transparent" Margin="1,1,1,1" Name="Temps" Text="00:00" 
+                                           Foreground="#FF799900"  VerticalAlignment="Center" TextAlignment="Center" 
+                                           FontFamily="Calibri" FontSize="12"  FontWeight="Bold">
+                                </TextBlock>
+                            </Border>
+                            <Border x:Uid="Border_3" HorizontalAlignment="Right" Width="40" Margin="1,1,1,1" CornerRadius="4" 
+                        Background="{StaticResource ScrollBackground}">
+                                <TextBlock x:Uid="TempsT" Background="Transparent" Margin="1,1,1,1" Name="TempsT" Text="00:00" 
+                               Foreground="#FFF95565" VerticalAlignment="Center" TextAlignment="Center" FontFamily="Calibri" 
+                               FontSize="12" FontWeight="Bold">
+                                </TextBlock>
+                            </Border>
+                        </DockPanel>
+                    </Grid>
+                </Grid>
+               <Slider x:Uid="PlayerVolume" Margin="1,1,1,1" Style="{StaticResource GBSlider}" Height="Auto" Name="PlayerVolume" Tag="Volume"
+                        Orientation="Vertical" Width="8" MaxWidth="10" Maximum="100" />
+                <Border x:Uid="BordureTexte" Margin="2,2,2,2" BorderBrush="{StaticResource ContainerBorderBrush}"  BorderThickness="1" Height="Auto" Name="BordureTexte" Width="Auto" CornerRadius="10" 
+                        Background="{StaticResource W8Background}">
+                    <DockPanel x:Uid="DockPanel_6">
+                        <Grid x:Uid="Grid_5" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_5" Width="45"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_6"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid x:Uid="Grid_6" Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition x:Uid="RowDefinition_3" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_4" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_5" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_6" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_7" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_8" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_9" Height="16"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Uid="TextBlock_1" Grid.Row="0" Text="Artiste :"/>
+                                <TextBlock x:Uid="TextBlock_2" Grid.Row="1" Text="Titre :"/>
+                                <TextBlock x:Uid="TextBlock_3" Grid.Row="2" Text="Album :"/>
+                                <TextBlock x:Uid="TextBlock_4" Grid.Row="3" Text="Année :"/>
+                                <TextBlock x:Uid="TextBlock_5" Grid.Row="4" Text="Comp :"/>
+                                <TextBlock x:Uid="TextBlock_6" Grid.Row="5" Text="Label :"/>
+                                <TextBlock x:Uid="TextBlock_7" Grid.Row="6" Text="Cat :"/>
+                            </Grid>
+                            <Grid x:Uid="Grid_7" Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition x:Uid="RowDefinition_10" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_11" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_12" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_13" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_14" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_15" Height="16"/>
+                                    <RowDefinition x:Uid="RowDefinition_16" Height="16"/>
+                                </Grid.RowDefinitions>
+                                <TextBox x:Uid="tagArtiste" Grid.Row="0" Margin="-3,0,0,0" Name="tagArtiste" 
+                                                         Text="{Binding Artiste, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource GridEditStyle}"
+                                                         Background="Transparent" MinWidth="20"/>
+                                <TextBox  x:Uid="tagTitre" Grid.Row="1" Margin="-3,0,0,0" Name="tagTitre" 
+                                                         Text="{Binding Titre, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                                                         Style="{StaticResource GridEditStyle}"
+                                                         Background="Transparent" MinWidth="20"/>
+                                <TextBox x:Uid="tagAlbum" Grid.Row="2"  Margin="-3,0,0,0" Name="tagAlbum" 
+                                                         Text="{Binding Album, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                                                         Style="{StaticResource GridEditStyle}"
+                                                         Background="Transparent" MinWidth="20"/>
+                                <TextBox x:Uid="tagAnnee" Grid.Row="3"  Margin="-3,0,0,0" Name="tagAnnee" 
+                                                         Text="{Binding Annee, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                                                         Style="{StaticResource GridEditStyle}"
+                                                         Background="Transparent" MinWidth="20"/>
+                                <TextBox x:Uid="tagCompositeur" Grid.Row="4"  Margin="-3,0,0,0" Name="tagCompositeur" 
+                                                         Text="{Binding Compositeur, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource GridEditStyle}"
+                                                         Background="Transparent" MinWidth="20"/>
+                                <TextBox x:Uid="tagLabel" Grid.Row="5"  Margin="-3,0,0,0" Name="tagLabel" 
+                                                         Text="{Binding Label, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource GridEditStyle}"
+                                                         Background="Transparent" MinWidth="20"/>
+                                <TextBox x:Uid="tagCatalogue" Grid.Row="6"  Margin="-3,0,0,0" Name="tagCatalogue" 
+                                                         Text="{Binding Catalogue, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource GridEditStyle}"
+                                                         Background="Transparent" MinWidth="20"/>
+                            </Grid>
+                        </Grid>
+                    </DockPanel>
+                </Border>
+            </DockPanel>
+
+            <StackPanel x:Uid="StackPanel_2" >
+                <Slider x:Uid="PlayerPosition" Margin="1,1,1,1" Style="{StaticResource GBSlider}" Height="8" Tag="Avancement lecture"
+                        Name="PlayerPosition" Width="Auto"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

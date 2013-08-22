@@ -1,0 +1,149 @@
+﻿<Window x:Uid="DiscogsoAuthWindows" x:Class="Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gbDev="clr-namespace:gbDev"
+        Name="DiscogsoAuthWindows"
+    Title="Authentification Discogs" Height="300" Width="300" WindowStyle="None"  ResizeMode="CanResizeWithGrip"
+    AllowsTransparency="true" Background="Transparent" ShowInTaskbar="False" Opacity="0.4">
+    <Window.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="/Styles/GBStyleTextBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border x:Uid="BordureFenetre" Name="BordureFenetre" BorderBrush="White" BorderThickness="1" CornerRadius="4"  >
+        <Grid x:Uid="Contenu" Name="Contenu" Margin="0" Opacity="1">
+            <Border x:Uid="Bordure" x:Name="Bordure" 
+              Grid.RowSpan="3"
+              CornerRadius="4"
+              BorderThickness="1"
+              Margin="0" 
+              Padding="3"
+              Background="#dde2e6"
+              BorderBrush="{StaticResource APBrushFenetreBrushBorder}">
+                <Border.Effect>
+                    <DropShadowEffect  x:Uid="DropShadowEffect_1" Direction="320" ShadowDepth="4" Color="{StaticResource APCouleurOmbreBackground}" BlurRadius="2" RenderingBias="Quality" />
+                </Border.Effect>
+                <Grid x:Uid="GrilleGenerale" Name="GrilleGenerale">
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+                        <RowDefinition x:Uid="RowDefinition_2"/>
+                        <RowDefinition x:Uid="RowDefinition_3" Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Border x:Uid="Border_1" Margin="-3,-3,-3,0" Height="30" BorderThickness="1,1,1,1" BorderBrush="#39414c" VerticalAlignment="Top"/>
+                    <Border x:Uid="EnteteFenetre" Margin="-3,-3,-3,0" Height="29"  x:Name="EnteteFenetre"
+                            VerticalAlignment="Top"
+                            CornerRadius="4,4,0,0"
+                            BorderThickness="1,1,0,0"
+                            Background="{StaticResource APBrushBoutonBackground}"
+                            BorderBrush="#d8e3e9">
+                        <!--   Background="{StaticResource APBrushBorderBackground}"-->
+                        <Border.Effect>
+                            <DropShadowEffect  x:Uid="DropShadowEffect_2" Direction="300" ShadowDepth="1" Color="#39414c" RenderingBias="Quality" />
+                        </Border.Effect>
+                        <Grid x:Uid="Grid_1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="30"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_2"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_3" Width="30"/>
+                            </Grid.ColumnDefinitions>
+                            <Image x:Uid="Image_1" Stretch="Uniform" Width="16"  Height="16" HorizontalAlignment="Center" 
+                                                       Source="/GBPlayer;component/Images/Icons/IconImage16.png"></Image>
+                            <Label x:Uid="Titre" Grid.Column="1" Name="Titre" FontFamily="Calibri" FontSize="14" Foreground="White" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                Content="Images Discogs" IsHitTestVisible="False">
+                                <Label.Effect>
+                                    <DropShadowEffect x:Uid="DropShadowEffect_3" Direction="90" ShadowDepth="1" Color="Black" />
+                                </Label.Effect>
+                            </Label>
+                            <Button x:Uid="BoutonFermer" Grid.Column="2" Height="16" Width="16" Name="BoutonFermer" Padding="4"
+                                IsCancel="True"  Style="{StaticResource GBButtonIcone}">
+                                <Button.Content>
+                                    <Image x:Uid="Image_2" Stretch="Uniform" Height="12" Width="12"  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                    Source="/GBPlayer;component/Images/Icons/IconAnnulation16.png"></Image>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <Border x:Uid="Border_2" Grid.Row="2" Margin="-3,0,-3,-3" Height="30" BorderThickness="1,1,1,1" BorderBrush="#39414c" VerticalAlignment="Bottom"/>
+                    <Border x:Uid="BasMsgbox" Grid.Row="2" Margin="-3,0,-3,-3" Height="30"  x:Name="BasMsgbox"
+                            VerticalAlignment="Bottom"
+                            CornerRadius="0,0,4,4"
+                            BorderThickness="1,1,0,0"
+                            Background="{StaticResource APBrushBoutonBackground}"
+                            
+                            BorderBrush="#d8e3e9">
+                        <Border.Effect>
+                            <DropShadowEffect  x:Uid="DropShadowEffect_4" Direction="300" ShadowDepth="1" Color="#39414c" RenderingBias="Quality" />
+                        </Border.Effect>
+                        <DockPanel x:Uid="DockPanel_1">
+                            <!-- <Button Name="Fermer" Height="20" Style="{StaticResource W8Button}" Margin="2" FontSize="9" 
+                                    Width="80" Content="Fermer" IsCancel="True" Grid.Row="1" Click="Fermer_Click" />
+                            -->
+                            <Label x:Uid="TexteExplication" Name="TexteExplication" Margin="-2" FontFamily="Calibri" FontSize="10" Foreground="White" 
+                               VerticalAlignment="Center" HorizontalAlignment="left" 
+                            Content="" IsHitTestVisible="False">
+                                <Label.Effect>
+                                    <DropShadowEffect x:Uid="DropShadowEffect_5" Direction="90" ShadowDepth="1" Color="Black" />
+                                </Label.Effect>
+                            </Label>
+                        </DockPanel>
+                    </Border>
+                    <Border x:Uid="Border_3" Grid.Row="1" Grid.RowSpan="1" Background="White"/>
+                    <Border x:Uid="BorderItem" x:Name="BorderItem" Grid.Row="1"
+                            CornerRadius="3"
+                            Margin="2"
+                            SnapsToDevicePixels="true"
+                            Background="Transparent"
+                            BorderBrush="{StaticResource ItemBorderBrush}"
+                            BorderThickness="1">
+                       <Grid x:Uid="Grid_2">
+                            <Grid.DataContext>
+                                <XmlDataProvider x:Uid="DataProvider" x:Name="DataProvider" XPath="CDDISK/Tracks"  />
+                            </Grid.DataContext>
+                            <ListView x:Uid="XMLBinding" Grid.Row="1" Height="Auto" Name="XMLBinding" Width="Auto"
+                                AllowDrop="True"
+                              ItemsSource="{Binding XPath=Track}"
+                                Style="{StaticResource GBListView}"
+                               ItemContainerStyle="{StaticResource GBListViewItemStyle}"
+                              >
+                                <ListView.View>
+                                <GridView x:Uid="GridView_1">
+                                    <GridView.ColumnHeaderContextMenu>
+                                        <ContextMenu x:Uid="MenuContextuelHeaderListe" Name="MenuContextuelHeaderListe">
+                                        </ContextMenu>
+                                    </GridView.ColumnHeaderContextMenu>
+                                    <GridViewColumn x:Uid="Ordre" x:Name="Ordre" Width="50" >
+                                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_1" Content="Ordre" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Tag="Ordre"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_1">
+                                                <Grid x:Uid="Grid_3" VerticalAlignment="Center" HorizontalAlignment="Center" Height="30">
+                                                    <TextBlock x:Uid="tagPiste" Text="{Binding XPath=Piste}" Name="tagPiste" VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Uid="Info" x:Name="Info" Width="200" >
+                                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_2" Content="Info" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Tag="Info"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate x:Uid="DataTemplate_2">
+                                                <Grid x:Uid="Grid_4" HorizontalAlignment="Left">
+                                                    <TextBlock x:Uid="tagLinkArtiste" Text="{Binding XPath=Artiste}" MinWidth="80" Name="tagLinkArtiste"
+                                               TextWrapping="WrapWithOverflow"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

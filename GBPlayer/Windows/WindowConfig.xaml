@@ -1,0 +1,79 @@
+﻿<Window x:Uid="Window_1" x:Class="WindowConfig"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gbDev="clr-namespace:gbDev"
+    Title="GBPlayer 3 Configuration" Icon="/GBPlayer;component/Images/IconGBPlayer.ico" >
+    <Window.Resources>
+    <ResourceDictionary x:Uid="ResourceDictionary_1">
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary x:Uid="ResourceDictionary_2" Source="/Styles/GBStyleProgressBar.xaml"/>
+                <!--    <ResourceDictionary Source="/Styles/GBStyleSlider.xaml"/>  -->
+                <ResourceDictionary x:Uid="ResourceDictionary_3" Source="/Styles/GBStyleTextBox.xaml"/>
+        </ResourceDictionary.MergedDictionaries>
+     </ResourceDictionary>
+    </Window.Resources>
+    <Window.DataContext>
+        <XmlDataProvider x:Uid="DataProvider" x:Name="DataProvider" XPath="ConfigPerso"  />
+    </Window.DataContext>
+
+    <Grid x:Uid="Grid_1">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_2"/>
+        </Grid.RowDefinitions>
+           <Grid x:Uid="Grid_2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Uid="ColumnDefinition_1" />
+                    <ColumnDefinition x:Uid="ColumnDefinition_2" Width="200"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel x:Uid="StackPanel_1" Grid.Column="1">
+                    <Button x:Uid="AccessToken" Name="AccessToken" Height="30" Width="150" Style="{StaticResource W8Button}" Margin="2" 
+                        Content="Demande d'accès Discogs"  Click="AccessToken_Click" />
+                <Button x:Uid="reqToken" Visibility="Collapsed" Name="reqToken" Height="30" Width="150" Style="{StaticResource W8Button}" Margin="2" Content="Soumettre code validation" 
+                            IsEnabled="False"    Click="reqToken_Click" />
+            </StackPanel>
+         <StackPanel x:Uid="StackPanel_2">
+            <DockPanel x:Uid="DockConsumerKey" Name="DockConsumerKey" Height="20" Margin="2">
+            <TextBlock x:Uid="TextBlock_1" Style="{StaticResource GridBlockStyle}"
+                                                         Background="Transparent"
+                                                         Text="DISCOGSCONNECTION_consumerKey :"/>
+            <TextBox x:Uid="tagconsumerKey" Text="{Binding XPath=DISCOGSCONNECTION_consumerKey}" MinWidth="80" Name="tagconsumerKey"
+                     VerticalAlignment="Center" Style="{StaticResource GBTextBox}" TextWrapping="WrapWithOverflow"/>
+            </DockPanel>
+        <DockPanel x:Uid="DockConsumerSecret" Name="DockConsumerSecret" Height="20" Margin="2">
+            <TextBlock x:Uid="TextBlock_2" Style="{StaticResource GridBlockStyle}"
+                                                         Background="Transparent"
+                                                         Text="DISCOGSCONNECTION_consumerSecret :"/>
+                <TextBox x:Uid="tagconsumerSecret" Text="{Binding XPath=DISCOGSCONNECTION_consumerSecret}" MinWidth="80" Name="tagconsumerSecret"
+                                VerticalAlignment="Center" Style="{StaticResource GBTextBox}" TextWrapping="WrapWithOverflow"/>
+        </DockPanel>
+            <DockPanel x:Uid="DockPanel_1" Height="20" Margin="2" Visibility="Collapsed">
+                <TextBlock x:Uid="TextBlock_3" Style="{StaticResource GridBlockStyle}"
+                                                         Background="Transparent"
+                                                         Text="DISCOGSCONNECTION_tokenValue :"/>
+                <TextBox x:Uid="tagtokenValue" Text="{Binding XPath=DISCOGSCONNECTION_tokenValue}" MinWidth="80" Name="tagtokenValue"
+                         IsEnabled="False" VerticalAlignment="Center" Style="{StaticResource GBTextBox}" TextWrapping="WrapWithOverflow"/>
+            </DockPanel>
+            <DockPanel x:Uid="DockPanel_2" Height="20" Margin="2" Visibility="Collapsed">
+                <TextBlock x:Uid="TextBlock_4" Style="{StaticResource GridBlockStyle}"
+                                                         Background="Transparent"
+                                                         Text="DISCOGSCONNECTION_tokenSecret :"/>
+                <TextBox x:Uid="tagtokenSecret" Text="{Binding XPath=DISCOGSCONNECTION_tokenSecret}" MinWidth="80" Name="tagtokenSecret"
+                            IsEnabled="False" VerticalAlignment="Center" Style="{StaticResource GBTextBox}" TextWrapping="WrapWithOverflow"/>
+            </DockPanel>
+            <DockPanel x:Uid="DockCodeValidation" Name="DockCodeValidation" Height="20" Margin="2" Visibility="Collapsed">
+                <TextBlock x:Uid="TextBlock_5" Style="{StaticResource GridBlockStyle}"
+                                                         Background="Transparent"
+                                                         Text="Code de validation retourné :"/>
+                <TextBox x:Uid="tagCodeDiscogs" Text="" MinWidth="80" Name="tagCodeDiscogs" Style="{StaticResource GBTextBox}" IsEnabled="False"
+                         VerticalAlignment="Center" />
+            </DockPanel>
+        </StackPanel>
+        </Grid>
+        <Border x:Uid="BordureAffichageWeb" Margin="0,2,0,0" Grid.Row="1" Name="BordureAffichageWeb" Height="Auto" Opacity="1" 
+                BorderBrush="{StaticResource ScrollButtonColor2}" BorderThickness="2" CornerRadius="4">
+            <WebBrowser x:Uid="Navigateur" Margin="3,3,3,3"  Name="Navigateur" HorizontalAlignment="Center" VerticalAlignment="Center">
+            </WebBrowser>
+        </Border>
+    </Grid>
+</Window>

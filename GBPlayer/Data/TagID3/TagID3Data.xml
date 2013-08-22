@@ -1,0 +1,168 @@
+<?xml version="1.0" ?>
+<TagID3Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Nom>tagID3Object</Nom>
+  <Version>v10.0</Version>
+  <TAGUTILISE_ID3v2>
+    <string>TPE1;Artiste</string>
+    <string>TIT2;Titre</string>
+    <string>TXXX;Sous Titre ou version [VersionTitre]</string>
+    <string>TALB;Album</string>
+    <string>TIT1;Regroupement</string>
+    <string>TCOM;Composé par</string>
+    <string>TYER;Année</string>
+    <string>TORY;Année d'origine</string>
+    <string>TRCK;Numero piste (x/x)</string>
+    <string>TPOS;Numero disque (x/x)</string>
+    <string>TBPM;Beat par minute</string>
+    <string>TCON;Style</string>
+    <string>TPUB;Label</string>
+    <string>TIT3;Catalogue</string>
+    <string>WOAF;Info page web</string>
+    <string>TCMP;Info compilation</string>
+    <string>COMM;Commentaire []</string>
+    <string>COMM;Commentaire [iTunNORM]</string>
+    <string>APIC;Image []</string>
+    <string>TENC;GBPlayer3</string>
+    <string>TLEN;Duree</string>
+    <string>TXXX;Collection [idRelease]</string>
+    <string>TXXX;Collection [VinylLabel]</string>
+    <string>TXXX;Collection [VinylCatalogue]</string>
+    <string>TXXX;Collection [VinylWeb]</string>
+  </TAGUTILISE_ID3v2>  
+  <CHAINEEXTRATION_ID3v2>
+    <string>ARTISTE=TPE1;N</string>
+    <string>TITRE=TIT2;N</string>
+    <string>TRACK=TRCK;</string>
+    <string>ANNEE=TYER;</string>
+    <string>ALBUM=TALB;N</string>
+    <string>CATALOGUE=TIT3;M</string>
+  </CHAINEEXTRATION_ID3v2>
+  <CONVERSION_ID3v22_ID3v23>
+    <string>BUF=RBUF</string>
+    <string>CNT=PCNT</string>
+    <string>COM=COMM</string>
+    <string>CRA=AENC</string>
+    <string>CRM=ENCR</string>
+    <string>ETC=ETCO</string>
+    <string>EQU=EQUA</string>
+    <string>GEO=GEOB</string>
+    <string>IPL=IPLS</string>
+    <string>LNK=LINK</string>
+    <string>MCI=MCDI</string>
+    <string>MLL=MLLT</string>
+    <string>PIC=APIC</string>
+    <string>POP=POPM</string>
+    <string>REV=RVRB</string>
+    <string>RVA=RVAD</string>
+    <string>SLT=SYLT</string>
+    <string>STC=SYTC</string>
+    <string>TAL=TALB</string>
+    <string>TBP=TBPM</string>
+    <string>TCM=TCOM</string>
+    <string>TCO=TCON</string>
+    <string>TCP=TCMP</string>
+    <string>TCR=TCOP</string>
+    <string>TDA=TDAT</string>
+    <string>TDY=TDLY</string>
+    <string>TEN=TENC</string>
+    <string>TFT=TFLT</string>
+    <string>TIM=TIME</string>
+    <string>TKE=TKEY</string>
+    <string>TLA=TLAN</string>
+    <string>TLE=TLEN</string>
+    <string>TMT=TMED</string>
+    <string>TOA=TOPE</string>
+    <string>TOF=TOFN</string>
+    <string>TOL=TOLY</string>
+    <string>TOR=TORY</string>
+    <string>TOT=TOAL</string>
+    <string>TP1=TPE1</string>
+    <string>TP2=TPE2</string>
+    <string>TP3=TPE3</string>
+    <string>TP4=TPE4</string>
+    <string>TPA=TPOS</string>
+    <string>TPB=TPUB</string>
+    <string>TRC=TSRC</string>
+    <string>TRD=TRDA</string>
+    <string>TRK=TRCK</string>
+    <string>TSI=TSIZ</string>
+    <string>TSS=TSSE</string>
+    <string>TT1=TIT1</string>
+    <string>TT2=TIT2</string>
+    <string>TT3=TIT3</string>
+    <string>TXT=TEXT</string>
+    <string>TXX=TXXX</string>
+    <string>TYE=TYER</string>
+    <string>UFI=UFID</string>
+    <string>ULT=USLT</string>
+    <string>WAF=WOAF</string>
+    <string>WAR=WOAR</string>
+    <string>WAS=WOAS</string>
+    <string>WCM=WCOM</string>
+    <string>WCP=WCOP</string>
+    <string>WPB=WPUB</string>
+    <string>WXX=WXXX</string>
+  </CONVERSION_ID3v22_ID3v23>
+  <CONVERSION_ID3v23_ID3v22>
+    <string>RBUF=BUF</string>
+    <string>PCNT=CNT</string>
+    <string>COMM=COM</string>
+    <string>AENC=CRA</string>
+    <string>ENCR=CRM</string>
+    <string>ETCO=ETC</string>
+    <string>EQUA=EQU</string>
+    <string>GEOB=GEO</string>
+    <string>IPLS=IPL</string>
+    <string>LINK=LNK</string>
+    <string>MCDI=MCI</string>
+    <string>MLLT=MLL</string>
+    <string>APIC=PIC</string>
+    <string>POPM=POP</string>
+    <string>RVRB=REV</string>
+    <string>RVAD=RVA</string>
+    <string>SYLT=SLT</string>
+    <string>SYTC=STC</string>
+    <string>TALB=TAL</string>
+    <string>TBPM=TBP</string>
+    <string>TCOM=TCM</string>
+    <string>TCON=TCO</string>
+    <string>TCMP=TCP</string>
+    <string>TCOP=TCR</string>
+    <string>TDAT=TDA</string>
+    <string>TDLY=TDY</string>
+    <string>TENC=TEN</string>
+    <string>TFLT=TFT</string>
+    <string>TIME=TIM</string>
+    <string>TKEY=TKE</string>
+    <string>TLAN=TLA</string>
+    <string>TLEN=TLE</string>
+    <string>TMED=TMT</string>
+    <string>TOPE=TOA</string>
+    <string>TOFN=TOF</string>
+    <string>TOLY=TOL</string>
+    <string>TORY=TOR</string>
+    <string>TOAL=TOT</string>
+    <string>TPE1=TP1</string>
+    <string>TPE2=TP2</string>
+    <string>TPE3=TP3</string>
+    <string>TPE4=TP4</string>
+    <string>TPOS=TPA</string>
+    <string>TPUB=TPB</string>
+    <string>TSRC=TRC</string>
+    <string>TRDA=TRD</string>
+    <string>TRCK=TRK</string>
+    <string>TSIZ=TSI</string>
+    <string>TSSE=TSS</string>
+    <string>TIT1=TT1</string>
+    <string>TIT2=TT2</string>
+    <string>TIT3=TT3</string>
+    <string>TEXT=TXT</string>
+    <string>TXXX=TXX</string>
+    <string>TYER=TYE</string>
+    <string>UFID=UFI</string>
+    <string>USLT=ULT</string>
+    <string>WOAF=WAF</string>
+    <string>WOAR=WAR</string>
+    <string>WOAS=WAS</string>
+  </CONVERSION_ID3v23_ID3v22>
+</TagID3Data>

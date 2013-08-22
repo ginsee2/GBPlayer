@@ -1,0 +1,55 @@
+﻿<Window x:Uid="Player" x:Class="WindowPlayer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:gbdev="clr-namespace:gbDev"
+        x:Name="Player" Title="Player" Height="Auto" Width="398" WindowStyle="None"  ResizeMode="NoResize" 
+        AllowsTransparency="true" 
+    Background="Transparent" ShowInTaskbar="False">
+    <Window.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2">
+                    <gbdev:ConverterValueDivision x:Uid="gbdev:ConverterValueDivision_1" x:Key="ConverterValueDivision"/>
+                    <gbdev:ConverterBoolToImageSource x:Uid="gbdev:ConverterBoolToImageSource_1" x:Key="ConverterBoolToImage"/>
+                    <gbdev:ConverterGetBitmapImage x:Uid="gbdev:ConverterGetBitmapImage_1" x:Key="ConverterGetBitmapImage"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Uid="Grid_1" Height="Auto" Width="Auto" Background="Transparent">
+        <MediaElement x:Uid="Lecteur" Height="14" Name="Lecteur" Width="95" Visibility="Hidden" />
+        <Border x:Uid="BordureGlobale" Name="BordureGlobale" CornerRadius="4" Background="{StaticResource W8Background}">
+        </Border>
+        <StackPanel x:Uid="StackPanel_1" Margin="2,2,3,0" Background="Transparent">
+            <Border  x:Uid="EnteteLecteur" Name="EnteteLecteur" AllowDrop="True" CornerRadius="4" Margin="1,1,2,2" 
+                     Background="{StaticResource W8BackgroundOver}"
+                     BorderBrush="{StaticResource W8BackgroundBorder}"
+                     BorderThickness="1,1,0,0">
+                <DockPanel x:Uid="DockPanel_1">
+                    <Label x:Uid="Entete" Name="Entete" Width="Auto" Content="Player" Foreground="{StaticResource W8ForegroundWhite}"
+                       FontFamily="Calibri" FontSize="14">
+                    </Label>
+                    <ComboBox x:Uid="DirectXList" Name="DirectXList" Grid.Row="1"  StaysOpenOnEdit="true"
+                                         FontFamily="Calibri" FontSize="12"
+                                         Background="{StaticResource W8Background}"
+                                         BorderBrush="{StaticResource W8BorderGray}"
+                                         Foreground="{StaticResource W8ForegroundWhite}"                                         
+                                         ItemContainerStyle="{StaticResource ComboBoxItemW8}"
+                                         Grid.Column="0" Margin="5,0,5,0" Width="Auto" MinWidth="80" 
+                                         Height="25" IsEditable="False" Text=""
+                                         ItemsSource="{Binding ElementName=Player, Path=DirectXSystemList}">
+                    </ComboBox>
+                    <Button x:Uid="BPOpenRecorder" HorizontalAlignment="Right" Height="16" Width="16" Style="{StaticResource GBButtonIcone}" 
+                            Margin="1,1,0,0" Name="BPOpenRecorder">
+                        <Button.Content>
+                            <Image x:Uid="Image_1" Stretch="Fill" Height="11" Width="11"  HorizontalAlignment="Left" 
+                                                    Source="/GBPlayer;component/Images/Icons/IconAjouter16.png"></Image>
+                        </Button.Content>
+                    </Button>
+                </DockPanel>
+            </Border>
+            <StackPanel x:Uid="PilePiste" Name="PilePiste"/>
+        </StackPanel>
+    </Grid>
+</Window>

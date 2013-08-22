@@ -1,0 +1,409 @@
+﻿<UserControl x:Uid="UserControl_1" x:Class="userControlWantList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+            d:DesignHeight="300" d:DesignWidth="832"
+            xmlns:gbDev="clr-namespace:gbDev"
+             SnapsToDevicePixels="true">
+    <UserControl.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="../Styles/GBStyleListView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <gbDev:ConverterStringToFlagPath x:Uid="gbDev:ConverterStringToFlagPath_1" x:Key="ConverterStringToFlagPath"/>
+            <gbDev:ConverterBoolToImageSource x:Uid="gbDev:ConverterBoolToImageSource_1" x:Key="ConverterBoolToImage"/>
+            <gbDev:ConverterBoolToOpacity x:Uid="gbDev:ConverterBoolToOpacity_1" x:Key="ConverterBoolToOpacity"/>
+            <gbDev:ConverterDiscogsIdToImagePath x:Uid="gbDev:ConverterDiscogsIdToImagePath_1" x:Key="ConverterDiscogsIdToImagePath"/>
+            <gbDev:ConverterBoolToVisibility x:Uid="gbDev:ConverterBoolToVisibility_1" x:Key="ConverterBoolToVisibility"/>
+            <gbDev:ConverterDiscogsConcatArtistsCollection x:Uid="gbDev:ConverterDiscogsConcatArtistsCollection_1" x:Key="ConverterDiscogsConcatArtistsCollection"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <XmlDataProvider x:Uid="DataProvider" x:Name="DataProvider" XPath="WANTLIST"  />
+    </UserControl.DataContext>
+    <Grid x:Uid="Grid_1">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
+        </Grid.RowDefinitions>
+ <!--       <Grid.DataContext>
+            <XmlDataProvider x:Name="DataProvider" XPath="WANTLIST"  />
+        </Grid.DataContext>-->
+        <Border  x:Uid="EnteteLecteur" Name="EnteteLecteur" AllowDrop="True" CornerRadius="3" Margin="2" Height="28"
+                     Background="Beige"
+                     BorderBrush="{StaticResource APBrushHautFenetre}"
+                     BorderThickness="1,1,0,0">
+            <Border.Effect>
+                <DropShadowEffect  x:Uid="DropShadowEffect_1" Direction="240" ShadowDepth="1" Color="Black" RenderingBias="Performance" />
+            </Border.Effect>
+        </Border>
+        <Border  x:Uid="EnteteLecteurBasse" Name="EnteteLecteurBasse" AllowDrop="True" CornerRadius="3" Margin="2" Height="28" 
+                     Background="Transparent"
+                            BorderBrush="{StaticResource APBrushHautFenetre}"
+                     BorderThickness="0,0,1,1">
+       </Border>
+        <Grid x:Uid="GrilleDeRecherche" Name="GrilleDeRecherche" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto"/>
+           </Grid.ColumnDefinitions>
+            <DockPanel x:Uid="DockPanel_1" Grid.Column="0" Margin="5,0,0,0">
+                <!--<Image Name="FiltreVinylCollection" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                        Opacity="0.3"
+                                                        Source="/GBPlayer;component/Images/Icons/IconVinyl.png"
+                                                        ToolTip="Filtrer les vinyls renseignés de la collection">
+                </Image>
+                <Image Name="FiltreVinylDiscogs" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Opacity="0.3"
+                                                       Source="/GBPlayer;component/Images/Icons/IconCollection.png"
+                                                        ToolTip="Filtrer les vinyls intégrés dans la collection Discogs">
+                </Image>
+                <Image Name="FiltreVinylWanted" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Opacity="0.3"
+                                                       Source="/GBPlayer;component/Images/Icons/IconWanted.png"
+                                                        ToolTip="Filtrer les vinyls originaux recherchés">
+                </Image>
+                <Image Name="FiltreVinylForSale" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Opacity="0.3"
+                                                       Source="/GBPlayer;component/Images/Icons/IconSell.png"
+                                                        ToolTip="Filtrer les vinyls à vendre">
+                </Image>
+                <Image Name="FiltreVinylARecevoir" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                        Opacity="0.3"
+                                                       Source="/GBPlayer;component/Images/Icons/IconTransport.png"
+                                                        ToolTip="Filtrer les vinyls à recevoir">
+                </Image>
+                <Image Name="FiltreVinylAPayer" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Opacity="0.3"
+                                                       Source="/GBPlayer;component/Images/Icons/IconEuro.png"
+                                                        ToolTip="Filtrer les vinyls à payer">
+                </Image>
+                <Border Margin="5" BorderThickness="0.5" BorderBrush="{StaticResource ScrollButtonColor2}"/>
+                -->
+                <Border x:Uid="Border_1" Margin="5" BorderThickness="0.5" BorderBrush="{StaticResource ScrollButtonColor2}"/>
+                <CheckBox x:Uid="IndicateurRechercheDupliquer" Padding="0" Height="22" Width="22"
+                                      Name="IndicateurRechercheDupliquer" Style="{StaticResource GBCheckBox}" 
+                                      ToolTip="Synchronisation recherche entre les fichiers et la collection">
+                    <CheckBox.Content>
+                        <Image x:Uid="Image_1" Stretch="Fill"  Height="16" Width="16" Source="{Binding Path=IsChecked, 
+                                    Converter={StaticResource ConverterBoolToImage}, 
+                                    ConverterParameter=/GBPlayer;component/Images/imgboutons/rechercheliee24.png!/GBPlayer;component/Images/imgboutons/recherchenonliee24.png!, 
+                                    RelativeSource={RelativeSource FindAncestor, AncestorType=CheckBox, AncestorLevel=1}}">
+                        </Image>
+                    </CheckBox.Content>
+                </CheckBox>
+                <CheckBox x:Uid="RechercheLocale" Padding="0" Height="22" Width="22"
+                                    Name="RechercheLocale" Style="{StaticResource GBCheckBox}" 
+                                    ToolTip="Recherche dans la collection ou dans la bibliothèque de fichiers"
+                                    IsChecked="True" 
+                                    Visibility="{Binding ElementName=IndicateurRechercheDupliquer, Path=IsChecked, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=False}">
+                    <CheckBox.Content>
+                        <Image x:Uid="Image_2" Stretch="Fill"  Height="16" Width="16" Source="{Binding Path=IsChecked, 
+                                    Converter={StaticResource ConverterBoolToImage}, 
+                                    ConverterParameter=/GBPlayer;component/Images/imgboutons/disque24.png!/GBPlayer;component/Images/imgboutons/fichiermusic24.png!, 
+                                    RelativeSource={RelativeSource FindAncestor, AncestorType=CheckBox, AncestorLevel=1}}">
+                        </Image>
+                    </CheckBox.Content>
+                </CheckBox>
+            </DockPanel>
+                <DockPanel x:Uid="DockPanel_2" Grid.Column="1">
+                    <Border x:Uid="BordureLecteur" Name="BordureLecteur"  VerticalAlignment="Center" Height="24"
+                        BorderBrush="{StaticResource ScrollButtonColor2}" 
+                        BorderThickness="1" CornerRadius="2">
+                    <Grid x:Uid="Grid_2" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*"/>
+                            <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto"/>
+                            <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Uid="RechercheArtiste" MinWidth="200" Name="RechercheArtiste" Margin="1" Style="{StaticResource GridEditStyle}"
+                                                         Background="#FFFEFEFE"
+                                                         TextAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Height="20"
+                                 FontFamily="Calibri"
+                                 FontSize="12"
+                                 Text="" HorizontalAlignment="Stretch"/>
+                        <Border x:Uid="Border_1" Margin="-1" Grid.Column="1" BorderThickness="1" BorderBrush="{StaticResource ScrollButtonColor2}"
+                                CornerRadius="0,2,2,0" Width="Auto" Visibility="{Binding ElementName=RecherchePrecedente, Path=IsEnabled, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=True}">
+                            <DockPanel x:Uid="DockPanel_3">
+                                <Button x:Uid="RecherchePrecedente" Grid.Column="1" Style="{StaticResource GBButtonIcone}" Height="22" IsEnabled="False"
+                                Name="RecherchePrecedente"
+                                ToolTip="Revenir à la recherche précédente"
+                                Visibility="{Binding ElementName=RecherchePrecedente, Path=IsEnabled, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=True}"
+                                        Width="22">
+                                    <Button.Content>
+                                        <Image x:Uid="Image_4" Stretch="Fill"  Height="16" Width="16"
+                                       HorizontalAlignment="Center" Source="/GBPlayer;component/Images/imgboutons/mvtarriere24.png">
+                                        </Image>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Uid="AnnuleRechercheEnCours" Grid.Column="2" Style="{StaticResource GBButtonIcone}" Height="22"  IsEnabled="{Binding ElementName=RecherchePrecedente, Path=IsEnabled}"
+                                ToolTip="Annuler toutes les recherches"
+                                Name="AnnuleRechercheEnCours" 
+                                Visibility="{Binding ElementName=AnnuleRechercheEnCours, Path=IsEnabled, 
+                                        Converter={StaticResource ConverterBoolToVisibility},ConverterParameter=True}"
+                                Width="22" HorizontalAlignment="Left">
+                                    <Button.Content>
+                                        <Image x:Uid="Image_5" Stretch="Fill"  Height="16" Width="16"
+                                       HorizontalAlignment="Center" Source="/GBPlayer;component/Images/imgboutons/annuler24.png"></Image>
+                                    </Button.Content>
+                                </Button>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                   </Border>
+                <DockPanel HorizontalAlignment="right">
+                    <TextBlock Margin="5,0,10,0" x:Uid="NbreElementsAffiches" FontFamily="Calibri" FontSize="12" Name="NbreElementsAffiches"
+                       Text="Element" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Black">
+                    </TextBlock>
+                    <Button x:Uid="BPWantList" Height="22" Width="22" Style="{StaticResource GBButtonIcone}" Grid.Column="2" 
+                                    Margin="0,0,5,0" Name="BPWantList" 
+                                    HorizontalAlignment="Right"
+                                    Visibility="Visible" ToolTip="Update la liste des recherches" >
+                        <Button.Content>
+                            <Image x:Uid="Image_3" Height="16" Width="16"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                        Source="/GBPlayer;component/Images/imgboutons/update24.png"></Image>
+                        </Button.Content>
+                    </Button>
+                    <Border x:Uid="Border_1" Margin="5" BorderThickness="0.5" BorderBrush="{StaticResource ScrollButtonColor2}"/>
+                    <Button x:Uid="BPEnregistrer" Height="22" Width="22" Style="{StaticResource GBButtonIcone}" Grid.Column="2" 
+                        Margin="0,0,5,0" Name="BPEnregistrer" 
+                        HorizontalAlignment="Right" Click="BPEnregistrer_Click"
+                        Visibility="Visible" ToolTip="Enregistrer les modifications dans la liste des recherches" >
+                        <Button.Content>
+                            <Image x:Uid="Image_6" Height="16" Width="16"  VerticalAlignment="Center" HorizontalAlignment="Center" 
+                           Source="/GBPlayer;component/Images/imgboutons/enregistrer24.png"></Image>
+                        </Button.Content>
+                    </Button>
+                </DockPanel>
+            </DockPanel>
+        </Grid>
+        <!-- </Border>-->
+        <ListView x:Uid="XMLBinding" Grid.Row="1" Height="Auto" Name="XMLBinding" Width="Auto"
+                                AllowDrop="True"
+                                ScrollViewer.CanContentScroll="True"
+                                ItemsSource="{Binding XPath=wants}"
+                                Style="{StaticResource GBListView}"
+                               ItemContainerStyle="{StaticResource GBListViewItemStyle}"
+                              >
+
+
+            <!--  <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="15" Text="Essai"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>-->
+
+
+            <ListView.View>
+                <GridView x:Uid="GridView_1">
+                    <GridView.ColumnHeaderContextMenu>
+                        <ContextMenu x:Uid="MenuContextuelHeaderListe" Name="MenuContextuelHeaderListe">
+                        </ContextMenu>
+                    </GridView.ColumnHeaderContextMenu>
+                    <!--
+                                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding XPath=.}" >
+                                        <GridViewColumnHeader Content="{Binding XPath=@Type}" Style="{StaticResource GBGridViewColumnHeader}"/>
+                                    </GridViewColumn>-->
+             <!--       <GridViewColumn x:Name="id" Width="50" >
+                        <GridViewColumnHeader Content="id" Style="{StaticResource GBGridViewColumnHeader}"
+                                             />
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding XPath=id}" FontFamily="Calibri" Name="tagLinkid" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>-->
+                    <!--<GridViewColumn>
+                        <GridViewColumnHeader Content="Tag" Style="{StaticResource GBGridViewColumnHeader}"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition MaxWidth="16"/>
+                                        <ColumnDefinition MaxWidth="16"/>
+                                        <ColumnDefinition MaxWidth="16"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition MaxHeight="16"/>
+                                        <RowDefinition MaxHeight="16"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Name="TagVinylCollection" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Grid.Row="0"
+                                                       Grid.Column="0"
+                                            Opacity="{Binding XPath=VinylCollection, Converter={StaticResource ConverterBoolToOpacity}}"
+                                            Source="/GBPlayer;component/Images/Icons/IconVinyl.png">
+                                    </Image>
+                                    <Image Name="TagVinylDiscogs" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       Opacity="{Binding XPath=VinylDiscogs, Converter={StaticResource ConverterBoolToOpacity}}"
+                                                       Source="/GBPlayer;component/Images/Icons/IconCollection.png">
+                                    </Image>
+                                    <Image Name="TagVinylWanted" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Grid.Row="1"
+                                                       Grid.Column="0"
+                                                       Opacity="{Binding XPath=VinylWanted, Converter={StaticResource ConverterBoolToOpacity}}"
+                                                       Source="/GBPlayer;component/Images/Icons/IconWanted.png">
+                                    </Image>
+                                    <Image Name="TagVinylForSale" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Grid.Row="1"
+                                                       Grid.Column="1"
+                                                       Opacity="{Binding XPath=VinylForSale, Converter={StaticResource ConverterBoolToOpacity}}"
+                                                       Source="/GBPlayer;component/Images/Icons/IconSell.png"></Image>
+                                    <Image Name="TagVinylARecevoir" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Grid.Row="0"
+                                                       Grid.Column="2"
+                                                       Opacity="{Binding XPath=VinylARecevoir, Converter={StaticResource ConverterBoolToOpacity}}"
+                                                       Source="/GBPlayer;component/Images/Icons/IconTransport.png"></Image>
+                                    <Image Name="TagVinylAPayer" Height="16" 
+                                                       Stretch="Fill"
+                                                       Width="16" 
+                                                       Grid.Row="1"
+                                                       Grid.Column="2"
+                                                       Opacity="{Binding XPath=VinylAPayer, Converter={StaticResource ConverterBoolToOpacity}}"
+                                                       Source="/GBPlayer;component/Images/Icons/IconEuro.png"></Image>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>-->
+                    <GridViewColumn x:Uid="Image" x:Name="Image" Width="40">
+                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_1" Content="Image" Style="{StaticResource GBGridViewColumnHeader}"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_1">
+                                <Grid x:Uid="Grid_3" HorizontalAlignment="Center">
+                                    <Image x:Uid="tagLinkImagePochette" Name="tagLinkImagePochette"  Height="38" 
+                                           Stretch="Fill"
+                                           Tag="{Binding XPath=basic_information/id}" 
+                                           Source="{Binding XPath=basic_information/thumb,IsAsync=True, Converter={StaticResource ConverterDiscogsIdToImagePath}}"
+                                           Width="38" >
+                                       <!-- <Image.Source>
+                                            <BitmapImage UriSource="/>
+                                        </Image.Source>-->
+                                    </Image>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Uid="Artiste" x:Name="Artiste" Width="200" >
+                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_2" Content="Artiste" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Click="SortClick" Tag="basic_information/artists/name"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_2">
+                                <Grid x:Uid="Grid_4" HorizontalAlignment="Left">
+                                    <ListBox  x:Uid="tagNomArtiste" Name="tagNomArtiste" Grid.Row="1" Style="{StaticResource GBListBoxStatic}" Margin="0"
+                                                      BorderThickness="0" Background="Transparent"
+                                                      ItemContainerStyle="{StaticResource GBListBoxItemStyleNoSelect}"
+                                                      FontFamily="Calibri" FontSize="12" Width="Auto" MinWidth="20" Height="Auto"
+                                                      ItemsSource="{Binding XPath=basic_information/artists,
+                                                      Converter={StaticResource ConverterDiscogsConcatArtistsCollection}}"
+                                                        />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Uid="Titre" x:Name="Titre" Width="200" >
+                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_3" Content="Titre" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Click="SortClick" Tag="basic_information/title"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_3">
+                                <Grid x:Uid="Grid_5" HorizontalAlignment="Left">
+                                    <TextBlock x:Uid="tagLinkTitre" Text="{Binding XPath=basic_information/title}" FontFamily="Calibri" Name="tagLinkTitre" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Uid="Label" x:Name="Label" Width="200" >
+                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_4" Content="Label" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Click="SortClick" Tag="basic_information/labels/name"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_4">
+                                <Grid x:Uid="Grid_6" HorizontalAlignment="Left">
+                                    <TextBlock x:Uid="tagLinkLabel" Text="{Binding XPath=basic_information/labels/name}" FontFamily="Calibri" 
+                                               Name="tagLinkLabel" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Uid="Catalogue" x:Name="Catalogue" Width="75" >
+                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_5" Content="Catalogue" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Click="SortClick" Tag="basic_information/labels/catno"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_5">
+                                <Grid x:Uid="Grid_7" HorizontalAlignment="Left">
+                                    <TextBlock x:Uid="tagLinkCatalogue" Text="{Binding XPath=basic_information/labels/catno}" FontFamily="Calibri" 
+                                               Name="tagLinkCatalogue" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Uid="Annee" x:Name="Annee" Width="50" >
+                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_6" Content="Annee" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Click="SortClick" Tag="basic_information/year"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_6">
+                                <Grid x:Uid="Grid_8" HorizontalAlignment="Left">
+                                    <TextBlock x:Uid="tagAnnee" Text="{Binding XPath=basic_information/year}" FontFamily="Calibri" 
+                                               Name="tagAnnee" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Uid="Format" x:Name="Format" Width="50" >
+                        <GridViewColumnHeader x:Uid="GridViewColumnHeader_7" Content="Format" Style="{StaticResource GBGridViewColumnHeader}"
+                                              Click="SortClick" Tag="basic_information/formats/descriptions"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_7">
+                                <Grid x:Uid="Grid_9" HorizontalAlignment="Left">
+                                    <TextBlock x:Uid="tagFormat" Text="{Binding XPath=basic_information/formats/descriptions}" FontFamily="Calibri" 
+                                               Name="tagFormat" VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

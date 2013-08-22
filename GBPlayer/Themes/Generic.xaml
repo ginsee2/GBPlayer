@@ -1,0 +1,29 @@
+﻿<ResourceDictionary
+    x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gbDev="clr-namespace:gbDev">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary x:Uid="ResourceDictionary_2" Source="../Styles/GBStyleTextBox.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Uid="Style_1" x:Key="{x:Type gbDev:CheckedComboBox}" TargetType="{x:Type gbDev:CheckedComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter x:Uid="Setter_1" Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style x:Uid="Style_2" TargetType="{x:Type ComboBoxItem}" >
+                    <Setter x:Uid="Setter_2" Property="Margin" Value="2,2,2,0"/>
+                    <Setter x:Uid="Setter_3" Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate x:Uid="ControlTemplate_1" TargetType="{x:Type ComboBoxItem}">
+                                <Border x:Uid="BorderSelect" Background="Transparent" x:Name="BorderSelect">
+                                    <CheckBox x:Uid="chkSelect" Content="{TemplateBinding Content}" x:Name="chkSelect"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>    
+    </Style>
+
+
+</ResourceDictionary>
