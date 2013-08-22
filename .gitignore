@@ -1,6 +1,7 @@
 # Build and Object Folders
 bin/
 obj/
+Sources/
 
 #User Specific Files
 *.user
