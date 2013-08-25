@@ -880,12 +880,11 @@ Public Class tagID3FilesInfosDO
             Case "Titre"
                 Dim Compteur As Integer = 0
                 If Me.Titre <> "" Then
-                    Dim DataConfig As ConfigPerso = ConfigPerso.LoadConfig
-                    DataConfig.FILESINFOS_ParametrageMenuTitre.ForEach(Sub(i As String)
-                                                                           Compteur += 1
-                                                                           ListeMenu.Add(Trim(ExtraitChaine(Me.Titre, "", "[", , True)) _
-                                                                                         & " " & i & ";PersNomTitre" & Compteur & ";")
-                                                                       End Sub)
+                    Application.Config.filesInfos_settingTitleMenu.ForEach(Sub(i As String)
+                                                                               Compteur += 1
+                                                                               ListeMenu.Add(Trim(ExtraitChaine(Me.Titre, "", "[", , True)) _
+                                                                                             & " " & i & ";PersNomTitre" & Compteur & ";")
+                                                                           End Sub)
                     ListeMenu.Add(";;")
                 End If
                 If ListeFichiers.Count = 1 Then
@@ -1153,8 +1152,8 @@ Public Class tagID3FilesInfosDO
     End Sub
     Public Sub ExtractionInfosTitre()
         Using Fichier As New gbDev.TagID3.tagID3Object(NomComplet)
-            Dim DataConfig As ConfigPerso = ConfigPerso.LoadConfig
-            Dim ChaineExtractionInfos As String = DataConfig.FILESINFOS_ChaineExtractionInfos
+            'Dim DataConfig As ConfigPerso = ConfigPerso.LoadConfig
+            Dim ChaineExtractionInfos As String = Application.Config.filesInfos_stringFormat_extractInfos
             If ChaineExtractionInfos <> "" Then
                 Fichier.ExtractInfosTitre(ChaineExtractionInfos)
                 Artiste = Fichier.ID3v2_Texte("TPE1")

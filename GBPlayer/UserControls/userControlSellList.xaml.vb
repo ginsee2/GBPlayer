@@ -31,7 +31,6 @@ Public Class UserControlSellList
     Private Const GBAU_NOMDOSSIER_IMAGESVINYLS = "GBDev\GBPlayer\Images\Sell"
     Private Const GBAU_NOMDOSSIER_SELLLIST = "GBDev\GBPlayer\Data\Discogs"
     Private Const GBAU_NOMFICHIER_SELLLIST = "DiscogsSellList"
-    Private Const UserName = "GilBau"
     Private Delegate Sub NoArgDelegate()
 
     '***********************************************************************************************
@@ -40,9 +39,12 @@ Public Class UserControlSellList
     Public Sub New()
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
+        LinkFileSellList()
+    End Sub
+    Private Sub LinkFileSellList()
         Dim RepDest = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\" & GBAU_NOMDOSSIER_SELLLIST
         If Directory.Exists(RepDest) Then
-            PathFichierSellList = String.Format("{0}\{1}_{2}.xml", {RepDest, GBAU_NOMFICHIER_SELLLIST, UserName})
+            PathFichierSellList = String.Format("{0}\{1}_{2}.xml", {RepDest, GBAU_NOMFICHIER_SELLLIST, Application.Config.user_name})
         End If
         If PathFichierSellList IsNot Nothing Then DataProvider.Source = New Uri(PathFichierSellList)
     End Sub
@@ -53,37 +55,33 @@ Public Class UserControlSellList
     End Sub
     Private Sub gbSellList_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        Dim SauvegardeCollection As New Dictionary(Of String, GridViewColumn)
+        If DataProvider.Document Is Nothing Then LinkFileSellList()
+        Dim SauvegardeSellList As New Dictionary(Of String, GridViewColumn)
         For Each i As GridViewColumn In CType(XMLBinding.View, GridView).Columns
-            SauvegardeCollection.Add(CType(i.Header, GridViewColumnHeader).Content.ToString, i)
+            SauvegardeSellList.Add(CType(i.Header, GridViewColumnHeader).Content.ToString, i)
         Next
         CType(XMLBinding.View, GridView).Columns.Clear()
-        ConfigUtilisateur.SELLLIST_ListeColonnes.ForEach(Sub(c As String)
-                                                             Try
-                                                                 Dim NomColonne As String = ExtraitChaine(c, "", ";")
-                                                                 Dim Position As Long = CLng(ExtraitChaine(c, ";", "/"))
-                                                                 Dim Dimension As Double = 0
-                                                                 Try
-                                                                     Dimension = CDbl(ExtraitChaine(c, "/", ""))
-                                                                 Catch ex As Exception
-                                                                     Dimension = Double.NaN
-                                                                 End Try
-                                                                 Dim Colonne As GridViewColumn = SauvegardeCollection.Item(NomColonne)
-                                                                 SauvegardeCollection.Remove(NomColonne)
-                                                                 Colonne.Width = Dimension
-                                                                 CType(XMLBinding.View, GridView).Columns.Add(Colonne)
-                                                             Catch ex As Exception
-                                                             End Try
-                                                         End Sub)
-        For Each i In SauvegardeCollection
+        Application.Config.sellList_columns.ForEach(Sub(c As ConfigApp.ColumnDescription)
+                                                        Try
+                                                            Dim NomColonne As String = c.Name
+                                                            Dim Dimension As Double = 0
+                                                            Try
+                                                                Dimension = c.Size
+                                                            Catch ex As Exception
+                                                                Dimension = Double.NaN
+                                                            End Try
+                                                            Dim Colonne As GridViewColumn = SauvegardeSellList.Item(NomColonne)
+                                                            SauvegardeSellList.Remove(NomColonne)
+                                                            Colonne.Width = Dimension
+                                                            CType(XMLBinding.View, GridView).Columns.Add(Colonne)
+                                                        Catch ex As Exception
+                                                        End Try
+                                                    End Sub)
+        For Each i In SauvegardeSellList
             Dim Colonne As GridViewColumn = i.Value
             CType(XMLBinding.View, GridView).Columns.Add(Colonne)
         Next
-        ActiveTri(ExtraitChaine(ConfigUtilisateur.SELLLIST_ColonneTriee, "", ";"),
-                  IIf(ExtraitChaine(ConfigUtilisateur.SELLLIST_ColonneTriee, ";", "") = "A",
-                      ListSortDirection.Ascending, ListSortDirection.Descending))
+        ActiveTri(Application.Config.sellList_sortColumn.Name, Application.Config.sellList_sortColumn.SortDirection)
         If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
             If System.Environment.OSVersion.Version.Major > 5 Then PlateformVista = True
         End If
@@ -93,20 +91,18 @@ Public Class UserControlSellList
     End Sub
     Private Sub gbSellList_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        SaveConfiguration(ConfigUtilisateur)
-        ConfigPerso.SaveConfig(ConfigUtilisateur)
+        SaveConfiguration()
     End Sub
-    Public Sub SaveConfiguration(ByVal ConfigUtilisateur As gbDev.ConfigPerso)
+    Public Sub SaveConfiguration()
         If Not DisplayValidation Then Exit Sub
-        ConfigPerso.UpdateListeColonnes(ConfigUtilisateur.SELLLIST_ListeColonnes, CType(XMLBinding.View, GridView).Columns)
+        ConfigApp.UpdateListeColonnes(Application.Config.sellList_columns, CType(XMLBinding.View, GridView).Columns)
         If ColonneTriEnCours IsNot Nothing Then
-            ConfigUtilisateur.SELLLIST_ColonneTriee = ColonneTriEnCours.Tag & ";" &
-                                    IIf(IconeDeTriEnCours.Direction = ListSortDirection.Ascending, "A", "D")
+            Application.Config.sellList_sortColumn = New ConfigApp.DescriptionTri(ColonneTriEnCours.Tag, IconeDeTriEnCours.Direction)
         End If
         Dim source As String = DataProvider.Source.LocalPath
-        DataProvider.Document.Save(source)
+        If DataProvider.Document IsNot Nothing Then
+            '    DataProvider.Document.Save(source)
+        End If
     End Sub
 
     '***********************************************************************************************
@@ -141,7 +137,7 @@ Public Class UserControlSellList
         Else
             Exit Sub
         End If
-        DiscogsServer.RequestAdd_SellListId("GilBau", Newid, New DelegateRequestResult(AddressOf DiscogsServerAddIdResultNotify))
+        DiscogsServer.RequestAdd_SellListId(Application.Config.user_name, Newid, New DelegateRequestResult(AddressOf DiscogsServerAddIdResultNotify))
     End Sub
     Private Sub DeleteIdSellList()
         Dim NodeSelectionne As XmlElement = CType(XMLBinding.SelectedItem, XmlElement)
@@ -153,7 +149,7 @@ Public Class UserControlSellList
             Dim NodeASelectionner As XmlElement = Nothing
             For Each i As XmlElement In XMLBinding.SelectedItems
                 NodeASelectionner = i.NextSibling
-                DiscogsServer.RequestDelete_SellListId("GilBau", i.SelectSingleNode("id").InnerText,
+                DiscogsServer.RequestDelete_SellListId(Application.Config.user_name, i.SelectSingleNode("id").InnerText,
                                                        New DelegateRequestResult(AddressOf DiscogsServerDeleteIdResultNotify))
             Next
             XMLBinding.SelectedItem = NodeASelectionner
@@ -333,7 +329,7 @@ Public Class UserControlSellList
     Private Sub BPSellList_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BPSellList.Click
         Me.IsEnabled = False
         NbreElementsAffiches.Text = "Mise a jour en cours...."
-        DiscogsServer.RequestGet_SellListAll("GilBau", New DelegateRequestResult(AddressOf DiscogsServerGetAllResultNotify))
+        DiscogsServer.RequestGet_SellListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetAllResultNotify))
     End Sub
 
     '***********************************************************************************************
@@ -428,7 +424,7 @@ Public Class UserControlSellList
         End If
         Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
                                  New NoArgDelegate(Sub()
-                                                       If AddResult <> "" Then
+                                                       If AddResult <> "" And DataProvider.Document IsNot Nothing Then
                                                            Dim doc As New XmlDocument()
                                                            doc.LoadXml(AddResult)
                                                            Dim newBook As XmlNode = DataProvider.Document.ImportNode(doc.FirstChild(), True)

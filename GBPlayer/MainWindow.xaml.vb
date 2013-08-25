@@ -38,21 +38,18 @@ Class MainWindow
 
  
     Private Sub MainWindow_Initialized(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Initialized
-        'Dim Config As ConfigStorage = New ConfigStorage
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
         Dim HauteurEcran = SystemParameters.PrimaryScreenHeight
         Dim LargeurEcran = SystemParameters.PrimaryScreenWidth
-        Me.Top = ConfigUtilisateur.MAINWINDOW_Position.Y
+        Me.Top = Application.Config.mainWindow_position.Y
         If Me.Top > HauteurEcran Or Me.Top < 0 Then Me.Top = 0
-        Me.Left = ConfigUtilisateur.MAINWINDOW_Position.X
+        Me.Left = Application.Config.mainWindow_position.X
         If Me.Left > LargeurEcran Or Me.Left < 0 Then Me.Left = 0
-        Me.Height = ConfigUtilisateur.MAINWINDOW_Size.Height
+        Me.Height = Application.Config.mainWindow_size.Height
         If Me.Height > HauteurEcran - Me.Top Then Me.Height = HauteurEcran - Me.Top - 10
-        Me.Width = ConfigUtilisateur.MAINWINDOW_Size.Width
+        Me.Width = Application.Config.mainWindow_size.Width
         If Me.Width > LargeurEcran - Me.Left Then Me.Width = LargeurEcran - Me.Left - 10
-        ListeRepertoires.gbRacine = ConfigUtilisateur.LISTEREPERTOIRES_Racine
-        ListeRepertoires.gbFolderSelected = ConfigUtilisateur.LISTEREPERTOIRES_RepertoireEnCours
+        ListeRepertoires.gbRacine = Application.Config.directoriesList_root
+        ListeRepertoires.gbFolderSelected = Application.Config.directoriesList_activeDirectory
     End Sub
     Private Sub MainWindow_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         ProcessMiseAJour = New WindowUpdateProgress(Me)
@@ -74,7 +71,7 @@ Class MainWindow
         Bibliotheque.SubscribeUpdateShellEvent(ListeFichiersMp3)
         Bibliotheque.SubscribeUpdateShellEvent(EditeurTAG2)
     End Sub
-     '***********************************************************************************************
+    '***********************************************************************************************
     '---------------------------------DESTRUCTION DE LA CLASSE--------------------------------------
     '***********************************************************************************************
     Private Sub MainWindow_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
@@ -97,21 +94,18 @@ Class MainWindow
         ForcageArretApplication()
     End Sub
     Public Sub ForcageArretApplication()
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        ConfigUtilisateur.MAINWINDOW_Position = New Point(Me.Left, Me.Top)
-        ConfigUtilisateur.MAINWINDOW_Size = New Size(Me.Width, Me.Height)
-        ConfigUtilisateur.LISTEREPERTOIRES_RepertoireEnCours = ListeRepertoires.gbFolderSelected
-        ConfigUtilisateur.LISTEREPERTOIRES_Racine = ListeRepertoires.gbRacine
-        oAuthDiscogs.SaveConfiguration(ConfigUtilisateur)
-        ListeFichiersMp3.SaveConfiguration(ConfigUtilisateur)
-        ListeCollection.SaveConfiguration(ConfigUtilisateur)
-        ListeWantList.SaveConfiguration(ConfigUtilisateur)
-        ListeSellList.SaveConfiguration(ConfigUtilisateur)
-        ListePisteCD.SaveConfiguration(ConfigUtilisateur)
-        If LePlayer IsNot Nothing Then LePlayer.ClosePlayer(ConfigUtilisateur)
-        If NavigateurWeb IsNot Nothing Then NavigateurWeb.CloseWebBrowser(ConfigUtilisateur)
-        ConfigPerso.SaveConfig(ConfigUtilisateur)
+        Application.Config.mainWindow_position = New ConfigApp.ConfigPoint(Me.Left, Me.Top)
+        Application.Config.mainWindow_size = New ConfigApp.ConfigSize(Me.Height, Me.Width)
+        Application.Config.directoriesList_activeDirectory = ListeRepertoires.gbFolderSelected
+        Application.Config.directoriesList_root = ListeRepertoires.gbRacine
+        'oAuthDiscogs.SaveConfiguration() 'ConfigUtilisateur)
+        ListeFichiersMp3.SaveConfiguration()
+        ListeCollection.SaveConfiguration()
+        ListeWantList.SaveConfiguration()
+        ListeSellList.SaveConfiguration()
+        ListePisteCD.SaveConfiguration()
+        If LePlayer IsNot Nothing Then LePlayer.ClosePlayer()
+        If NavigateurWeb IsNot Nothing Then NavigateurWeb.CloseWebBrowser()
         If ProcessMiseAJour IsNot Nothing Then ProcessMiseAJour.Close()
         If FenetreDiscogs IsNot Nothing Then FenetreDiscogs.Close()
         Bibliotheque.CloseBibliothèque()
@@ -362,12 +356,15 @@ Class MainWindow
     '***********************************************GESTION OAUTH DISCOGS******************************************
     '**************************************************************************************************************
     Private Sub DiscogsAuthentification_ConsumerKeyRequest(ByVal SettingUri As Uri) Handles DiscogsAuthentification.ConsumerKeyRequest
-        Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
-                                 New NoArgDelegate(Sub()
-                                                       Dim navigateurconfig As WindowConfig = New WindowConfig()
-                                                       navigateurconfig.Focus()
-                                                       navigateurconfig.UpdateUrl(SettingUri)
-                                                   End Sub))
+        Me.Dispatcher.BeginInvoke(Sub()
+                                      Dim navigateurconfig As WindowConfig = New WindowConfig()
+                                      'Dim retour As String = wpfMsgBox.InputBox("Procédure d'autorisation accès Discogs?", Me, "Entrer le nom du compte Discogs", Application.Config.user_name)
+                                      'If retour <> "" Then
+                                      navigateurconfig.Focus()
+                                      navigateurconfig.DemandeAcces()
+                                      'End If
+                                  End Sub, Windows.Threading.DispatcherPriority.Input, Nothing)
+
     End Sub
     Private Sub DiscogsAuthentification_StateChanged() Handles DiscogsAuthentification.StateChanged
         Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
@@ -724,29 +721,29 @@ Class MainWindow
         ' Next
         'Exit Sub
         'Bibliotheque.PurgerImagesInutiles()
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        Dim mail As String = ConfigUtilisateur.USER_name
         Dim guid As String = GetProfileGUID()
-        Dim userID As String = ConfigUtilisateur.USER_ID
-        Dim DicRetour = FreeServer.TestValidUser(mail, guid, userID)
+        Dim userID As String = Application.Config.user_id
+        Dim DicRetour = FreeServer.TestValidUser("", guid, userID)
+        ' MsgBox(DicRetour)
         If DicRetour.ContainsKey("UserID") Then
-            MsgBox("installation valide")
-            ConfigUtilisateur.USER_name = mail
-            ConfigUtilisateur.USER_ID = DicRetour.Item("UserID")
-            ConfigPerso.SaveConfig(ConfigUtilisateur)
+            'Application.Config.discogsConnection_tokenValue = AccessTokenData.TokenValue
+            'Application.Config.discogsConnection_tokenSecret = AccessTokenData.TokenSecret
+            'Application.Config.user_name = UserName
+            Application.Config.user_id = DicRetour.Item("UserID")
             Return
         Else
-            userID = FreeServer.Inscription(mail, guid)
-            DicRetour = FreeServer.TestValidUser(mail, guid, userID)
+            userID = FreeServer.Inscription("", guid)
+            'MsgBox(userID)
+            DicRetour = FreeServer.TestValidUser("", guid, userID)
+            'MsgBox(DicRetour)
             If DicRetour.ContainsKey("UserID") Then
-                ConfigUtilisateur.USER_name = mail
-                ConfigUtilisateur.USER_ID = DicRetour.Item("UserID")
-                ConfigPerso.SaveConfig(ConfigUtilisateur)
+                'Application.Config.discogsConnection_tokenValue = AccessTokenData.TokenValue
+                'Application.Config.discogsConnection_tokenSecret = AccessTokenData.TokenSecret
+                'Application.Config.user_name = UserName
+                Application.Config.user_id = DicRetour.Item("UserID")
                 Return
             End If
         End If
-        MsgBox("INSTALLATION non VALIDE")
     End Sub
 
 End Class

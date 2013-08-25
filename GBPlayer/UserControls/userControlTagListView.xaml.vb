@@ -73,34 +73,29 @@ Public Class userControlTagListView
     Private Sub ListeFichiers_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles ListeFichiers.Loaded
         If Not DisplayValidation Then Exit Sub
         If Not DisableCustomisation Then
-            Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-            ConfigUtilisateur = ConfigPerso.LoadConfig
-            Dim SauvegardeCollection As New Dictionary(Of String, GridViewColumn)
+            Dim SauvegardeTagListView As New Dictionary(Of String, GridViewColumn)
             For Each i As GridViewColumn In CType(ListeFichiers.View, GridView).Columns
-                SauvegardeCollection.Add(CType(i.Header, GridViewColumnHeader).Tag.ToString, i)
+                SauvegardeTagListView.Add(CType(i.Header, GridViewColumnHeader).Tag.ToString, i)
             Next
             CType(ListeFichiers.View, GridView).Columns.Clear()
-            ConfigUtilisateur.LISTEFICHIERSMP3_ListeColonnes.ForEach(Sub(c As String)
-                                                                         Try
-                                                                             Dim NomColonne As String = ExtraitChaine(c, "", ";")
-                                                                             Dim Position As Long = CLng(ExtraitChaine(c, ";", "/"))
-                                                                             Dim Dimension As Double = CDbl(ExtraitChaine(c, "/", ""))
-                                                                             Dim Colonne As GridViewColumn = SauvegardeCollection.Item(NomColonne)
-                                                                             SauvegardeCollection.Remove(NomColonne)
-                                                                             Colonne.Width = Dimension
-                                                                             CType(ListeFichiers.View, GridView).Columns.Add(Colonne)
-                                                                         Catch ex As Exception
-                                                                             MsgBox("erreu")
-                                                                         End Try
-                                                                     End Sub)
-            If SauvegardeCollection.Count > 0 Then
-                For Each i In SauvegardeCollection
+            Application.Config.filesList_columns.ForEach(Sub(c As ConfigApp.ColumnDescription)
+                                                             Try
+                                                                 Dim NomColonne As String = c.Name
+                                                                 Dim Dimension As Double = c.Size
+                                                                 Dim Colonne As GridViewColumn = SauvegardeTagListView.Item(NomColonne)
+                                                                 SauvegardeTagListView.Remove(NomColonne)
+                                                                 Colonne.Width = Dimension
+                                                                 CType(ListeFichiers.View, GridView).Columns.Add(Colonne)
+                                                             Catch ex As Exception
+                                                                 MsgBox("erreu")
+                                                             End Try
+                                                         End Sub)
+            If SauvegardeTagListView.Count > 0 Then
+                For Each i In SauvegardeTagListView
                     CType(ListeFichiers.View, GridView).Columns.Add(i.Value)
                 Next
             End If
-            ActiveTri(ExtraitChaine(ConfigUtilisateur.LISTEFICHIERSMP3_ColonneTriee, "", ";"),
-                    IIf(ExtraitChaine(ConfigUtilisateur.LISTEFICHIERSMP3_ColonneTriee, ";", "") = "A",
-                         ListSortDirection.Ascending, ListSortDirection.Descending))
+            ActiveTri(Application.Config.filesList_sortColumn.Name, Application.Config.filesList_sortColumn.SortDirection)
         End If
         If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
             If System.Environment.OSVersion.Version.Major > 5 Then PlateformVista = True
@@ -117,12 +112,12 @@ Public Class userControlTagListView
         ' ConfigPerso.SaveConfig(ConfigUtilisateur)
         ' End If
     End Sub
-    Public Sub SaveConfiguration(ByVal ConfigUtilisateur As gbDev.ConfigPerso)
+    Public Sub SaveConfiguration()
         If DisableCustomisation Then Exit Sub
-        ConfigPerso.UpdateListeColonnesTag(ConfigUtilisateur.LISTEFICHIERSMP3_ListeColonnes, CType(ListeFichiers.View, GridView).Columns)
+        ConfigApp.UpdateListeColonnesTag(Application.Config.filesList_columns, CType(ListeFichiers.View, GridView).Columns)
         If ColonneTriEnCours IsNot Nothing Then
-            ConfigUtilisateur.LISTEFICHIERSMP3_ColonneTriee = ColonneTriEnCours.Tag & "[" & NomChampTriEnCours & "];" &
-                                IIf(IconeDeTriEnCours.Direction = ListSortDirection.Ascending, "A", "D")
+            Application.Config.filesList_sortColumn = New ConfigApp.DescriptionTri(ColonneTriEnCours.Tag & "[" & NomChampTriEnCours & "]",
+                                IconeDeTriEnCours.Direction)
         End If
     End Sub
 

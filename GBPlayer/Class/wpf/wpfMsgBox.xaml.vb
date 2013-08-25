@@ -20,7 +20,8 @@ Public Class wpfMsgBox
         If e.ChangedButton = MouseButton.Left Then Me.DragMove()
     End Sub
 
-    Public Shared Function InputBox(ByVal TexteQuestion As String, Optional ByVal Parent As UIElement = Nothing, Optional ByVal Explication As String = "") As String
+    Public Shared Function InputBox(ByVal TexteQuestion As String, Optional ByVal Parent As UIElement = Nothing,
+                                    Optional ByVal Explication As String = "", Optional ValeurParDefaut As String = "") As String
         Try
             Dim FenetreEnCours As wpfMsgBox = New wpfMsgBox
             If Parent IsNot Nothing Then
@@ -39,6 +40,7 @@ Public Class wpfMsgBox
             End If
             FenetreEnCours.Titre.Content = TexteQuestion
             FenetreEnCours.TexteExplication.Content = Explication
+            FenetreEnCours.Valeur.Text = ValeurParDefaut
             FenetreEnCours.Valeur.Focus()
             FenetreEnCours.ShowDialog()
             Return ChaineRetour

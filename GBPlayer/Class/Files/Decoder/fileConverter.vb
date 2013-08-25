@@ -217,8 +217,7 @@ Public Class fileConverter
                 Dim NouveauNomMp3 As String = System.IO.Path.ChangeExtension(NomFichierMp3, ".mp3")
                 Rename(NomFichierMp3, NouveauNomMp3)
                 Using Fichier As New gbDev.TagID3.tagID3Object(NouveauNomMp3)
-                    Dim DataConfig As ConfigPerso = ConfigPerso.LoadConfig
-                    Dim ChaineExtractionInfos As String = DataConfig.FILESINFOS_ChaineExtractionInfos
+                    Dim ChaineExtractionInfos As String = Application.Config.filesInfos_stringFormat_extractInfos
                     If ChaineExtractionInfos <> "" Then
                         Fichier.ExtractInfosTitre(ChaineExtractionInfos)
                         Fichier.SaveID3()

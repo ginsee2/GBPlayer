@@ -2,6 +2,7 @@
 Imports System.Windows.Threading
 
 Public Class UserControlPhoneSynchro
+    Private phoneSynchroInitialised As Boolean
     Public Property DisplayValidation As Boolean
 
     Private Sub UserControlPhoneSynchro_Initialized(sender As Object, e As EventArgs) Handles Me.Initialized
@@ -19,11 +20,12 @@ Public Class UserControlPhoneSynchro
     Private Sub UserControlPhoneSynchro_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If Not DisplayValidation Then Exit Sub
         ListeFichiersASynchro.DisplayValidation = True
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        RepertoiresSynchro.gbRacine = ConfigUtilisateur.PHONESYNCHRO_Directory
-        ListeFichiersASynchro.MiseAJourListeRepertoire(RepertoiresSynchro.gbRacine)
-        RacineSynchro.Content = RepertoiresSynchro.gbRacine
+        If Not phoneSynchroInitialised Then
+            RepertoiresSynchro.gbRacine = Application.Config.phoneSynchro_directory
+            ListeFichiersASynchro.MiseAJourListeRepertoire(RepertoiresSynchro.gbRacine)
+            RacineSynchro.Content = RepertoiresSynchro.gbRacine
+            phoneSynchroInitialised = True
+        End If
         Dim SauvegardeCollection As New Dictionary(Of String, GridViewColumn)
         For Each i In CType(ListeFichiersASynchro.ListeFichiers.View, GridView).Columns
             Select Case CType(i.Header, GridViewColumnHeader).Tag.ToString
@@ -44,14 +46,11 @@ Public Class UserControlPhoneSynchro
     End Sub
     Private Sub UserControlPhoneSynchro_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        SaveConfiguration(ConfigUtilisateur)
-        ConfigPerso.SaveConfig(ConfigUtilisateur)
+        SaveConfiguration()
     End Sub
-    Public Sub SaveConfiguration(ByVal ConfigUtilisateur As gbDev.ConfigPerso)
+    Public Sub SaveConfiguration()
         If Not DisplayValidation Then Exit Sub
-        ConfigUtilisateur.PHONESYNCHRO_Directory = RepertoiresSynchro.gbRacine
+        Application.Config.phoneSynchro_directory = RepertoiresSynchro.gbRacine
         'ConfigPerso.UpdateListeColonnes(ConfigUtilisateur.SELLLIST_ListeColonnes, CType(XMLBinding.View, GridView).Columns)
         'If ColonneTriEnCours IsNot Nothing Then
         ' ConfigUtilisateur.SELLLIST_ColonneTriee = ColonneTriEnCours.Tag & ";" &
@@ -117,10 +116,7 @@ Public Class UserControlPhoneSynchro
         If dialog.SelectedPath <> "" Then
             RepertoiresSynchro.gbRacine = dialog.SelectedPath
             RacineSynchro.Content = RepertoiresSynchro.gbRacine
-            Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-            ConfigUtilisateur = ConfigPerso.LoadConfig
-            ConfigUtilisateur.PHONESYNCHRO_Directory = RepertoiresSynchro.gbRacine
-            ConfigPerso.SaveConfig(ConfigUtilisateur)
+            Application.Config.phoneSynchro_directory = RepertoiresSynchro.gbRacine
         End If
     End Sub
 

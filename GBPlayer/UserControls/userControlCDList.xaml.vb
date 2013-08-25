@@ -43,26 +43,26 @@ Public Class userControlCDList
     '***********************************************************************************************
     Private Sub userControlCDList_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
         Dim SauvegardeCD As New Dictionary(Of String, GridViewColumn)
         For Each i As GridViewColumn In CType(XMLBinding.View, GridView).Columns
             SauvegardeCD.Add(CType(i.Header, GridViewColumnHeader).Content.ToString, i)
         Next
         CType(XMLBinding.View, GridView).Columns.Clear()
-        ConfigUtilisateur.LISTECD_ListeColonnes.ForEach(Sub(c As String)
-                                                            Dim NomColonne As String = ExtraitChaine(c, "", ";")
-                                                            Dim Position As Long = CLng(ExtraitChaine(c, ";", "/"))
-                                                            Dim Dimension As Double = CDbl(ExtraitChaine(c, "/", ""))
-                                                            Dim Colonne As GridViewColumn = SauvegardeCD.Item(NomColonne)
+        Application.Config.cdList_columns.ForEach(Sub(c As ConfigApp.ColumnDescription)
+                                                      Dim NomColonne As String = c.Name
+                                                      Dim Dimension As Double = c.Size
+                                                      Dim Colonne As GridViewColumn = SauvegardeCD.Item(NomColonne)
+                                                      SauvegardeCD.Remove(NomColonne)
+                                                      Colonne.Width = Dimension
+                                                      CType(XMLBinding.View, GridView).Columns.Add(Colonne)
+                                                  End Sub)
 
-                                                            Colonne.Width = Dimension
-                                                            CType(XMLBinding.View, GridView).Columns.Add(Colonne)
-                                                        End Sub)
-
-        ActiveTri(ExtraitChaine(ConfigUtilisateur.LISTECD_ColonneTriee, "", ";"),
-                  IIf(ExtraitChaine(ConfigUtilisateur.LISTECD_ColonneTriee, ";", "") = "A",
-                      ListSortDirection.Ascending, ListSortDirection.Descending))
+        If SauvegardeCD.Count > 0 Then
+            For Each i In SauvegardeCD
+                CType(XMLBinding.View, GridView).Columns.Add(i.Value)
+            Next
+        End If
+        ActiveTri(Application.Config.cdList_sortColumn.Name, Application.Config.cdList_sortColumn.SortDirection)
         If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
             If System.Environment.OSVersion.Version.Major > 5 Then PlateformVista = True
         End If
@@ -74,18 +74,14 @@ Public Class userControlCDList
     '***********************************************************************************************
     Private Sub userControlCDList_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        SaveConfiguration(ConfigUtilisateur)
-        ConfigPerso.SaveConfig(ConfigUtilisateur)
+        SaveConfiguration()
         Dispose()
     End Sub
-    Public Sub SaveConfiguration(ByVal ConfigUtilisateur As gbDev.ConfigPerso)
+    Public Sub SaveConfiguration()
         If Not DisplayValidation Then Exit Sub
-        ConfigPerso.UpdateListeColonnes(ConfigUtilisateur.LISTECD_ListeColonnes, CType(XMLBinding.View, GridView).Columns)
+        ConfigApp.UpdateListeColonnes(Application.Config.cdList_columns, CType(XMLBinding.View, GridView).Columns)
         If ColonneTriEnCours IsNot Nothing Then
-            ConfigUtilisateur.LISTECD_ColonneTriee = ColonneTriEnCours.Tag & ";" &
-                                    IIf(IconeDeTriEnCours.Direction = ListSortDirection.Ascending, "A", "D")
+            Application.Config.cdList_sortColumn = New ConfigApp.DescriptionTri(ColonneTriEnCours.Tag, IconeDeTriEnCours.Direction)
         End If
         Dispose()
     End Sub

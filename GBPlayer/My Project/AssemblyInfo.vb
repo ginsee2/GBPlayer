@@ -15,7 +15,7 @@ Imports System.Windows
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("GilBau")> 
 <Assembly: AssemblyProduct("GBPlayer3")> 
-<Assembly: AssemblyCopyright("Copyright @ GilBau")> 
+<Assembly: AssemblyCopyright("Copyright @ Gilles Bauvent")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
 

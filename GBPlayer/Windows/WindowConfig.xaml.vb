@@ -4,6 +4,8 @@ Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports mshtml
 Imports gbDev.OAuthLib
+Imports gbDev.DiscogsServer
+Imports System.Xml
 
 Public Class WindowConfig
     '***********************************************************************************************
@@ -26,14 +28,12 @@ Public Class WindowConfig
     Public Sub New()
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
-        If File.Exists(ConfigPerso.GetConfigPersoPath) Then DataProvider.Source = New Uri(ConfigPerso.GetConfigPersoPath)
     End Sub
     'PROCEDURE DE FERMETURE DU LECTEUR APPELE PAR LA FENETRE MAITRE
     '***********************************************************************************************
     '-----------------------------------PROCEDURE DE FERMETURE DE LA FENETRE------------------------
     '***********************************************************************************************
-    Public Sub CloseWebBrowser(ByRef Config As ConfigPerso)
-        ' If Config IsNot Nothing Then Config.PlayerPosition = New Point(Me.Left, Me.Top)
+    Public Sub CloseWebBrowser()
         Me.Close()
     End Sub
 
@@ -82,67 +82,22 @@ Public Class WindowConfig
     '---------------GESTION INTERCEPTION DES BOUTONS AJOUTER ET SUPPRIMER DE LA PAGE RELEASE--------
     '***********************************************************************************************
     'REPONSE AU MESSAGE IWebBrowser2 CHARGEMENT COMPLET 
-    Dim BoutonAjoutCollection As IHTMLButtonElement
-    Dim BoutonAjoutWantList As IHTMLButtonElement
-    Dim BoutonSuppressionCollection As IHTMLAnchorElement
-    Dim BoutonSuppressionWantList As IHTMLAnchorElement
+
+    Private AccessTokenData As oAuthAccessToken
     Private Sub DownloadComplete()
         'INTERCEPTION DES MESSAGES DE LA PAGE RELEASE
         If Navigateur.Source IsNot Nothing Then
-            If InStr(Navigateur.Source.OriginalString, "/release/") > 0 Then
-                If BoutonAjoutCollection IsNot Nothing Then
-                    RemoveHandler CType(BoutonAjoutCollection, HTMLButtonElementEvents_Event).onclick, New HTMLButtonElementEvents_onclickEventHandler(AddressOf OnClickAddCollection)
-                    BoutonAjoutCollection = Nothing
-                End If
-                If BoutonAjoutWantList IsNot Nothing Then
-                    RemoveHandler CType(BoutonAjoutWantList, HTMLButtonElementEvents_Event).onclick, New HTMLButtonElementEvents_onclickEventHandler(AddressOf OnClickAddWantList)
-                    BoutonAjoutWantList = Nothing
-                End If
+            If InStr(Navigateur.Source.OriginalString, "?oauth_token") > 0 Then
                 Dim doc As HTMLDocument = CType(Navigateur.Document, IHTMLDocument)
-                Debug.Print("COLLECTION", "Creation bouton coll")
                 Try
                     For Each i As IHTMLElement In doc.all
                         Select Case i.nodename
-                            Case "BUTTON"
-                                If i.className IsNot Nothing Then
-                                    If InStr(i.className, "coll_add_button") > 0 Then
-                                        BoutonAjoutCollection = CType(i, IHTMLButtonElement)
-                                        AddHandler CType(BoutonAjoutCollection, HTMLButtonElementEvents_Event).onclick, New HTMLButtonElementEvents_onclickEventHandler(AddressOf OnClickAddCollection)
-                                        Debug.Print("COLLECTION", "Creation bouton coll")
-                                    End If
-                                    If InStr(i.className, "want_add_button") > 0 Then
-                                        BoutonAjoutWantList = CType(i, IHTMLButtonElement)
-                                        AddHandler CType(BoutonAjoutWantList, HTMLButtonElementEvents_Event).onclick, New HTMLButtonElementEvents_onclickEventHandler(AddressOf OnClickAddWantList)
-                                        Debug.Print("COLLECTION", "Creation bouton want")
-                                    End If
-                                End If
                             Case "DIV"
-                                If i.className IsNot Nothing Then
-                                    If InStr(i.className, "coll_block") > 0 Then
+                                If i.id IsNot Nothing Then
+                                    If InStr(i.id, "page") > 0 Then
                                         For Each j As IHTMLElement In i.all
-                                            If j.nodename = "A" Then
-                                                If BoutonSuppressionCollection IsNot Nothing Then
-                                                    RemoveHandler CType(BoutonSuppressionCollection, HTMLAnchorEvents_Event).onclick, New HTMLAnchorEvents_onclickEventHandler(AddressOf OnClickRemoveCollection)
-                                                    BoutonSuppressionCollection = Nothing
-                                                End If
-                                                BoutonSuppressionCollection = CType(j, IHTMLAnchorElement)
-                                                AddHandler CType(BoutonSuppressionCollection, HTMLAnchorEvents_Event).onclick, New HTMLAnchorEvents_onclickEventHandler(AddressOf OnClickRemoveCollection)
-                                                Debug.Print("COLLECTION", "Creation bouton sup coll")
-                                            End If
-                                        Next
-                                    End If
-                                End If
-                                If i.className IsNot Nothing Then
-                                    If InStr(i.className, "want_block") > 0 Then
-                                        For Each j As IHTMLElement In i.all
-                                            If j.nodename = "A" Then
-                                                If BoutonSuppressionWantList IsNot Nothing Then
-                                                    RemoveHandler CType(BoutonSuppressionWantList, HTMLAnchorEvents_Event).onclick, New HTMLAnchorEvents_onclickEventHandler(AddressOf OnClickRemoveWantList)
-                                                    BoutonSuppressionWantList = Nothing
-                                                End If
-                                                BoutonSuppressionWantList = CType(j, IHTMLAnchorElement)
-                                                AddHandler CType(BoutonSuppressionWantList, HTMLAnchorEvents_Event).onclick, New HTMLAnchorEvents_onclickEventHandler(AddressOf OnClickRemoveWantList)
-                                                Debug.Print("COLLECTION", "Creation bouton sup want")
+                                            If j.className = "auth_success_verify_code" Then
+                                                FinaliseDemandeAcces(j.outerText)
                                             End If
                                         Next
                                     End If
@@ -155,59 +110,30 @@ Public Class WindowConfig
             End If
         End If
     End Sub
-    'REPONSE A L'APPUI SUR LES BOUTONS DE LA PAGE RELEASE
-    Dim WithEvents TimerUpdate As New Timers.Timer(1000)
-    Private Function OnClickAddCollection() As Boolean
-    End Function
-    Private Function OnClickAddWantList() As Boolean
-    End Function
-    Private Function OnClickRemoveCollection() As Boolean
-    End Function
-    Private Function OnClickRemoveWantList() As Boolean
-    End Function
-
-    Dim UserData As OAuthUser = Nothing
-    Dim AccessTokenData As oAuthAccessToken
-    Private Sub AccessToken_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        If DataProvider.Source IsNot Nothing Then
-            tagconsumerKey.Text = Trim(tagconsumerKey.Text)
-            tagconsumerSecret.Text = Trim(tagconsumerSecret.Text)
-            tagconsumerKey.IsEnabled = False
-            tagconsumerSecret.IsEnabled = False
-            AccessToken.IsEnabled = False
-            Dim source As String = DataProvider.Source.LocalPath
-            DataProvider.Document.Save(source)
-            If Not oAuthDiscogs.TestoAuth(tagconsumerKey.Text, tagconsumerSecret.Text,
-                                           tagtokenValue.Text, tagtokenSecret.Text) Then
-                reqToken.IsEnabled = True
-                tagCodeDiscogs.IsEnabled = True
-                Dim NewUri As Uri = oAuthDiscogs.GetUriAutorization()
-                If NewUri IsNot Nothing Then
-                    DockConsumerKey.Visibility = Windows.Visibility.Collapsed
-                    DockConsumerSecret.Visibility = Windows.Visibility.Collapsed
-                    DockCodeValidation.Visibility = Windows.Visibility.Visible
-                    AccessToken.Visibility = Windows.Visibility.Collapsed
-                    reqToken.Visibility = Windows.Visibility.Visible
-                    UpdateUrl(NewUri)
-                Else
-                    wpfMsgBox.MsgBoxInfo("Erreur d'authentification Discogs",
-                                         "Les clés entrées ne sont pas valides pour oAuth Discogs", , "Echec de la procédure oAuth de Discogs")
-                    Close()
-                End If
+    Public Sub DemandeAcces()
+        If Not oAuthDiscogs.TestoAuth(Application.Config.discogsConnection_consumerKey, Application.Config.discogsConnection_consumerSecret,
+                                       Application.Config.discogsConnection_tokenValue, Application.Config.discogsConnection_tokenSecret) Then
+            Dim NewUri As Uri = oAuthDiscogs.GetUriAutorization()
+            If NewUri IsNot Nothing Then
+                UpdateUrl(NewUri)
             Else
+                wpfMsgBox.MsgBoxInfo("Erreur d'authentification Discogs",
+                                     "Les clés entrées ne sont pas valides pour oAuth Discogs", , "Echec de la procédure oAuth de Discogs")
                 Close()
             End If
+        Else
+            DiscogsServer.RequestGet_UserProfile("", New DelegateRequestResult(AddressOf DiscogsServerGetUserProfile))
+            Close()
         End If
+
+
     End Sub
-    Private Sub reqToken_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        Dim Chaine = Trim(tagCodeDiscogs.Text)
+    Private Sub FinaliseDemandeAcces(CodeValidationDiscogs As String)
+        Dim Chaine = Trim(CodeValidationDiscogs)
         Try
             If Chaine <> "" Then
                 AccessTokenData = oAuthDiscogs.GetAccessAutorization(Chaine)
-                tagtokenValue.Text = AccessTokenData.TokenValue
-                tagtokenSecret.Text = AccessTokenData.TokenSecret
-                Dim source As String = DataProvider.Source.LocalPath
-                DataProvider.Document.Save(source)
+                DiscogsServer.RequestGet_UserProfile("", New DelegateRequestResult(AddressOf DiscogsServerGetUserProfile))
             End If
             Close()
         Catch ex As Exception
@@ -215,6 +141,36 @@ Public Class WindowConfig
                                  "Le code de validation n'est pas valide. Recommencer la procédure à partir des options de configuration", , "Echec de la procédure oAuth de Discogs")
         End Try
         Close()
+    End Sub
+    Private Sub DiscogsServerGetUserProfile(ByVal UserProfile As String, ByVal UserName As String)
+        If UserProfile <> "" Then
+            Dim doc As New XmlDocument()
+            doc.LoadXml(UserProfile)
+            UserName = doc.SelectSingleNode("userProfile/username").InnerText
+            'Dim guid As String = GetProfileGUID()
+            'Dim userID As String = Application.Config.user_id
+            'Dim DicRetour = FreeServer.TestValidUser("", guid, userID)
+            'If DicRetour.ContainsKey("UserID") Then
+            ' Application.Config.discogsConnection_tokenValue = AccessTokenData.TokenValue
+            'Application.Config.discogsConnection_tokenSecret = AccessTokenData.TokenSecret
+            'Application.Config.user_name = UserName
+            'Application.Config.user_id = DicRetour.Item("UserID")
+            'Return
+            'Else
+            'userID = FreeServer.Inscription("", Guid)
+            'DicRetour = FreeServer.TestValidUser(UserName, Guid, userID)
+            'If DicRetour.ContainsKey("UserID") Then
+            Application.Config.discogsConnection_tokenValue = AccessTokenData.TokenValue
+            Application.Config.discogsConnection_tokenSecret = AccessTokenData.TokenSecret
+            Application.Config.user_name = UserName
+            ' Application.Config.user_id = DicRetour.Item("UserID")
+            ' Return
+            'End If
+            'End If
+        Else
+            wpfMsgBox.MsgBoxInfo("Erreur d'authentification Discogs",
+                                 "Le nom utilisateur non valide. Recommencer la procédure à partir des options de configuration", , "Echec de la procédure oAuth de Discogs")
+        End If
     End Sub
 
 End Class

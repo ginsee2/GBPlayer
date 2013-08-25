@@ -93,9 +93,7 @@ Public Class UserControlTagEditor
     '---------------------------------DESTRUCTION DE LA CLASSE--------------------------------------
     '***********************************************************************************************
     'PROCEDURE DE FERMETURE DU LECTEUR APPELE PAR LA FENETRE MAITRE
-    Sub ClosePlayer(ByRef Config As ConfigPerso)
-        'If Config IsNot Nothing Then Config.PlayerPosition = New Point(Me.Left, Me.Top)
-        ' Me.Close()
+    Sub ClosePlayer()
     End Sub
     '**************************************************************************************************************
     '*****************************GESTION DE LA MISE A JOUR DES INFORMATIONS DES FICHIERS**************************

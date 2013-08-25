@@ -65,8 +65,7 @@ Public Class WindowWebBrowser
     '***********************************************************************************************
     '-----------------------------------PROCEDURE DE FERMETURE DE LA FENETRE------------------------
     '***********************************************************************************************
-    Public Sub CloseWebBrowser(ByRef Config As ConfigPerso)
-        ' If Config IsNot Nothing Then Config.PlayerPosition = New Point(Me.Left, Me.Top)
+    Public Sub CloseWebBrowser()
         Me.Close()
     End Sub
 

@@ -61,11 +61,8 @@ Public Class tagID3FilesInfosUpdate
     End Sub
     Private Shared Sub WriteFilesModif()
         Dim Compteur As Integer = 0
-        Dim DataConfig As ConfigPerso = ConfigPerso.LoadConfig
         Dim ChaineFormattageNom As String = ""
-        If DataConfig IsNot Nothing Then
-            ChaineFormattageNom = DataConfig.FILESINFOS_ChaineFormattageNom
-        End If
+        ChaineFormattageNom = Application.Config.filesInfos_stringFormat_fileName
         Do
             Dim infos As tagID3FilesInfos = _ListeTacheAExecuter.First
             Dim MiseAJourID3V1 As Boolean

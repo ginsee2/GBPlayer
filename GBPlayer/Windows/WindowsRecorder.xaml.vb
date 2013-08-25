@@ -232,7 +232,7 @@ Public Class WindowsRecorder
     End Sub
 
     'PROCEDURE DE FERMETURE DU LECTEUR APPELE PAR LA FENETRE MAITRE
-    Function CloseRecorder(ByRef Config As ConfigPerso) As Boolean
+    Function CloseRecorder() As Boolean
     End Function
 
     '**************************************************************************************************************

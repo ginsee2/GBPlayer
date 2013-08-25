@@ -55,7 +55,7 @@ Public Class WindowUpdateProgress
                 Top = TopFenetreParente
                 Left = LeftFenetreParente
                 Height = Fenetre.BordureAffichageTemp.ActualHeight - 4
-                Width = Fenetre.BordureAffichageTemp.ActualWidth - 5 '- Fenetre.PointToScreen(Fenetre.BordureAffichageTemp.TranslatePoint(New Point(0, 0), Fenetre)).Y
+                Width = Math.Abs(Fenetre.BordureAffichageTemp.ActualWidth - 5) '- Fenetre.PointToScreen(Fenetre.BordureAffichageTemp.TranslatePoint(New Point(0, 0), Fenetre)).Y
                 Me.Show()
                 FenetreAffichee = True
             End If

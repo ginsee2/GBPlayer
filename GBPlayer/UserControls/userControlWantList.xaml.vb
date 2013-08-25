@@ -32,7 +32,6 @@ Public Class userControlWantList
     Private PathFichierWantList As String
     Private Const GBAU_NOMDOSSIER_WANTLIST = "GBDev\GBPlayer\Data\Discogs"
     Private Const GBAU_NOMFICHIER_WANTLIST = "DiscogsWantList"
-    Private Const UserName = "GilBau"
     Private Delegate Sub NoArgDelegate()
 
     '***********************************************************************************************
@@ -41,40 +40,45 @@ Public Class userControlWantList
     Public Sub New()
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
+        LinkFileWantList()
+    End Sub
+    Private Sub LinkFileWantList()
         Dim RepDest = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\" & GBAU_NOMDOSSIER_WANTLIST
         If Directory.Exists(RepDest) Then
-            PathFichierWantList = String.Format("{0}\{1}_{2}.xml", {RepDest, GBAU_NOMFICHIER_WANTLIST, UserName})
+            PathFichierWantList = String.Format("{0}\{1}_{2}.xml", {RepDest, GBAU_NOMFICHIER_WANTLIST, Application.Config.user_name})
         End If
         If PathFichierWantList IsNot Nothing Then DataProvider.Source = New Uri(PathFichierWantList)
     End Sub
     Private Sub gbListeCollection_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        Dim SauvegardeCollection As New Dictionary(Of String, GridViewColumn)
+        If DataProvider.Document Is Nothing Then LinkFileWantList()
+        Dim SauvegardeWantList As New Dictionary(Of String, GridViewColumn)
         For Each i As GridViewColumn In CType(XMLBinding.View, GridView).Columns
-            SauvegardeCollection.Add(CType(i.Header, GridViewColumnHeader).Content.ToString, i)
+            SauvegardeWantList.Add(CType(i.Header, GridViewColumnHeader).Content.ToString, i)
         Next
         CType(XMLBinding.View, GridView).Columns.Clear()
-        ConfigUtilisateur.WANTLIST_ListeColonnes.ForEach(Sub(c As String)
-                                                             Try
-                                                                 Dim NomColonne As String = ExtraitChaine(c, "", ";")
-                                                                 Dim Position As Long = CLng(ExtraitChaine(c, ";", "/"))
-                                                                 Dim Dimension As Double = 0
-                                                                 Try
-                                                                     Dimension = CDbl(ExtraitChaine(c, "/", ""))
-                                                                 Catch ex As Exception
-                                                                     Dimension = Double.NaN
-                                                                 End Try
-                                                                 Dim Colonne As GridViewColumn = SauvegardeCollection.Item(NomColonne)
-                                                                 Colonne.Width = Dimension
-                                                                 CType(XMLBinding.View, GridView).Columns.Add(Colonne)
-                                                             Catch ex As Exception
-                                                             End Try
-                                                         End Sub)
-        ActiveTri(ExtraitChaine(ConfigUtilisateur.WANTLIST_ColonneTriee, "", ";"),
-                  IIf(ExtraitChaine(ConfigUtilisateur.WANTLIST_ColonneTriee, ";", "") = "A",
-                      ListSortDirection.Ascending, ListSortDirection.Descending))
+        Application.Config.wantList_columns.ForEach(Sub(c As ConfigApp.ColumnDescription)
+                                                        Try
+                                                            Dim NomColonne As String = c.Name
+                                                            Dim Dimension As Double = 0
+                                                            Try
+                                                                Dimension = c.Size
+                                                            Catch ex As Exception
+                                                                Dimension = Double.NaN
+                                                            End Try
+                                                            Dim Colonne As GridViewColumn = SauvegardeWantList.Item(NomColonne)
+                                                            SauvegardeWantList.Remove(NomColonne)
+                                                            Colonne.Width = Dimension
+                                                            CType(XMLBinding.View, GridView).Columns.Add(Colonne)
+                                                        Catch ex As Exception
+                                                        End Try
+                                                    End Sub)
+        If SauvegardeWantList.Count > 0 Then
+            For Each i In SauvegardeWantList
+                CType(XMLBinding.View, GridView).Columns.Add(i.Value)
+            Next
+        End If
+        ActiveTri(Application.Config.wantList_sortColumn.Name, Application.Config.wantList_sortColumn.SortDirection)
         If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
             If System.Environment.OSVersion.Version.Major > 5 Then PlateformVista = True
         End If
@@ -82,20 +86,18 @@ Public Class userControlWantList
     End Sub
     Private Sub gbListeCollection_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        SaveConfiguration(ConfigUtilisateur)
-        ConfigPerso.SaveConfig(ConfigUtilisateur)
+        SaveConfiguration()
     End Sub
-    Public Sub SaveConfiguration(ByVal ConfigUtilisateur As gbDev.ConfigPerso)
+    Public Sub SaveConfiguration()
         If Not DisplayValidation Then Exit Sub
-        ConfigPerso.UpdateListeColonnes(ConfigUtilisateur.WANTLIST_ListeColonnes, CType(XMLBinding.View, GridView).Columns)
+        ConfigApp.UpdateListeColonnes(Application.Config.wantList_columns, CType(XMLBinding.View, GridView).Columns)
         If ColonneTriEnCours IsNot Nothing Then
-            ConfigUtilisateur.WANTLIST_ColonneTriee = ColonneTriEnCours.Tag & ";" &
-                                    IIf(IconeDeTriEnCours.Direction = ListSortDirection.Ascending, "A", "D")
+            Application.Config.wantList_sortColumn = New ConfigApp.DescriptionTri(ColonneTriEnCours.Tag, IconeDeTriEnCours.Direction)
         End If
         Dim source As String = DataProvider.Source.LocalPath
-        DataProvider.Document.Save(source)
+        If DataProvider.Document IsNot Nothing Then
+            'DataProvider.Document.Save(source)
+        End If
     End Sub
 
     '***********************************************************************************************
@@ -148,7 +150,7 @@ Public Class userControlWantList
                 Exit Sub
             End If
         Next
-        DiscogsServer.RequestAdd_WantListId("GilBau", Newid, New DelegateRequestResult(AddressOf DiscogsServerAddIdResultNotify))
+        DiscogsServer.RequestAdd_WantListId(Application.Config.user_name, Newid, New DelegateRequestResult(AddressOf DiscogsServerAddIdResultNotify))
     End Sub
     Private Sub DeleteIdWantList()
         Dim NodeSelectionne As XmlElement = CType(XMLBinding.SelectedItem, XmlElement)
@@ -161,7 +163,7 @@ Public Class userControlWantList
             Dim NodeASelectionner As XmlElement = Nothing
             For Each i As XmlElement In XMLBinding.SelectedItems
                 NodeASelectionner = i.NextSibling
-                DiscogsServer.RequestDelete_WantListId("GilBau", i.SelectSingleNode("basic_information/id").InnerText, New DelegateRequestResult(AddressOf DiscogsServerDeleteIdResultNotify))
+                DiscogsServer.RequestDelete_WantListId(Application.Config.user_name, i.SelectSingleNode("basic_information/id").InnerText, New DelegateRequestResult(AddressOf DiscogsServerDeleteIdResultNotify))
             Next
             XMLBinding.SelectedItem = NodeASelectionner
         End If
@@ -177,7 +179,7 @@ Public Class userControlWantList
     Private Sub BPWantList_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BPWantList.Click
         Me.IsEnabled = False
         NbreElementsAffiches.Text = "Mise a jour en cours...."
-        DiscogsServer.RequestGet_WantListAll("GilBau", New DelegateRequestResult(AddressOf DiscogsServerGetAllResultNotify))
+        DiscogsServer.RequestGet_WantListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetAllResultNotify))
     End Sub
 
     '***********************************************************************************************
@@ -197,7 +199,7 @@ Public Class userControlWantList
                 Return True
             End If
         Next
-        DiscogsServer.RequestGet_WantListId("GilBau", Newid, New DelegateRequestResult(AddressOf DiscogsServerGetIdResultNotify))
+        DiscogsServer.RequestGet_WantListId(Application.Config.user_name, Newid, New DelegateRequestResult(AddressOf DiscogsServerGetIdResultNotify))
         Return True
     End Function
     Public Function NotifyRemoveIdWantlist(ByVal id As String) As Boolean Implements iNotifyWantListUpdate.NotifyRemoveIdWantlist

@@ -215,10 +215,10 @@ Public Class WindowPlayer
     End Sub
 
     'PROCEDURE DE FERMETURE DU LECTEUR APPELE PAR LA FENETRE MAITRE
-    Sub ClosePlayer(ByRef Config As ConfigPerso)
+    Sub ClosePlayer()
         If ListePistes.Count > 0 Then
-            If Config IsNot Nothing Then Config.PLAYERVOLUME0 = ListePistes.First.Volume
-            If Recorder IsNot Nothing Then Recorder.CloseRecorder(Config)
+            Application.Config.player_volumes("PLAYER0") = ListePistes.First.Volume
+            If Recorder IsNot Nothing Then Recorder.CloseRecorder()
             If TheMixer IsNot Nothing Then TheMixer.RemoveAllLines()
             TheMixer = Nothing
         End If
@@ -285,9 +285,7 @@ Public Class WindowPlayer
         ListePistes.Add(PisteEnCours)
         PilePiste.Children.Add(PisteEnCours)
         BibliothequeLiee.SubscribeUpdateShellEvent(PisteEnCours)
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        PisteEnCours.Volume = CDbl(ConfigUtilisateur.PLAYERVOLUME0)
+        PisteEnCours.Volume = CDbl(Application.Config.player_volumes("PLAYER0"))
         AddHandler PisteEnCours.RequeteRecherche, AddressOf ReqRechercheEventHandler
         AddHandler PisteEnCours.RequeteFichierSuivant, AddressOf ReqFichierSuivantEventHandler
         Return PisteEnCours

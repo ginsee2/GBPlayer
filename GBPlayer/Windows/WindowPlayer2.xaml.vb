@@ -68,9 +68,9 @@ Public Class WindowPlayer2
 
     Private Sub WindowPlayer_Initialized(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Initialized
         Me.Height = 0
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        PlayerVolume.Value = CDbl(ConfigUtilisateur.PLAYERVOLUME0)
+        'Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
+        'ConfigUtilisateur = ConfigPerso.LoadConfig
+        PlayerVolume.Value = CDbl(Application.Config.player_volumes("PLAYER0"))
     End Sub
     Private Sub WindowPlayer_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         OuvertureLecteur()
@@ -124,8 +124,8 @@ Public Class WindowPlayer2
     End Sub
 
     'PROCEDURE DE FERMETURE DU LECTEUR APPELE PAR LA FENETRE MAITRE
-    Sub ClosePlayer(ByRef Config As ConfigPerso)
-        If Config IsNot Nothing Then Config.PLAYERVOLUME0 = CStr(PlayerVolume.Value)
+    Sub ClosePlayer()
+        Application.Config.player_volumes("PLAYER0") = CStr(PlayerVolume.Value)
         Me.Close()
     End Sub
 

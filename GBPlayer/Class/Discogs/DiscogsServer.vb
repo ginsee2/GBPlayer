@@ -39,6 +39,10 @@ Public Class DiscogsServer
     '----------------------------------FONCTION PUBLIQUE-------------------------------------------
     '***********************************************************************************************
     ' ------------------------------Retrouve Noms des fichier XML----------------------------------
+    Public Shared Sub RequestGet_UserProfile(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult)
+        DiscogsRequest(UserName, "", "UserProfile", DelegateSub)
+    End Sub
+    ' ------------------------------Retrouve Noms des fichier XML----------------------------------
     Public Shared Function FilePathCollectionFolders(ByVal UserName As String) As String
         Return GetNomFichierXML(UserName, "CollectionFolderlist")
     End Function
@@ -115,6 +119,8 @@ Public Class DiscogsServer
             Dim cde As StockageAction = _ListeTacheAExecuter.First
             _ListeTacheAExecuter.Remove(_ListeTacheAExecuter.First)
             Select Case cde.Action
+                Case "UserProfile"
+                    Get_UserProfile(cde.UserName, cde.DelegateSub)
                 Case "FolderGet"
                     Get_CollectionFolderListAll(cde.UserName, cde.DelegateSub)
                 Case "FolderAdd"
@@ -150,6 +156,28 @@ Public Class DiscogsServer
         Loop While _ListeTacheAExecuter.Count > 0
         TacheEnCours = False
     End Sub
+    ' -----------------Requetes pour la gestion des folders de la collection Discogs---------------
+    Private Shared Function Get_UserProfile(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
+        Dim reader As IO.StreamReader = Nothing
+        Dim hwebresponse As System.Net.HttpWebResponse = Nothing
+        Dim FichierxmlFinal As XDocument = _
+                 <?xml version="1.0" encoding="utf-8"?>
+                 <userProfile>
+                 </userProfile>
+        Try
+            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/oauth/identity", , "GET")
+            reader = New IO.StreamReader(hwebresponse.GetResponseStream)
+            FichierxmlFinal.Root.Add(ConvertReponseXmlUserProfile(reader.ReadToEnd).<USER>.Elements)
+            DelegateSub(FichierxmlFinal.ToString, UserName)
+            Return True
+        Catch ex As Exception
+            DelegateSub("", UserName)
+        Finally
+            If reader IsNot Nothing Then reader.Close()
+            If hwebresponse IsNot Nothing Then hwebresponse.Close()
+        End Try
+        Return False
+    End Function
     ' -----------------Requetes pour la gestion des folders de la collection Discogs---------------
     Private Shared Function Get_CollectionFolderListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
         Dim reader As IO.StreamReader = Nothing
@@ -575,6 +603,10 @@ Public Class DiscogsServer
     '***********************************************************************************************
     '--------------------------FUNCTION DE CONVERSION DE FICHIERS JSON VERS XML--------------------
     '***********************************************************************************************
+    Private Shared Function ConvertReponseXmlUserProfile(ByVal TexteJson As String) As XDocument
+        Dim ChaineMiseEnForme As String = "{""" & "USER" & """:" & TexteJson & "}"
+        Return JsonConvert.DeserializeXNode(ChaineMiseEnForme)
+    End Function
     Private Shared Function ConvertReponseXmlSellList(ByVal TexteJson As String) As XDocument
         Dim ChaineMiseEnForme As String = "{""" & "SELLLIST" & """:" & TexteJson & "}"
         Return JsonConvert.DeserializeXNode(ChaineMiseEnForme)

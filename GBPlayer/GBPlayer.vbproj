@@ -108,8 +108,9 @@
     <AssemblyOriginatorKeyFile>SigantureAssembly.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="gbdev">
-      <HintPath>..\..\gbdev\gbdev\bin\Release\gbdev.dll</HintPath>
+    <Reference Include="gbdev, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Visual Studio 2010\Projects\gbdev\gbdev\bin\Release\gbdev.dll</HintPath>
     </Reference>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -119,7 +120,7 @@
       <HintPath>..\..\Json40r2\Bin\Net\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Serializer">
-      <HintPath>..\serializer\Serializer.dll</HintPath>
+      <HintPath>..\Sources\serializer\Serializer.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />

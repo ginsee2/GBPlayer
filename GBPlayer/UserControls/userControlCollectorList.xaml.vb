@@ -116,15 +116,13 @@ Public Class gbListeCollection
         Return Valeur
     End Function
     Private Sub UploadBackup()
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
         Dim source As String = Path.GetFileName(PathFichierCollection)
-        If ConfigUtilisateur.LISTECOLLECTION_BackUpDirectory = "" Then
-            If Directory.Exists(ConfigUtilisateur.LISTEREPERTOIRES_Racine) Then _
-                FileCopy(ConfigUtilisateur.LISTEREPERTOIRES_Racine & "\Backup_" & source, PathFichierCollection)
+        If Application.Config.collectionList_backupDirectory = "" Then
+            If Directory.Exists(Application.Config.directoriesList_root) Then _
+                FileCopy(Application.Config.directoriesList_root & "\Backup_" & source, PathFichierCollection)
         Else
-            If Directory.Exists(ConfigUtilisateur.LISTECOLLECTION_BackUpDirectory) Then _
-             FileCopy(ConfigUtilisateur.LISTECOLLECTION_BackUpDirectory & "\Backup_" & source, PathFichierCollection)
+            If Directory.Exists(Application.Config.collectionList_backupDirectory) Then _
+             FileCopy(Application.Config.collectionList_backupDirectory & "\Backup_" & source, PathFichierCollection)
         End If
         Try
             Dim DocXCollection As XDocument = XDocument.Load(PathFichierCollection)
@@ -142,36 +140,28 @@ Public Class gbListeCollection
     Private Sub gbListeCollection_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         If Not DisplayValidation Then Exit Sub
         '   ActiveTri("Artiste", ListSortDirection.Ascending)
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
         Dim SauvegardeCollection As New Dictionary(Of String, GridViewColumn)
         For Each i As GridViewColumn In CType(XMLBinding.View, GridView).Columns
             SauvegardeCollection.Add(CType(i.Header, GridViewColumnHeader).Content.ToString, i)
         Next
-        ' ConfigUtilisateur.LoadColonnes(LISTECOLLECTION_ListeColonnes,CType(XMLBinding.View, GridView).Columns)
-
         CType(XMLBinding.View, GridView).Columns.Clear()
-        'GrilleDeRecherche.ColumnDefinitions.Clear()
-        ConfigUtilisateur.LISTECOLLECTION_ListeColonnes.ForEach(Sub(c As String)
-                                                                    Try
-                                                                        Dim NomColonne As String = ExtraitChaine(c, "", ";")
-                                                                        Dim Position As Long = CLng(ExtraitChaine(c, ";", "/"))
-                                                                        Dim Dimension As Double = CDbl(ExtraitChaine(c, "/", ""))
-                                                                        Dim Colonne As GridViewColumn = SauvegardeCollection.Item(NomColonne)
-                                                                        SauvegardeCollection.Remove(NomColonne)
-                                                                        Colonne.Width = Dimension
-                                                                        CType(XMLBinding.View, GridView).Columns.Add(Colonne)
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                End Sub)
+        Application.Config.collectionList_columns.ForEach(Sub(c As ConfigApp.ColumnDescription)
+                                                              Try
+                                                                  Dim NomColonne As String = c.Name
+                                                                  Dim Dimension As Double = c.Size
+                                                                  Dim Colonne As GridViewColumn = SauvegardeCollection.Item(NomColonne)
+                                                                  SauvegardeCollection.Remove(NomColonne)
+                                                                  Colonne.Width = Dimension
+                                                                  CType(XMLBinding.View, GridView).Columns.Add(Colonne)
+                                                              Catch ex As Exception
+                                                              End Try
+                                                          End Sub)
         If SauvegardeCollection.Count > 0 Then
             For Each i In SauvegardeCollection
                 CType(XMLBinding.View, GridView).Columns.Add(i.Value)
             Next
         End If
-        ActiveTri(ExtraitChaine(ConfigUtilisateur.LISTECOLLECTION_ColonneTriee, "", ";"),
-                  IIf(ExtraitChaine(ConfigUtilisateur.LISTECOLLECTION_ColonneTriee, ";", "") = "A",
-                      ListSortDirection.Ascending, ListSortDirection.Descending))
+        ActiveTri(Application.Config.collectionList_sortColumn.Name, Application.Config.collectionList_sortColumn.SortDirection)
         If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
             If System.Environment.OSVersion.Version.Major > 5 Then PlateformVista = True
         End If
@@ -187,25 +177,21 @@ Public Class gbListeCollection
     End Sub
     Private Sub gbListeCollection_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
         If Not DisplayValidation Then Exit Sub
-        Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-        ConfigUtilisateur = ConfigPerso.LoadConfig
-        'ConfigPerso.UpdateListeColonnesTag(ConfigUtilisateur.LISTECOLLECTION_ListeColonnes, CType(XMLBinding.View, GridView).Columns)
-        SaveConfiguration(ConfigUtilisateur)
-        ConfigPerso.SaveConfig(ConfigUtilisateur)
+        SaveConfiguration()
     End Sub
-    Public Sub SaveConfiguration(ByVal ConfigUtilisateur As gbDev.ConfigPerso)
+    Public Sub SaveConfiguration()
         If Not DisplayValidation Then Exit Sub
-        ConfigPerso.UpdateListeColonnes(ConfigUtilisateur.LISTECOLLECTION_ListeColonnes, CType(XMLBinding.View, GridView).Columns)
+        ConfigApp.UpdateListeColonnes(Application.Config.collectionList_columns, CType(XMLBinding.View, GridView).Columns)
         If ColonneTriEnCours IsNot Nothing Then
-            ConfigUtilisateur.LISTECOLLECTION_ColonneTriee = ColonneTriEnCours.Tag & ";" &
-                                    IIf(IconeDeTriEnCours.Direction = ListSortDirection.Ascending, "A", "D")
+            Application.Config.collectionList_sortColumn = New ConfigApp.DescriptionTri(ColonneTriEnCours.Tag,
+                                    IconeDeTriEnCours.Direction)
         End If
         Dim source As String = DataProvider.Source.LocalPath
         DataProvider.Document.Save(source)
     End Sub
     Private Sub gbListeCollection_Initialized(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Initialized
         FoldersDataProvider = CType(FindResource("FoldersDataProvider"), XmlDataProvider)
-        FoldersDataProvider.Source = New Uri(DiscogsServer.FilePathCollectionFolders("GilBau"))
+        FoldersDataProvider.Source = New Uri(DiscogsServer.FilePathCollectionFolders(Application.Config.user_name))
         'StyleDataProvider = CType(FindResource("StyleDataProvider"), XmlDataProvider)
         'StyleDataProvider.Source = tagID3FilesInfosDO.GetDataProvider
     End Sub
@@ -235,7 +221,7 @@ Public Class gbListeCollection
                     RaiseEvent IdCollectionAdded(idRelease, Me)
                     If Not NodeExist(idASupprimer) Then
                         If NodeSelectionne.SelectSingleNode("VinylDiscogs").InnerText = True Then
-                            DiscogsServer.RequestDelete_CollectionId("GilBau", idASupprimer,
+                            DiscogsServer.RequestDelete_CollectionId(Application.Config.user_name, idASupprimer,
                                                                New DelegateRequestResult(AddressOf DiscogsServerDeleteIdResultNotify))
                         End If
                         RaiseEvent IdCollectionRemoved(idASupprimer, Me)
@@ -315,7 +301,7 @@ Public Class gbListeCollection
                                            ElementASupprimer.ParentNode().RemoveChild(ElementASupprimer)
                                            If Not NodeExist(ElementASupprimer.SelectSingleNode("id").InnerText) Then
                                                If ElementASupprimer.SelectSingleNode("VinylDiscogs").InnerText = True Then
-                                                   DiscogsServer.RequestDelete_CollectionId("GilBau", ElementASupprimer.SelectSingleNode("id").InnerText,
+                                                   DiscogsServer.RequestDelete_CollectionId(Application.Config.user_name, ElementASupprimer.SelectSingleNode("id").InnerText,
                                                                                       New DelegateRequestResult(AddressOf DiscogsServerDeleteIdResultNotify))
                                                End If
                                                RaiseEvent IdCollectionRemoved(ElementASupprimer.SelectSingleNode("id").InnerText, Me)
@@ -343,8 +329,8 @@ Public Class gbListeCollection
     Private Sub BPUpdateCollection_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BPUpdateCollection.Click
         Me.IsEnabled = False
         NbreElementsAffiches.Text = "Mise a jour collection en cours...."
-        DiscogsServer.RequestGet_CollectionListAll("GilBau", New DelegateRequestResult(AddressOf DiscogsServerGetAllResultNotify))
-        DiscogsServer.RequestGet_CollectionFolderListAll("GilBau", New DelegateRequestResult(AddressOf DiscogsServerGetFolderResultNotify))
+        DiscogsServer.RequestGet_CollectionListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetAllResultNotify))
+        DiscogsServer.RequestGet_CollectionFolderListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetFolderResultNotify))
     End Sub
     Private Sub DataProvider_DataChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataProvider.DataChanged
         NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
@@ -352,14 +338,13 @@ Public Class gbListeCollection
     Private Sub BPEnregistrer_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         If CollectionChargee Then
             Dim source As String = Path.GetFileName(DataProvider.Source.LocalPath)
-            Dim ConfigUtilisateur = ConfigPerso.LoadConfig
             Try
-                If ConfigUtilisateur.LISTECOLLECTION_BackUpDirectory = "" Then
-                    If Directory.Exists(ConfigUtilisateur.LISTEREPERTOIRES_Racine) Then _
-                        DataProvider.Document.Save(ConfigUtilisateur.LISTEREPERTOIRES_Racine & "\Backup_" & source)
+                If Application.Config.collectionList_backupDirectory = "" Then
+                    If Directory.Exists(Application.Config.directoriesList_root) Then _
+                        DataProvider.Document.Save(Application.Config.directoriesList_root & "\Backup_" & source)
                 Else
-                    If Directory.Exists(ConfigUtilisateur.LISTECOLLECTION_BackUpDirectory) Then _
-                        DataProvider.Document.Save(ConfigUtilisateur.LISTECOLLECTION_BackUpDirectory & "\Backup_" & source)
+                    If Directory.Exists(Application.Config.collectionList_backupDirectory) Then _
+                        DataProvider.Document.Save(Application.Config.collectionList_backupDirectory & "\Backup_" & source)
                 End If
             Catch ex As Exception
             End Try
@@ -391,7 +376,7 @@ Public Class gbListeCollection
                             End If
                         Next
                         NbreElementsAffiches.Text = "Création répertoire...."
-                        DiscogsServer.RequestAdd_CollectionFolder("GilBau", NomNouveauRepertoire,
+                        DiscogsServer.RequestAdd_CollectionFolder(Application.Config.user_name, NomNouveauRepertoire,
                                                             New DelegateRequestResult(AddressOf DiscogsServerAddFolderResultNotify))
                     End If
                 End If
@@ -409,7 +394,7 @@ Public Class gbListeCollection
                                     End If
                                 Next
                                 NbreElementsAffiches.Text = "Suppression répertoire...."
-                                DiscogsServer.RequestDelete_CollectionFolder("GilBau", i.OuterXml,
+                                DiscogsServer.RequestDelete_CollectionFolder(Application.Config.user_name, i.OuterXml,
                                                                     New DelegateRequestResult(AddressOf DiscogsServerDeleteFolderResultNotify))
                                 Exit Sub
                             End If
@@ -458,7 +443,7 @@ Public Class gbListeCollection
                 If (idFolderDestination > 0) Then
                     If idFolderSource = 0 Then idFolderSource = 1
                     If DonneeSurvolee.SelectSingleNode("instance").InnerText = "" Then DonneeSurvolee.SelectSingleNode("instance").InnerText = CStr(1)
-                    DiscogsServer.RequestMove_CollectionId("GilBau", DonneeSurvolee.SelectSingleNode("id").InnerText,
+                    DiscogsServer.RequestMove_CollectionId(Application.Config.user_name, DonneeSurvolee.SelectSingleNode("id").InnerText,
                                                        DonneeSurvolee.SelectSingleNode("instance").InnerText, idFolderSource,
                                                        idFolderDestination, AddressOf DiscogsServerMoveIdResultNotify)
                 Else
@@ -642,7 +627,7 @@ Public Class gbListeCollection
                 DocXCollection.Root.Add(NewElement)
                 Disque.<instance_id>.Value = CStr(False)
             Next
-            Dim DocXDiscogsFolders As XDocument = XDocument.Load(DiscogsServer.FilePathCollectionFolders("GilBau"))
+            Dim DocXDiscogsFolders As XDocument = XDocument.Load(DiscogsServer.FilePathCollectionFolders(Application.Config.user_name))
             If DocXCollection IsNot Nothing Then
                 For Each Disque In From i In DocXCollection.<GBPLAYER>.<Vinyl> _
                                    Join j In DocXDiscogsFolders.<COLLECTIONFOLDERLIST>.<folders> _
@@ -1667,7 +1652,7 @@ Public Class gbListeCollection
                     If Valeur = "" Or (Valeur = "False") Then
                         If NomDonnee = "VinylCollection" Then Exit Sub ' RecuperationInfos(DonneeSurvolee)
                         If NomDonnee = "VinylDiscogs" Then
-                            DiscogsServer.RequestAdd_CollectionId("GilBau", DonneeSurvolee.SelectSingleNode("id").InnerText,
+                            DiscogsServer.RequestAdd_CollectionId(Application.Config.user_name, DonneeSurvolee.SelectSingleNode("id").InnerText,
                                                                 New DelegateRequestResult(AddressOf DiscogsServerAddIdResultNotify))
                         End If
                         DonneeSurvolee.SelectSingleNode(NomDonnee).InnerText = "True"
@@ -1682,7 +1667,7 @@ Public Class gbListeCollection
                         'End If
                         'End If
                         If NomDonnee = "VinylDiscogs" Then
-                            DiscogsServer.RequestDelete_CollectionId("GilBau", DonneeSurvolee.SelectSingleNode("id").InnerText,
+                            DiscogsServer.RequestDelete_CollectionId(Application.Config.user_name, DonneeSurvolee.SelectSingleNode("id").InnerText,
                                                                 New DelegateRequestResult(AddressOf DiscogsServerDeleteIdResultNotify))
                         End If
                         DonneeSurvolee.SelectSingleNode(NomDonnee).InnerText = "False"

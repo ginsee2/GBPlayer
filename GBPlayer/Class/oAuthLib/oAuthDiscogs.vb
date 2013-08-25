@@ -21,7 +21,7 @@ Class oAuthDiscogs
     Shared Property DiscogsoAuthCancelled As Boolean
 
     Private Shared Function GetDiscogsSettingUri() As Uri
-        Return New Uri("https://www.discogs.com/settings/applications")
+        Return New Uri("https://www.discogs.com") '/settings/applications")
     End Function
     Public Shared Function TestoAuth(ByVal tagconsumerKey As String, ByVal tagconsumerSecret As String,
                               ByVal tagtokenValue As String, ByVal tagtokenSecret As String) As Boolean
@@ -66,15 +66,17 @@ Class oAuthDiscogs
             Return Nothing
         End Try
     End Function
+    Public Shared Sub CancelAccessAutorization()
+        oAuthNotAvailable = True
+        AccessToken = Nothing
+    End Sub
 
     Private Shared Sub GetDiscogsoAuthAuthentification()
         Try
-            Dim ConfigUtilisateur As ConfigPerso = New ConfigPerso
-            ConfigUtilisateur = ConfigPerso.LoadConfig
-            Utilisateur = New OAuthUser(ConfigUtilisateur.DISCOGSCONNECTION_consumerKey,
-                                ConfigUtilisateur.DISCOGSCONNECTION_consumerSecret)
-            AccessToken = New oAuthAccessToken(ConfigUtilisateur.DISCOGSCONNECTION_tokenValue,
-                                               ConfigUtilisateur.DISCOGSCONNECTION_tokenSecret)
+            Utilisateur = New OAuthUser(Application.Config.discogsConnection_consumerKey,
+                                Application.Config.discogsConnection_consumerSecret)
+            AccessToken = New oAuthAccessToken(Application.Config.discogsConnection_tokenValue,
+                                               Application.Config.discogsConnection_tokenSecret)
             If Utilisateur.AccessProtectedResource(AccessToken,
                                                          "http://api.discogs.com/oauth/identity",
                                                          "GET",
@@ -87,35 +89,43 @@ Class oAuthDiscogs
             Else
                 AccessToken = Nothing
             End If
-        Catch ex As WebException
+        Catch ex As Exception
             AccessToken = Nothing
-            If ex.Response IsNot Nothing Then
-                If CType(ex.Response, HttpWebResponse).StatusCode = 407 Then
-                    If Not ProxyCancelRequest Then
-                        wpfMsgBox.MsgBoxInfo("Erreur de connection au site Discogs", ex.Message, , "Echec de la procédure oAuth de Discogs")
-                        ProxyCancelRequest = True
+            If TypeOf ex Is WebException Then
+                Dim ExW As WebException = CType(ex, WebException)
+                If ExW.Response IsNot Nothing Then
+                    If CType(ExW.Response, HttpWebResponse).StatusCode = 407 Then
+                        If Not ProxyCancelRequest Then
+                            wpfMsgBox.MsgBoxInfo("Erreur de connection au site Discogs", ex.Message, , "Echec de la procédure oAuth de Discogs")
+                            ProxyCancelRequest = True
+                        End If
+                        ExW.Response.Close()
+                        Exit Sub
                     End If
-                    ex.Response.Close()
-                    Exit Sub
+                Else
                 End If
+                Select Case ExW.Status
+                    Case WebExceptionStatus.ProtocolError
+                        If Not oAuthNotAvailable Then
+                            oAuthNotAvailable = True
+                            RaiseEvent ConsumerKeyRequest(GetDiscogsSettingUri)
+                        End If
+                    Case WebExceptionStatus.NameResolutionFailure
+                        If Not DiscogsNotConnected Then
+                            wpfMsgBox.MsgBoxInfo("Erreur de connection au site Discogs", "Vérifier si une connection internet est valide sur le poste", , "Echec de la procédure oAuth de Discogs")
+                            DiscogsNotConnected = True
+                        End If
+                    Case Else
+                        wpfMsgBox.MsgBoxInfo("Erreur de connection au site Discogs", ex.Message, , "Echec de la procédure oAuth de Discogs")
+                        DiscogsoAuthCancelled = True
+                End Select
+                Exit Sub
             Else
+                If Not oAuthNotAvailable Then
+                    oAuthNotAvailable = True
+                    RaiseEvent ConsumerKeyRequest(GetDiscogsSettingUri)
+                End If
             End If
-            Select Case ex.Status
-                Case WebExceptionStatus.ProtocolError
-                    If Not oAuthNotAvailable Then
-                        oAuthNotAvailable = True
-                        RaiseEvent ConsumerKeyRequest(GetDiscogsSettingUri)
-                    End If
-                Case WebExceptionStatus.NameResolutionFailure
-                    If Not DiscogsNotConnected Then
-                        wpfMsgBox.MsgBoxInfo("Erreur de connection au site Discogs", "Vérifier si une connection internet est valide sur le poste", , "Echec de la procédure oAuth de Discogs")
-                        DiscogsNotConnected = True
-                    End If
-                Case Else
-                    wpfMsgBox.MsgBoxInfo("Erreur de connection au site Discogs", ex.Message, , "Echec de la procédure oAuth de Discogs")
-                    DiscogsoAuthCancelled = True
-             End Select
-            Exit Sub
         End Try
     End Sub
     Public Shared Function WebRequestoAuth(ByVal urlRequete As String, Optional ByVal ParametresRequete As String = "", Optional ByVal methode As String = "GET") As System.Net.HttpWebResponse
@@ -133,16 +143,16 @@ Class oAuthDiscogs
             Return Nothing
         End If
     End Function
-    Public Shared Sub SaveConfiguration(ByVal ConfigUtilisateur As gbDev.ConfigPerso)
-        If Utilisateur IsNot Nothing Then
-            If Utilisateur._consumerKey = "" Then Exit Sub
-            ConfigUtilisateur.DISCOGSCONNECTION_consumerKey = Utilisateur._consumerKey
-            ConfigUtilisateur.DISCOGSCONNECTION_consumerSecret = Utilisateur._consumerSecret
-        End If
-        If AccessToken IsNot Nothing Then
-            ConfigUtilisateur.DISCOGSCONNECTION_tokenValue = AccessToken.TokenValue
-            ConfigUtilisateur.DISCOGSCONNECTION_tokenSecret = AccessToken.TokenSecret
-        End If
-    End Sub
+    'Public Shared Sub SaveConfiguration() 'ByVal ConfigUtilisateur As gbDev.ConfigPerso)
+    '    If Utilisateur IsNot Nothing Then
+    '        If Utilisateur._consumerKey = "" Then Exit Sub
+    '        Application.Config.discogsConnection_consumerKey = Utilisateur._consumerKey
+    '        Application.Config.discogsConnection_consumerSecret = Utilisateur._consumerSecret
+    '    End If
+    '    If AccessToken IsNot Nothing Then
+    '        Application.Config.discogsConnection_tokenValue = AccessToken.TokenValue
+    '        Application.Config.discogsConnection_tokenSecret = AccessToken.TokenSecret
+    '    End If
+    'End Sub
 End Class
 
