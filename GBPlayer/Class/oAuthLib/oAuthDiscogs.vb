@@ -66,10 +66,6 @@ Class oAuthDiscogs
             Return Nothing
         End Try
     End Function
-    Public Shared Sub CancelAccessAutorization()
-        oAuthNotAvailable = True
-        AccessToken = Nothing
-    End Sub
 
     Private Shared Sub GetDiscogsoAuthAuthentification()
         Try

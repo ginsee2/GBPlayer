@@ -89,6 +89,9 @@ Public Class ConfigApp
 
     Public Sub New()
         player_volumes.Add("PLAYER0", 100)
+        filesInfos_settingTitleMenu.Add("[Lp Version]")
+        filesInfos_settingTitleMenu.Add("[12'' Version]")
+        filesInfos_settingTitleMenu.Add("[7'' Version]")
     End Sub
     '***********************************************************************************************
     '---------------------------------PROCEDURES SHARED DE LA CLASSE--------------------------------
