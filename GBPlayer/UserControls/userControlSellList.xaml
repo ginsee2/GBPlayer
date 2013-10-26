@@ -122,8 +122,9 @@
                             <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBox x:Uid="RechercheArtiste" MinWidth="200" Name="RechercheArtiste" Margin="1" Style="{StaticResource GridEditStyle}"
-                                                         Background="#FFFEFEFE"
-                                                         TextAlignment="Center"
+                                 MaxWidth="400"                        
+                                 Background="#FFFEFEFE"
+                                 TextAlignment="Center"
                                  VerticalAlignment="Center"
                                  Height="20"
                                  FontFamily="Calibri"

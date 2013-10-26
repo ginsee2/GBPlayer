@@ -52,6 +52,9 @@ Public Class DiscogsServer
     Public Shared Function FilePathWantList(ByVal UserName As String) As String
         Return GetNomFichierXML(UserName, "Wantlist")
     End Function
+    Public Shared Function FileOrdersList(ByVal UserName As String) As String
+        Return GetNomFichierXML(UserName, "OrdersList")
+    End Function
     ' -----------------Fonctions pour la gestion des folders de la collection Discogs--------------
     Public Shared Sub RequestGet_CollectionFolderListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult)
         DiscogsRequest(UserName, "", "FolderGet", DelegateSub)
@@ -103,6 +106,10 @@ Public Class DiscogsServer
     Public Shared Sub RequestChange_SellListId(ByVal Input As String, ByVal idListing As String, ByVal DelegateSub As DelegateRequestResult)
         DiscogsRequest(Input, idListing, "SellChange", DelegateSub)
     End Sub
+    ' -----------------Fonctions pour la gestion de la SellList Discogs----------------------------
+    Public Shared Sub RequestGet_OrderListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult)
+        DiscogsRequest(UserName, "", "OrdersList", DelegateSub)
+    End Sub
     '-------------------------TACHE DE FOND POUR TRAITEMENT DES REQUETES---------------------------
     '***********************************************************************************************
     Private Shared Sub DiscogsRequest(ByVal UserName As String, ByVal id As String, ByVal Action As String, ByVal DelegateSub As DelegateRequestResult)
@@ -152,11 +159,13 @@ Public Class DiscogsServer
                     Delete_SellListId(cde.UserName, cde.id, cde.DelegateSub)
                 Case "SellChange"
                     Change_SellListId(cde.UserName, cde.id, cde.DelegateSub)
+                Case "OrdersList"
+                    Get_OrderListAll(cde.UserName, cde.DelegateSub)
             End Select
         Loop While _ListeTacheAExecuter.Count > 0
         TacheEnCours = False
     End Sub
-    ' -----------------Requetes pour la gestion des folders de la collection Discogs---------------
+    ' -----------------Requetes pour la gestion des FOLDERS Discogs---------------
     Private Shared Function Get_UserProfile(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
         Dim reader As IO.StreamReader = Nothing
         Dim hwebresponse As System.Net.HttpWebResponse = Nothing
@@ -273,7 +282,7 @@ Public Class DiscogsServer
         End Try
         Return False
     End Function
-    ' -----------------Requetes pour la gestion de la collection Discogs---------------------------
+    ' -----------------Requetes pour la gestion de la COLLECTION Discogs---------------------------
     Private Shared Function Get_CollectionListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
         Dim reader As IO.StreamReader = Nothing
         Dim hwebresponse As System.Net.HttpWebResponse = Nothing
@@ -377,7 +386,7 @@ Public Class DiscogsServer
         End Try
         Return False
     End Function
-    ' -----------------Requetes pour la gestion de la wANTLIST Discogs-----------------------------
+    ' -----------------Requetes pour la gestion de la WANTLIST Discogs-----------------------------
     Private Shared Function Get_WantListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
         Dim reader As IO.StreamReader = Nothing
         Dim hwebresponse As System.Net.HttpWebResponse = Nothing
@@ -599,12 +608,47 @@ Public Class DiscogsServer
         End Try
         Return False
     End Function
+    ' -----------------Requetes pour la gestion de la ORDERS Discogs-----------------------------
+    Private Shared Function Get_OrderListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
+        Dim reader As IO.StreamReader = Nothing
+        Dim hwebresponse As System.Net.HttpWebResponse = Nothing
+        Dim PathNomFichierInfos As String = GetNomFichierXML(UserName, "OrdersList")
+        Dim xmlPartiel As XDocument
+        Dim ReponseComplete As String = ""
+        Try
+            Dim FichierxmlFinal As XDocument = _
+                     <?xml version="1.0" encoding="utf-8"?>
+                     <ORDERSLIST>
+                     </ORDERSLIST>
+
+            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/orders", "per_page=50&sort=id&sort_order=desc", "GET")
+            reader = New IO.StreamReader(hwebresponse.GetResponseStream)
+            Dim InfosReader = reader.ReadToEnd
+            xmlPartiel = ConvertReponseXmlOrdersList(InfosReader)
+            Dim RequeteReleases = (From rel In xmlPartiel.<ORDERSLIST>.<orders>
+                                Select rel)
+            FichierxmlFinal.Root.Add(RequeteReleases)
+            FichierxmlFinal.Save(PathNomFichierInfos)
+            DelegateSub(PathNomFichierInfos, "")
+            Return True
+        Catch ex As Exception
+            DelegateSub("", "")
+        Finally
+            If reader IsNot Nothing Then reader.Close()
+            If hwebresponse IsNot Nothing Then hwebresponse.Close()
+        End Try
+        Return False
+    End Function
 
     '***********************************************************************************************
     '--------------------------FUNCTION DE CONVERSION DE FICHIERS JSON VERS XML--------------------
     '***********************************************************************************************
     Private Shared Function ConvertReponseXmlUserProfile(ByVal TexteJson As String) As XDocument
         Dim ChaineMiseEnForme As String = "{""" & "USER" & """:" & TexteJson & "}"
+        Return JsonConvert.DeserializeXNode(ChaineMiseEnForme)
+    End Function
+    Private Shared Function ConvertReponseXmlOrdersList(ByVal TexteJson As String) As XDocument
+        Dim ChaineMiseEnForme As String = "{""" & "ORDERSLIST" & """:" & TexteJson & "}"
         Return JsonConvert.DeserializeXNode(ChaineMiseEnForme)
     End Function
     Private Shared Function ConvertReponseXmlSellList(ByVal TexteJson As String) As XDocument

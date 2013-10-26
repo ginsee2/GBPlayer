@@ -499,6 +499,15 @@ Public Class UserControlSellList
                                                        End Sub))
     End Sub
 
+    Private Sub DiscogsServerGetAllOrdersNotify(ByVal xmlFileResult As String, ByVal IdRelease As String)
+        Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
+                                         New NoArgDelegate(Sub()
+                                                               MenuContextuel.Tag = ""
+                                                               If xmlFileResult = "" Then
+                                                                   wpfMsgBox.MsgBoxInfo("Echec update", "La mise a jour des ordres à échouée")
+                                                               End If
+                                                           End Sub))
+    End Sub
     '***********************************************************************************************
     '---------------------------------GESTION DES MENUS LA LISTE DES VINYLS-------------------------
     '***********************************************************************************************
@@ -527,61 +536,115 @@ Public Class UserControlSellList
         End If
         MenuContextuel = New ContextMenu
         MenuContextuel.Tag = NomChamp
+        Dim ListeMenu As New List(Of String) 'Libelle menu;Tag envoyé à la fonction de reponse,Nom sous menu
         Select Case NomChamp
             Case "General"
-                Dim ListeMenu As New List(Of String) 'Libelle menu;Tag envoyé à la fonction de reponse,Nom sous menu
-                ListeMenu.Add("Supprimer un vinyl;SupprimerVinyl;supprimervinyl24.png")
+                ListeMenu.Add("Supprimer un vinyl;SupprimerVinyl;;supprimervinyl24.png")
                 ListeMenu.Add(";;")
-                ListeMenu.Add("Forcer mise à jour de l'image;UpdateImage;update24.png")
-                ListeMenu.ForEach(Sub(i As String)
-                                      Dim ItemMenu As New MenuItem
-                                      Dim TabChaine() As String = Split(i, ";")
-                                      If TabChaine(0) <> "" Then
-                                          If TabChaine(1) <> "" Then
-                                              ItemMenu.AddHandler(MenuItem.ClickEvent, New RoutedEventHandler(AddressOf MenuDynamique_Click))
-                                              ItemMenu.Name = TabChaine(1)
-                                              ItemMenu.Tag = TabChaine(1)
-                                          End If
-                                          If TabChaine.Count >= 3 Then
-                                              If TabChaine(2) <> "" Then
-                                                  Dim ImageIcon As Image = New Image()
-                                                  ImageIcon.Height = 16
-                                                  ImageIcon.Width = 16
-                                                  ImageIcon.Stretch = Stretch.Fill
-                                                  ImageIcon.Source = GetBitmapImage("../Images/imgmenus/" & TabChaine(2))
-                                                  ItemMenu.Icon = ImageIcon
-                                              End If
-                                          End If
-                                          ItemMenu.Header = TabChaine(0)
-                                          MenuContextuel.Items.Add(ItemMenu)
-                                      Else
-                                          MenuContextuel.Items.Add(New Separator)
-                                      End If
-                                  End Sub)
+                ListeMenu.Add("Forcer mise à jour de l'image;UpdateImage;;update24.png")
+            Case "DiscogsOrder"
+                ListeMenu.Add("Selectionner ordre;;ListeOrders;discogsorder24.png")
+                ListeMenu.Add(";;")
+                ListeMenu.Add("Mise à jour ordres...;UpdateOrdersList;;update24.png")
         End Select
+        ListeMenu.ForEach(Sub(i As String)
+                              Dim ItemMenu As New MenuItem
+                              Dim TabChaine() As String = Split(i, ";")
+                              If TabChaine(0) <> "" Then
+                                  If TabChaine(1) <> "" Then
+                                      ItemMenu.AddHandler(MenuItem.ClickEvent, New RoutedEventHandler(AddressOf MenuDynamique_Click))
+                                      ItemMenu.Name = TabChaine(1)
+                                      ItemMenu.Tag = TabChaine(1)
+                                  End If
+                                  If TabChaine(2) <> "" Then
+                                      CreationItemsDynamiques(TabChaine(2), ItemMenu.Items)
+                                  End If
+                                  If TabChaine.Count >= 3 Then
+                                      If TabChaine(3) <> "" Then
+                                          Dim ImageIcon As Image = New Image()
+                                          ImageIcon.Height = 16
+                                          ImageIcon.Width = 16
+                                          ImageIcon.Stretch = Stretch.Fill
+                                          ImageIcon.Source = GetBitmapImage("../Images/imgmenus/" & TabChaine(3))
+                                          ItemMenu.Icon = ImageIcon
+                                      End If
+                                  End If
+                                  ItemMenu.Header = TabChaine(0)
+                                  MenuContextuel.Items.Add(ItemMenu)
+                              Else
+                                  MenuContextuel.Items.Add(New Separator)
+                              End If
+                          End Sub)
         Return MenuContextuel
     End Function
-    Sub MenuDynamique_Click(ByVal sender As Object, ByVal e As RoutedEventArgs)
-        Select Case CType(e.OriginalSource, MenuItem).Name
-            Case "SupprimerVinyl"
-                DeleteIdSellList()
-            Case "UpdateImage"
-                ' Exit Sub
-                Dim Item As ListViewItem = ItemParentMenuContext
-                If Item IsNot Nothing Then
-                    Dim NodeSelectionne As XmlElement = CType(XMLBinding.SelectedItem, XmlElement)
-                    If NodeSelectionne.SelectSingleNode("release/id").InnerText <> "" Then
-                        Dim MemId = NodeSelectionne.SelectSingleNode("release/id").InnerText()
-                        Dim Index = ExtraitChaine(MemId, "-", "", , False)
-                        If Index = "" Then Index = "1" Else Index = CStr(CInt(Index) + 1)
-                        NodeSelectionne.SelectSingleNode("release/id").InnerText = ExtraitChaine(MemId, "", "-", , True) & "-" & Index
-                        Dim ImageUpdate As Controls.Image = CType(wpfApplication.FindChild(Item, "tagLinkImagePochette"), Controls.Image)
-                        If ImageUpdate.GetBindingExpression(Controls.Image.SourceProperty) IsNot Nothing Then
-                            ImageUpdate.GetBindingExpression(Controls.Image.SourceProperty).UpdateTarget()
+    Private Sub CreationItemsDynamiques(ByVal NomChamp As String, ByVal ItemsMenu As ItemCollection, Optional ByVal Desactive As Boolean = False)
+        Select Case NomChamp
+            Case "ListeOrders"
+                Dim OrdersFileName = DiscogsServer.FileOrdersList(Application.Config.user_name)
+                If File.Exists(OrdersFileName) Then
+                    Dim DocXDiscogs As XDocument = XDocument.Load(OrdersFileName)
+                    Dim Compteur As Integer
+                    Dim Result = From i In DocXDiscogs.<ORDERSLIST>.<orders> _
+                                        Select i
+                    For Each order In Result
+                        If order.<status>.Value <> "Merged" Then
+                            Dim ItemMenu As New MenuItem
+                            ItemMenu.Header = order.<items>.Count & " Items - [" & order.<status>.Value & "] " & order.<id>.Value & " (" & order.<buyer>.<username>.Value & ")"
+                            ItemMenu.Tag = order '"Order:" & order.<id>.Value
+                            ItemMenu.Name = "Order" & Compteur 'order.<id>.Value
+                            ItemMenu.AddHandler(MenuItem.ClickEvent, New RoutedEventHandler(AddressOf MenuDynamique_Click))
+                            Dim ImageIcon As Image = New Image()
+                            ImageIcon.Height = 16
+                            ImageIcon.Width = 16
+                            ImageIcon.Stretch = Stretch.Fill
+                            ImageIcon.Source = GetBitmapImage("../Images/imgmenus/discogsorder24.png")
+                            ItemMenu.Icon = ImageIcon
+                            ItemsMenu.Add(ItemMenu)
+                            Compteur += 1
                         End If
-                    End If
+                    Next
                 End If
         End Select
+        Return
+    End Sub
+    Sub MenuDynamique_Click(ByVal sender As Object, ByVal e As RoutedEventArgs)
+        If CType(e.OriginalSource, MenuItem).Name Like "Order*" Then
+            Dim Order As XElement = CType(CType(e.OriginalSource, MenuItem).Tag, XElement)
+            Dim result = From i In Order.<items> _
+                                        Select i
+            Dim Chaine As String = ""
+            For Each item In result
+                If Chaine = "" Then
+                    Chaine &= "lid:" & item.<id>.Value
+                Else
+                    Chaine &= "/lid:" & item.<id>.Value
+                End If
+            Next
+            FiltreVinyls(Chaine, True, True)
+        Else
+            Select Case CType(e.OriginalSource, MenuItem).Name
+                Case "SupprimerVinyl"
+                    DeleteIdSellList()
+                Case "UpdateImage"
+                    ' Exit Sub
+                    Dim Item As ListViewItem = ItemParentMenuContext
+                    If Item IsNot Nothing Then
+                        Dim NodeSelectionne As XmlElement = CType(XMLBinding.SelectedItem, XmlElement)
+                        If NodeSelectionne.SelectSingleNode("release/id").InnerText <> "" Then
+                            Dim MemId = NodeSelectionne.SelectSingleNode("release/id").InnerText()
+                            Dim Index = ExtraitChaine(MemId, "-", "", , False)
+                            If Index = "" Then Index = "1" Else Index = CStr(CInt(Index) + 1)
+                            NodeSelectionne.SelectSingleNode("release/id").InnerText = ExtraitChaine(MemId, "", "-", , True) & "-" & Index
+                            Dim ImageUpdate As Controls.Image = CType(wpfApplication.FindChild(Item, "tagLinkImagePochette"), Controls.Image)
+                            If ImageUpdate.GetBindingExpression(Controls.Image.SourceProperty) IsNot Nothing Then
+                                ImageUpdate.GetBindingExpression(Controls.Image.SourceProperty).UpdateTarget()
+                            End If
+                        End If
+                    End If
+                Case "UpdateOrdersList"
+                    DiscogsServer.RequestGet_OrderListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetAllOrdersNotify))
+            End Select
+        End If
     End Sub
     Private Function GetBitmapImage(ByVal NomImage As String) As BitmapImage
         Dim bi3 As New BitmapImage
@@ -590,6 +653,11 @@ Public Class UserControlSellList
         bi3.EndInit()
         Return bi3
     End Function
+    Private Sub RechercheArtiste_PreviewMouseRightButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles RechercheArtiste.PreviewMouseRightButtonDown
+        'ContextMenu = Await InfosFichier.CreationMenuContextuelDynamique("Artiste")
+        RechercheArtiste.ContextMenu = CreationMenuContextuelDynamique("DiscogsOrder")
+        e.Handled = True
+    End Sub
 
     '***********************************************************************************************
     '------------------------------MENU CONTEXTUEL ENTETE LISTE-------------------------------------
@@ -616,6 +684,7 @@ Public Class UserControlSellList
             End If
         Next
     End Sub
+
 
     '***********************************************************************************************
     '---------------------------------GESTION CLAVIER-----------------------------------------------
@@ -1159,6 +1228,8 @@ Public Class UserControlSellList
                                               Dim ChaineRecherche As String = Trim(ExtraitChaine(j, ":", "", , True))
                                               If j <> "" Then Resultat = True Else Resultat = False
                                               Select Case NomCritere
+                                                  Case "lid"
+                                                      If Vinyl.SelectSingleNode("id").InnerText <> ChaineRecherche Then Resultat = False
                                                   Case "id", "+id", "*id"
                                                       If Vinyl.SelectSingleNode("release/id").InnerText <> ChaineRecherche Then Resultat = False
                                                   Case "artiste", "a", "+artiste", "+a", "*artiste", "*a"
@@ -1234,7 +1305,7 @@ Public Class UserControlSellList
                                       If (FiltreStatusSold.Opacity = 1) And (Vinyl.SelectSingleNode("status").InnerText <> "Sold") Then IconResultat = False
                                       If (FiltreStatusExpired.Opacity = 1) And (Vinyl.SelectSingleNode("status").InnerText <> "Expired") Then IconResultat = False
                                       If Vinyl.SelectSingleNode("price/value").InnerText <> "" Then
-                                          If MemResultatOR Then PriceSelection += CDbl(RemplaceOccurences(Vinyl.SelectSingleNode("price/value").InnerText, ".", ","))
+                                          If (MemResultatOR And IconResultat) Then PriceSelection += CDbl(RemplaceOccurences(Vinyl.SelectSingleNode("price/value").InnerText, ".", ","))
                                       End If
                                       Return (MemResultatOR And IconResultat)
                                   End Function
