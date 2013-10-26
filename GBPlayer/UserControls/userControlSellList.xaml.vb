@@ -781,12 +781,13 @@ Public Class UserControlSellList
         UpdateInfosIcons(e.OriginalSource)
         If TypeOf (e.OriginalSource) Is Image Then
             If CType(e.OriginalSource, Image).Name Like "tagLink*" Then
+                Dim Chaine As String = ExtraitChaine(CType(CType(e.OriginalSource, Image).Tag, XmlElement).InnerText, "", "-", , True)
                 If (Keyboard.GetKeyStates(Key.LeftCtrl) And KeyStates.Down) = 0 Then
-                    UpdateRecherche("tagLinkid", CType(CType(e.OriginalSource, Image).Tag, XmlElement).InnerText)
+                    UpdateRecherche("tagLinkid", Chaine)
                     e.Handled = True
                 Else
                     Dim Newurl As String = ""
-                    Newurl = "http://www.discogs.com/release/" & CType(CType(e.OriginalSource, Image).Tag, XmlElement).InnerText
+                    Newurl = "http://www.discogs.com/release/" & Chaine
                     Dim NewURI As Uri = New Uri(Newurl)
                     RaiseEvent RequeteWebBrowser(NewURI)
                     e.Handled = True
@@ -1231,7 +1232,7 @@ Public Class UserControlSellList
                                                   Case "lid"
                                                       If Vinyl.SelectSingleNode("id").InnerText <> ChaineRecherche Then Resultat = False
                                                   Case "id", "+id", "*id"
-                                                      If Vinyl.SelectSingleNode("release/id").InnerText <> ChaineRecherche Then Resultat = False
+                                                      If ExtraitChaine(Vinyl.SelectSingleNode("release/id").InnerText, "", "-", , True) <> ChaineRecherche Then Resultat = False
                                                   Case "artiste", "a", "+artiste", "+a", "*artiste", "*a"
                                                       If Left(NomCritere, 1) = "+" Then
                                                           If Vinyl.SelectSingleNode("release/description").InnerText <> ChaineRecherche Then Resultat = False
