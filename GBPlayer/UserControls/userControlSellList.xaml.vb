@@ -306,7 +306,8 @@ Public Class UserControlSellList
     '***********************************************************************************************
     Private Sub XMLBinding_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles XMLBinding.SelectionChanged
         If (TypeOf (e.OriginalSource) Is ListView) And (Not MemValuesItemModified.IsEmpty) Then
-            Dim Input As String = "condition=" & MemItemModified.SelectSingleNode("condition").InnerText &
+            Dim Input As String = "(id=" & MemItemModified.SelectSingleNode("release/id").InnerText & ")" &
+                                  "condition=" & MemItemModified.SelectSingleNode("condition").InnerText &
                                   "&sleeve_condition=" & MemItemModified.SelectSingleNode("sleeve_condition").InnerText &
                                   "&price=#F" & MemItemModified.SelectSingleNode("price/value").InnerText &
                                   "&comments=" & MemItemModified.SelectSingleNode("comments").InnerText &
@@ -498,7 +499,6 @@ Public Class UserControlSellList
                                                            NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
                                                        End Sub))
     End Sub
-
     Private Sub DiscogsServerGetAllOrdersNotify(ByVal xmlFileResult As String, ByVal IdRelease As String)
         Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
                                          New NoArgDelegate(Sub()
@@ -1312,7 +1312,6 @@ Public Class UserControlSellList
                                   End Function
         NbreElementsAffiches.Text = PriceSelection & " EUR - " & XMLBinding.Items.Count & " vinyls"
     End Sub
-
 
     '***********************************************************************************************
     '---------------------------------GESTION DU TRI DANS LA LISTE DES VINYLS-----------------------

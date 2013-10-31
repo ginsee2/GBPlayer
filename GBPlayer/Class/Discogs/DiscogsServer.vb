@@ -534,9 +534,21 @@ Public Class DiscogsServer
                  <listings>
                  </listings>
         Try
+            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/price_suggestions/" & idrelease, , "GET")
+            reader = New IO.StreamReader(hwebresponse.GetResponseStream)
+            Dim Chaine = reader.ReadToEnd
+            Chaine = ExtraitChaine(Chaine, "Very Good Plus (VG+)", "", Len("Very Good Plus (VG+)"))
+            Chaine = ExtraitChaine(Chaine, "{", "}")
+            Chaine = ExtraitChaine(Chaine, "value", "", Len("value"))
+            Chaine = ExtraitChaine(Chaine, ":", "")
+            Chaine = ExtraitChaine(Chaine, "", ".") & Left(ExtraitChaine(Chaine, ".", "", 0), 3)
+            If Chaine = "" Then Chaine = "10"
+            If reader IsNot Nothing Then reader.Close()
+            If hwebresponse IsNot Nothing Then hwebresponse.Close()
+
             Dim Input As String = "release_id=#N" & idrelease & "&" &
                                     "condition=Very Good Plus (VG+)&" &
-                                    "price=#F10.0&" &
+                                    "price=#F" & Chaine & "&" &
                                     "status=Draft"
             hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/listings", Input, "POST")
             reader = New IO.StreamReader(hwebresponse.GetResponseStream)
@@ -588,7 +600,29 @@ Public Class DiscogsServer
                  </listings>
         Try
             Dim Id = ExtraitChaine(ListingId, "", "/")
+            Dim IdRelease As String = ExtraitChaine(Input, "=", ")")
+            If InStr(Input, "status=Draft") > 0 And InStr(ListingId, "price") = 0 Then
+                If InStr(ListingId, "status") = 0 Then
+                    Dim condition As String = ExtraitChaine(Input, "condition=", "&", Len("condition="))
+                    hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/price_suggestions/" & IdRelease, , "GET")
+                    reader = New IO.StreamReader(hwebresponse.GetResponseStream)
+                    Dim Chaine = reader.ReadToEnd
+                    Chaine = ExtraitChaine(Chaine, condition, "", Len(condition))
+                    Chaine = ExtraitChaine(Chaine, "{", "}")
+                    Chaine = ExtraitChaine(Chaine, "value", "", Len("value"))
+                    Chaine = ExtraitChaine(Chaine, ":", "")
+                    Chaine = ExtraitChaine(Chaine, "", ".") & Left(ExtraitChaine(Chaine, ".", "", 0), 3)
+                    If reader IsNot Nothing Then reader.Close()
+                    If hwebresponse IsNot Nothing Then hwebresponse.Close()
+
+                    Dim Debut As String = ExtraitChaine(Input, "", "&price")
+                    Dim Fin As String = ExtraitChaine(Input, "&price", "", Len("&price"))
+                    Fin = ExtraitChaine(Fin, "&", "", 0)
+                    If Chaine <> "" Then Input = Debut & "&price=#F" & Chaine & Fin
+                End If
+            End If
             If InStr(Input, "status=Sold") = 0 Then
+                Input = ExtraitChaine(Input, ")", "")
                 hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/listings/" & Id, Input, "POST")
                 reader = New IO.StreamReader(hwebresponse.GetResponseStream)
                 If reader IsNot Nothing Then reader.Close()
