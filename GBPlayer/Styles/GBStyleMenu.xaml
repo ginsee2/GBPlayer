@@ -38,7 +38,7 @@
                 <ControlTemplate x:Uid="ControlTemplate_2" TargetType="{x:Type ContextMenu}">
                     <Grid x:Uid="Grid_1">
                         <Border x:Uid="Border_1" x:Name="Border" CornerRadius="4" BorderThickness="1" Margin="0" Opacity="1"
-                            Background="{StaticResource W8Background}"
+                             Background="{StaticResource W8Background}"
                             BorderBrush="{StaticResource W8BorderGray}">
                         </Border>
                         <ScrollViewer x:Uid="ScrollViewer_1" Style="{DynamicResource GBStyleScrollViewer}" Margin="4" 
@@ -271,7 +271,8 @@
 
     <!-- MENU ITEM TOP LEVEL -->
     <ControlTemplate x:Uid="ControlTemplate_7" x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}" TargetType="{x:Type MenuItem}">
-        <Border x:Uid="Border_5" CornerRadius="3" Margin="1" SnapsToDevicePixels="true" Background="{StaticResource W8BackgroundBorder}"
+        <Border x:Uid="Border_5" CornerRadius="3" Margin="1" SnapsToDevicePixels="true" 
+                Background="{StaticResource W8BackgroundBorder}"
                BorderBrush="{StaticResource W8BorderGray}" BorderThickness="1"
                 x:Name="Border" >
             <Grid x:Uid="Grid_4">

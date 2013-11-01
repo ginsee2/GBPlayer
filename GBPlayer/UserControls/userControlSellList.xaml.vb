@@ -85,7 +85,9 @@ Public Class UserControlSellList
         If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
             If System.Environment.OSVersion.Version.Major > 5 Then PlateformVista = True
         End If
-        NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+        Me.AddHandler(ContextMenuOpeningEvent, New ContextMenuEventHandler(AddressOf MenuContextuel_Opened))
+        Me.AddHandler(ContextMenuClosingEvent, New ContextMenuEventHandler(AddressOf MenuContextuel_Closed))
+        NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
         FenetreParente = CType(Application.Current.MainWindow, MainWindow)
         ProcessUpdate = FenetreParente.ProcessMiseAJour
     End Sub
@@ -126,7 +128,7 @@ Public Class UserControlSellList
         End If
     End Sub
     Private Sub DataProvider_DataChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataProvider.DataChanged
-        NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+        NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
         ' If DataProvider.Document IsNot Nothing Then RaiseEvent IdWantlistUpdated(DataProvider.Document, Me)
     End Sub
 
@@ -412,7 +414,7 @@ Public Class UserControlSellList
                                                            Else
                                                                wpfMsgBox.MsgBoxInfo("La mise à jour à échouée", "Les informations Discogs n'ont pas pu être mis à jour", Me)
                                                            End If
-                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
                                                            Me.IsEnabled = True
                                                        End Sub))
     End Sub
@@ -439,7 +441,7 @@ Public Class UserControlSellList
                                                            RefreshSort()
                                                            XMLBinding.SelectedItem = newBook
                                                            XMLBinding.ScrollIntoView(XMLBinding.SelectedItem)
-                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
                                                            '  RaiseEvent IdWantlistAdded(IdRelease, Me)
                                                        End If
                                                    End Sub))
@@ -455,7 +457,7 @@ Public Class UserControlSellList
                                                                    XMLBinding.SelectedItem = Item.NextSibling
                                                                    Item.ParentNode.RemoveChild(Item)
                                                                End If
-                                                               NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+                                                               NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
                                                            End If
                                                        End Sub))
 
@@ -494,7 +496,7 @@ Public Class UserControlSellList
                                                                XMLBinding.SelectedItem = Element
                                                                XMLBinding.ScrollIntoView(XMLBinding.SelectedItem)
                                                            End If
-                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
                                                        End Sub))
     End Sub
     Private Sub DiscogsServerRelistIdResultNotify(ByVal AddResult As String, ByVal IdListing As String)
@@ -523,7 +525,7 @@ Public Class UserControlSellList
                                                            RefreshSort()
                                                            XMLBinding.SelectedItem = newBook
                                                            XMLBinding.ScrollIntoView(XMLBinding.SelectedItem)
-                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
                                                            '  RaiseEvent IdWantlistAdded(IdRelease, Me)
                                                        End If
                                                    End Sub))
@@ -568,13 +570,11 @@ Public Class UserControlSellList
         Dim ListeMenu As New List(Of String) 'Libelle menu;Tag envoyé à la fonction de reponse,Nom sous menu
         Select Case NomChamp
             Case "General"
-                ListeMenu.Add("Supprimer un vinyl;SupprimerVinyl;;supprimervinyl24.png")
+                ListeMenu.Add("Delete item;SupprimerVinyl;;supprimervinyl24.png")
                 ListeMenu.Add(";;")
-                ListeMenu.Add("Forcer mise à jour de l'image;UpdateImage;;update24.png")
+                ListeMenu.Add("Force update image;UpdateImage;;update24.png")
             Case "DiscogsOrder"
-                ListeMenu.Add("Selectionner ordre;;ListeOrders;discogsorder24.png")
-                ListeMenu.Add(";;")
-                ListeMenu.Add("Mise à jour ordres...;UpdateOrdersList;;update24.png")
+                ListeMenu.Add("Select all items of order...;;ListeOrders;discogs16.png")
         End Select
         ListeMenu.ForEach(Sub(i As String)
                               Dim ItemMenu As New MenuItem
@@ -618,7 +618,8 @@ Public Class UserControlSellList
                     For Each order In Result
                         If order.<status>.Value <> "Merged" Then
                             Dim ItemMenu As New MenuItem
-                            ItemMenu.Header = order.<items>.Count & " Items - [" & order.<status>.Value & "] " & order.<id>.Value & " (" & order.<buyer>.<username>.Value & ")"
+                            Dim TexteItem As String = IIf(order.<items>.Count > 1, " items", " item")
+                            ItemMenu.Header = order.<items>.Count & TexteItem & " - [" & order.<status>.Value & "] " & order.<id>.Value & " (" & order.<buyer>.<username>.Value & ")"
                             ItemMenu.Tag = order '"Order:" & order.<id>.Value
                             ItemMenu.Name = "Order" & Compteur 'order.<id>.Value
                             ItemMenu.AddHandler(MenuItem.ClickEvent, New RoutedEventHandler(AddressOf MenuDynamique_Click))
@@ -626,7 +627,20 @@ Public Class UserControlSellList
                             ImageIcon.Height = 16
                             ImageIcon.Width = 16
                             ImageIcon.Stretch = Stretch.Fill
-                            ImageIcon.Source = GetBitmapImage("../Images/imgmenus/discogsorder24.png")
+                            Select Case ExtraitChaine(order.<status>.Value, "", " ", , True)
+                                Case "New"
+                                    ImageIcon.Source = GetBitmapImage("../Images/imgmenus/neworder.png")
+                                Case "Invoice"
+                                    ImageIcon.Source = GetBitmapImage("../Images/imgmenus/invoicesent.png")
+                                Case "Payment"
+                                    ImageIcon.Source = GetBitmapImage("../Images/imgmenus/paymentreceived.png")
+                                Case "Shipped"
+                                    ImageIcon.Source = GetBitmapImage("../Images/imgmenus/shipped.png")
+                                Case "Cancelled"
+                                    ImageIcon.Source = GetBitmapImage("../Images/imgmenus/Cancelled.png")
+                                Case Else
+                                    ImageIcon.Source = GetBitmapImage("../Images/imgmenus/discogs16.png")
+                            End Select
                             ItemMenu.Icon = ImageIcon
                             ItemsMenu.Add(ItemMenu)
                             Compteur += 1
@@ -670,8 +684,6 @@ Public Class UserControlSellList
                             End If
                         End If
                     End If
-                Case "UpdateOrdersList"
-                    DiscogsServer.RequestGet_OrderListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetAllOrdersNotify))
             End Select
         End If
     End Sub
@@ -688,6 +700,17 @@ Public Class UserControlSellList
         e.Handled = True
     End Sub
 
+    Private Sub MenuContextuel_Opened(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Dim Texte As TextBox = wpfApplication.FindAncestor(e.OriginalSource, "TextBox")
+        If Texte IsNot Nothing Then
+            If CType(wpfApplication.FindAncestor(e.OriginalSource, "TextBox"), TextBox).Name = "RechercheArtiste" Then
+                DiscogsServer.RequestGet_OrderListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetAllOrdersNotify))
+            End If
+        End If
+    End Sub
+    Private Sub MenuContextuel_Closed(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+
+    End Sub
     '***********************************************************************************************
     '------------------------------MENU CONTEXTUEL ENTETE LISTE-------------------------------------
     '***********************************************************************************************
@@ -1339,7 +1362,7 @@ Public Class UserControlSellList
                                       End If
                                       Return (MemResultatOR And IconResultat)
                                   End Function
-        NbreElementsAffiches.Text = PriceSelection & " EUR - " & XMLBinding.Items.Count & " vinyls"
+        NbreElementsAffiches.Text = PriceSelection & " EUR - " & XMLBinding.Items.Count & " items"
     End Sub
 
     '***********************************************************************************************

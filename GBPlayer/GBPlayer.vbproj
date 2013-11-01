@@ -730,6 +730,12 @@
     <Resource Include="Images\imgboutons\restauresauvegarde24.png" />
     <Resource Include="Images\imgmenus\update24.png" />
     <Resource Include="Images\imgmenus\discogsorder24.png" />
+    <Resource Include="Images\imgmenus\discogs16.png" />
+    <Resource Include="Images\imgmenus\neworder.png" />
+    <Resource Include="Images\imgmenus\shipped.png" />
+    <Resource Include="Images\imgmenus\paymentreceived.png" />
+    <Resource Include="Images\imgmenus\cancelled.png" />
+    <Resource Include="Images\imgmenus\invoicesent.png" />
     <Content Include="lame_enc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

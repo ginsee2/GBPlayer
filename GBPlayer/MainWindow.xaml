@@ -262,9 +262,9 @@
                                     <gbDev:userControlWantList x:Uid="ListeWantList" x:Name="ListeWantList" MaxHeight="800" />
                                 </Grid>
                             </TabItem>
-                            <TabItem x:Uid="GestionSellList" Header="SellList" Name="GestionSellList" Style="{StaticResource GBTabItemVertical}">
-                                <Grid x:Uid="Grid_10">
-                                    <gbDev:UserControlSellList x:Uid="ListeSellList" x:Name="ListeSellList" MaxHeight="800" />
+                            <TabItem x:Uid="GestionSellList" Header="Marketplace" Name="GestionSellList" Style="{StaticResource GBTabItemVertical}">
+                                <Grid >
+                                    <gbDev:UserControlSellList x:Name="ListeSellList" MaxHeight="800" />
                                 </Grid>
                             </TabItem>
                             <TabItem Header="Synchronisation" Name="PhoneSynchro" Style="{StaticResource GBTabItemVertical}">
