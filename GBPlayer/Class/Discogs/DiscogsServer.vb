@@ -106,6 +106,9 @@ Public Class DiscogsServer
     Public Shared Sub RequestChange_SellListId(ByVal Input As String, ByVal idListing As String, ByVal DelegateSub As DelegateRequestResult)
         DiscogsRequest(Input, idListing, "SellChange", DelegateSub)
     End Sub
+    Public Shared Sub RequestRelist_SellListId(ByVal Input As String, ByVal idListing As String, ByVal DelegateSub As DelegateRequestResult)
+        DiscogsRequest(Input, idListing, "SellRelist", DelegateSub)
+    End Sub
     ' -----------------Fonctions pour la gestion de la SellList Discogs----------------------------
     Public Shared Sub RequestGet_OrderListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult)
         DiscogsRequest(UserName, "", "OrdersList", DelegateSub)
@@ -159,6 +162,8 @@ Public Class DiscogsServer
                     Delete_SellListId(cde.UserName, cde.id, cde.DelegateSub)
                 Case "SellChange"
                     Change_SellListId(cde.UserName, cde.id, cde.DelegateSub)
+                Case "SellRelist"
+                    Relist_SellListId(cde.UserName, cde.id, cde.DelegateSub)
                 Case "OrdersList"
                     Get_OrderListAll(cde.UserName, cde.DelegateSub)
             End Select
@@ -571,22 +576,22 @@ Public Class DiscogsServer
         End Try
         Return False
     End Function
-    Private Shared Function Delete_SellListId(ByVal UserName As String, ByVal idrelease As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
+    Private Shared Function Delete_SellListId(ByVal UserName As String, ByVal ListingId As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
         Dim reader As IO.StreamReader = Nothing
         Dim hwebresponse As System.Net.HttpWebResponse = Nothing
         Try
-            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/listings/" & idrelease, , "DELETE")
+            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/listings/" & ListingId, , "DELETE")
             hwebresponse.Close()
-            DelegateSub(CStr(True), idrelease)
+            DelegateSub(CStr(True), ListingId)
             Return True
         Catch ex As Exception
-            DelegateSub(CStr(False), idrelease)
+            DelegateSub(CStr(False), ListingId)
             Debug.Print(ex.Message)
             If InStr(ex.Message, "404") > 0 Then
-                DelegateSub(CStr(True), idrelease)
+                DelegateSub(CStr(True), ListingId)
                 Return True
             Else
-                DelegateSub(CStr(False), idrelease)
+                DelegateSub(CStr(False), ListingId)
                 Return False
             End If
         End Try
@@ -642,6 +647,53 @@ Public Class DiscogsServer
         End Try
         Return False
     End Function
+    Private Shared Function Relist_SellListId(ByVal UserName As String, ByVal ListingId As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
+        Dim reader As IO.StreamReader = Nothing
+        Dim hwebresponse As System.Net.HttpWebResponse = Nothing
+        Dim FichierxmlFinal As XDocument = _
+                 <?xml version="1.0" encoding="utf-8"?>
+                 <listings>
+                 </listings>
+        Try
+            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/listings/" & ListingId, , "GET")
+            reader = New IO.StreamReader(hwebresponse.GetResponseStream)
+            FichierxmlFinal.Root.Add(ConvertReponseXmlSellList(reader.ReadToEnd).<SELLLIST>.Elements)
+            Dim idRelease As String = FichierxmlFinal.<listings>.<release>.<id>.Value
+            Dim Price As String = FichierxmlFinal.<listings>.<price>.<value>.Value
+            Dim Condition As String = FichierxmlFinal.<listings>.<condition>.Value
+            Dim SleeveCondition As String = FichierxmlFinal.<listings>.<sleeve_condition>.Value
+            Dim Comment As String = FichierxmlFinal.<listings>.<comments>.Value
+            If reader IsNot Nothing Then reader.Close()
+            If hwebresponse IsNot Nothing Then hwebresponse.Close()
+
+            Dim Input As String = "release_id=#N" & idRelease & "&" &
+                                    "condition=" & Condition & "&" &
+                                    "sleeve_condition=" & SleeveCondition & "&" &
+                                    "comments=" & Comment & "&" &
+                                    "price=#F" & Price & "&" &
+                                    "status=Draft"
+            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/listings", Input, "POST")
+            reader = New IO.StreamReader(hwebresponse.GetResponseStream)
+            FichierxmlFinal.Root.RemoveAll()
+            FichierxmlFinal.Root.Add(ConvertReponseXmlSellList(reader.ReadToEnd).<SELLLIST>.Elements)
+            If reader IsNot Nothing Then reader.Close()
+            If hwebresponse IsNot Nothing Then hwebresponse.Close()
+            hwebresponse = oAuthDiscogs.WebRequestoAuth("http://" & Site & "/marketplace/listings/" &
+                                                        FichierxmlFinal.<listings>.<listing_id>.Value, , "GET")
+            reader = New IO.StreamReader(hwebresponse.GetResponseStream)
+            FichierxmlFinal.Root.RemoveAll()
+            FichierxmlFinal.Root.Add(ConvertReponseXmlSellList(reader.ReadToEnd).<SELLLIST>.Elements)
+            DelegateSub(FichierxmlFinal.ToString, ListingId)
+            Return True
+        Catch ex As Exception
+            DelegateSub("", ListingId)
+        Finally
+            If reader IsNot Nothing Then reader.Close()
+            If hwebresponse IsNot Nothing Then hwebresponse.Close()
+        End Try
+        Return False
+    End Function
+
     ' -----------------Requetes pour la gestion de la ORDERS Discogs-----------------------------
     Private Shared Function Get_OrderListAll(ByVal UserName As String, ByVal DelegateSub As DelegateRequestResult) As Boolean
         Dim reader As IO.StreamReader = Nothing

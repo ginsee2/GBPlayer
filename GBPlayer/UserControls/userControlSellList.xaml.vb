@@ -189,6 +189,12 @@ Public Class UserControlSellList
                             MemValuesItemModified.Update("status", Valeur)
                             DonneeSurvolee.SelectSingleNode(NomDonnee).InnerText = "Sold"
                         End If
+                    ElseIf (Valeur = "Sold") Then
+                        If (IconClic = "Draft") And (Valeur = "Sold") Then
+                            If wpfMsgBox.MsgBoxQuestion("Relist sold listing", "Want to relist this sold listing?") Then
+                                DiscogsServer.RequestRelist_SellListId("", DonneeSurvolee.SelectSingleNode("id").InnerText, AddressOf DiscogsServerRelistIdResultNotify)
+                            End If
+                        End If
                     End If
                 End If
             End If
@@ -443,21 +449,13 @@ Public Class UserControlSellList
         Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
                                      New NoArgDelegate(Sub()
                                                            If Retour Then
-                                                               Dim IdExistant As Boolean = False
-                                                               Dim Item As XmlElement = Nothing
-                                                               For Each i As XmlElement In DataProvider.Document.DocumentElement.ChildNodes
-                                                                   If i.SelectSingleNode("id").InnerText = IdListing Then
-                                                                       Item = i
-                                                                       IdExistant = True
-                                                                       Exit For
-                                                                   End If
-                                                               Next
-                                                               If IdExistant Then
+                                                               Dim Item As XmlElement = DataProvider.Document.DocumentElement.SelectSingleNode("descendant::listings" & _
+                                                                     "[id='" & IdListing & "']")
+                                                               If Item IsNot Nothing Then
                                                                    XMLBinding.SelectedItem = Item.NextSibling
                                                                    Item.ParentNode.RemoveChild(Item)
                                                                End If
                                                                NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
-                                                               ' RaiseEvent IdWantlistRemoved(IdRelease, Me)
                                                            End If
                                                        End Sub))
 
@@ -498,6 +496,37 @@ Public Class UserControlSellList
                                                            End If
                                                            NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
                                                        End Sub))
+    End Sub
+    Private Sub DiscogsServerRelistIdResultNotify(ByVal AddResult As String, ByVal IdListing As String)
+        If AddResult <> "" Then
+            Dim od As XElement = XElement.Parse(AddResult)
+            Dim RequeteDiscogs As Discogs = New Discogs
+            Dim Infos As DiscogsRelease = RequeteDiscogs.release(od.<release>.<id>.Value)
+            Dim NewElement As XElement = <extension>
+                                             <pays><%= Infos.pays %></pays>
+                                             <style><%= Infos.style %></style>
+                                             <label><%= Infos.label.nom %></label>
+                                         </extension>
+            od.<release>.First.Add(NewElement)
+            AddResult = od.ToString
+        End If
+        Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
+                                 New NoArgDelegate(Sub()
+                                                       If AddResult <> "" And DataProvider.Document IsNot Nothing Then
+                                                           Dim doc As New XmlDocument()
+                                                           doc.LoadXml(AddResult)
+                                                           Dim newBook As XmlNode = DataProvider.Document.ImportNode(doc.FirstChild(), True)
+                                                           DataProvider.Document.SelectSingleNode("SELLLIST").AppendChild(newBook)
+                                                           Dim Item As XmlElement = DataProvider.Document.DocumentElement.SelectSingleNode("descendant::listings" & _
+                                                                 "[id='" & IdListing & "']")
+                                                           If Item IsNot Nothing Then Item.ParentNode.RemoveChild(Item)
+                                                           RefreshSort()
+                                                           XMLBinding.SelectedItem = newBook
+                                                           XMLBinding.ScrollIntoView(XMLBinding.SelectedItem)
+                                                           NbreElementsAffiches.Text = XMLBinding.Items.Count & " vinyls"
+                                                           '  RaiseEvent IdWantlistAdded(IdRelease, Me)
+                                                       End If
+                                                   End Sub))
     End Sub
     Private Sub DiscogsServerGetAllOrdersNotify(ByVal xmlFileResult As String, ByVal IdRelease As String)
         Me.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
