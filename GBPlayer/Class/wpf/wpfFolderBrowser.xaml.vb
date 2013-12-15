@@ -77,7 +77,7 @@ Public Class wpfFolderBrowser
                 If Trim(ExtraitChaine(i, "", "[")) = Trim(ExtraitChaine(MemTexte, "", "[")) Then tagDrives.Text = i
             Next
         Catch ex As Exception
-            MsgBox("Erreur lors du scan des disques")
+            MsgBox("Error Scan Disk")
         End Try
     End Sub
 

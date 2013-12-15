@@ -77,14 +77,14 @@ Class MainWindow
     Private Sub MainWindow_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         If ConvertisseurFichier IsNot Nothing Then
             If ConvertisseurFichier.IsAlive Then
-                wpfMsgBox.MsgBoxInfo("ARRET APPLICATION IMPOSSIBLE", "Attendre la fin du process de convertion avant de fermer l'application")
+                wpfMsgBox.MsgBoxInfo("APPLICATION CAN'T STOP", "Wait until the process of convertion before closing the application")
                 e.Cancel = True
             End If
         End If
         If Bibliotheque IsNot Nothing Then
             If Bibliotheque.IsBusy Then
-                If wpfMsgBox.MsgBoxQuestion("ARRET APPLICATION CRITIQUE", "La mise à jour de la bibliothèque est dans une phase critique," & _
-                                            "souhaitez vous attendre avant de quitter l'application?", , "Risque de perte de la bibliothèque") Then
+                If wpfMsgBox.MsgBoxQuestion("CRITICAL APPLICATION STOP", "The update of the library is in a critical phase," & _
+                                            "want to wait before exiting the application?", , "Risk of loosing the library") Then
                     e.Cancel = True
                 End If
             End If
@@ -295,7 +295,7 @@ Class MainWindow
                 LePlayer.PlayFichier(NomFichier)
             End If
         Catch ex As Exception
-            wpfMsgBox.MsgBoxInfo("Erreur player", ex.Message)
+            wpfMsgBox.MsgBoxInfo("Player error", ex.Message)
         End Try
 
     End Sub
@@ -407,7 +407,7 @@ Class MainWindow
     Private Sub BPChooseRacine_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BPChooseRacine.Click
         Dim dialog = New wpfFolderBrowser ' System.Windows.Forms.FolderBrowserDialog
         dialog.SelectedPath = ListeRepertoires.gbRacine
-        dialog.DialogTitle = "Selection racine"
+        dialog.DialogTitle = "Select the root"
         dialog.ShowDialog()
         If dialog.SelectedPath <> "" Then
             ListeRepertoires.gbRacine = dialog.SelectedPath
@@ -557,7 +557,7 @@ Class MainWindow
     End Sub
     Private Sub MenuDynamique_Click(ByVal sender As Object, ByVal e As RoutedEventArgs)
         If CType(e.OriginalSource, MenuItem).Name Like "Groupement*" Then
-            RechercheArtiste.Text = "groupement:" & CType(e.OriginalSource, MenuItem).Header
+            RechercheArtiste.Text = "subgroup:" & CType(e.OriginalSource, MenuItem).Header
         ElseIf CType(e.OriginalSource, MenuItem).Name Like "Style*" Then
             RechercheArtiste.Text = "style:" & CType(e.OriginalSource, MenuItem).Header
         End If
@@ -608,7 +608,7 @@ Class MainWindow
             Me.ProcessMiseAJour.StopProcess(NumProcess)
             NumProcess = 0
         ElseIf Avancement > 0 Then
-            Me.ProcessMiseAJour.UpdateWindows("Conversion en cours...: " & NomFichier, NumProcess, True, Avancement)
+            Me.ProcessMiseAJour.UpdateWindows("Conversion in progress...: " & NomFichier, NumProcess, True, Avancement)
         Else
             Me.ProcessMiseAJour.UpdateWindows(NomFichier, NumProcess)
         End If
@@ -638,11 +638,11 @@ Class MainWindow
         End If
         If TypeConversion = fileConverter.ConvertType.mp3 Then
             If Not ConvertisseurFichier.ConvertToMp3(NomFichier, Repertoire, "", fileEncoderMp3.EnumBitrateEncodeur.Bitrate_320) Then
-                wpfMsgBox.MsgBoxInfoThread("Erreur de conversion mp3", "Une erreur c'est produite pendant l'opération de conversion du fichier.", , Path.GetFileName(NomFichier))
+                wpfMsgBox.MsgBoxInfoThread("Mp3 conversion error", "An error occurred during the operation of file conversion.", , Path.GetFileName(NomFichier))
             End If
         Else
             If Not ConvertisseurFichier.ConvertToWave(NomFichier, Repertoire) Then
-                wpfMsgBox.MsgBoxInfoThread("Erreur de conversion mp3", "Une erreur c'est produite pendant l'opération de conversion du fichier.", , Path.GetFileName(NomFichier))
+                wpfMsgBox.MsgBoxInfoThread("Mp3 conversion error", "An error occurred during the operation of file conversion.", , Path.GetFileName(NomFichier))
             End If
         End If
 

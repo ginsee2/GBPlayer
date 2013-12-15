@@ -38,7 +38,7 @@
                             Background="{StaticResource W8BackgroundOver}">
                     <Label x:Uid="Titre" Name="Titre" FontFamily="Calibri" FontSize="14" Foreground="{StaticResource W8ForegroundWhite}" 
                                VerticalAlignment="Center" HorizontalAlignment="Center" 
-                                Content="Recherche un dossier" IsHitTestVisible="False">
+                                Content="Search directory" IsHitTestVisible="False">
                     </Label>
                 </Border>
                 <Border x:Uid="BordureLecteur" Name="BordureLecteur" Margin="1" Grid.Row="2" Grid.RowSpan="1" Height="Auto"
@@ -68,12 +68,13 @@
                         <ColumnDefinition x:Uid="ColumnDefinition_3" Width="75"/>
                         <ColumnDefinition x:Uid="ColumnDefinition_4" Width="75"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Uid="CreateFolder" Name="CreateFolder" Height="30" Style="{StaticResource W8Button}" Margin="2" Content="Création dossier" 
+                    <Button Name="CreateFolder" Height="30" Style="{StaticResource W8Button}" Margin="2" 
+                            Content="New folder" 
                                 Click="CreateFolder_Click" Width="Auto" />
-                    <Button x:Uid="Ok" Name="Ok" Height="30" Style="{StaticResource W8Button}" Margin="2" Content="Ok" 
+                    <Button Name="Ok" Height="30" Style="{StaticResource W8Button}" Margin="2" Content="Ok" 
                                 Click="Ok_Click" Width="Auto" IsDefault="True" Grid.Column="2" />
-                    <Button x:Uid="Annuler" Name="Annuler" Height="30" Style="{StaticResource W8Button}" 
-                                Margin="2" Content="Annuler" Click="Annuler_Click" Width="Auto" 
+                    <Button Name="Annuler" Height="30" Style="{StaticResource W8Button}" 
+                                Margin="2" Content="Cancel" Click="Annuler_Click" Width="Auto" 
                                 IsDefault="False" IsCancel="True" Grid.Column="3" />
                 </Grid>
             </Grid>

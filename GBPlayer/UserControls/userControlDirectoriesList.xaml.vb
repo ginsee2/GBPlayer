@@ -134,7 +134,7 @@ Public Class userControlDirectoriesList
                 End If
             End If
         Catch ex As Exception
-            Debug.Print("Erreur lors de la creation d'un repertoire : " & NomRepRacine & "\" & NomDirectory)
+            Debug.Print("Error creating a directory : " & NomRepRacine & "\" & NomDirectory)
         End Try
         RaiseEvent AfterUpdate("CancelCreateDirectory", NomRepRacine & "\" & NomDirectory)
         Return ""
@@ -155,7 +155,7 @@ Public Class userControlDirectoriesList
                 End If
             End If
         Catch ex As Exception
-            wpfMsgBox.MsgBoxInfo("Opération annulée", ex.Message, , "Impossible de renommer le répertoire avec ce nom")
+            wpfMsgBox.MsgBoxInfo("Operation canceled", ex.Message, , "Unable to rename the directory with the name")
             ' MsgBox(ex.Message, MsgBoxStyle.Critical Or MsgBoxStyle.OkOnly, "Opération annulée")
         End Try
         RaiseEvent AfterUpdate("CancelRenameDirectory", NomRepRacine & "\" & OldName)
@@ -292,7 +292,7 @@ Public Class userControlDirectoriesList
     Private Sub InitListe()
         If Not Directory.Exists(Racine) Then
             gbListe.Items.Clear()
-            gbListe.Items.Add("Chemin d'accès du dossier racine non valide...")
+            gbListe.Items.Add("The path of the root folder is invalid...")
             '            Liste.SelectedImageIndex = 2
         Else
             If Not ListeIsInit Then
@@ -378,7 +378,7 @@ Public Class userControlDirectoriesList
                     End If
                 End If
             Catch ex As Exception
-                wpfMsgBox.MsgBoxInfo("Erreur gbDirectory", ex.Message, Nothing)
+                wpfMsgBox.MsgBoxInfo("Error gbDirectory", ex.Message, Nothing)
                 ' MsgBox(ex.Message)
             End Try
         End If
@@ -544,15 +544,17 @@ Public Class userControlDirectoriesList
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             If ((e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey) Or ForceCopyFiles Then
                 e.Effects = e.AllowedEffects And DragDropEffects.Copy
-                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me), e.Data, e.GetPosition(Me), e.Effects, "Copier vers %1", gbRacine)
+                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
+                    e.Data, e.GetPosition(Me), e.Effects, "Copy %1", gbRacine)
             Else
                 e.Effects = e.AllowedEffects And DragDropEffects.Move
-                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me), e.Data, e.GetPosition(Me), e.Effects, "Déplace vers %1", gbRacine) ' CType(Me.Template.FindName("GBTextBlock", Me), textblock).he)
+                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
+                    e.Data, e.GetPosition(Me), e.Effects, "Move to %1", gbRacine) ' CType(Me.Template.FindName("GBTextBlock", Me), textblock).he)
             End If
         Else
             If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
                                                             e.Data, e.GetPosition(Me),
-                                                            e.Effects, "Copie impossible sur ce type de sélection", "")
+                                                            e.Effects, "Not copy on this selection", "")
             e.Effects = DragDropEffects.None
         End If
         e.Handled = True
@@ -602,11 +604,11 @@ Public Class userControlDirectoriesList
                 If (e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey Then
                     If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
                                                                             e.Data, e.GetPosition(Me),
-                                                                            e.Effects, "Copier vers %1", gbRacine)
+                                                                            e.Effects, "Copy to %1", gbRacine)
                 Else
                     If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
                                                                   e.Data, e.GetPosition(Me),
-                                                                  e.Effects, "Convertir en mp3 vers %1", gbRacine)
+                                                                  e.Effects, "Convert mp3 to %1", gbRacine)
                 End If
             Else
                 e.Effects = DragDropEffects.None
@@ -615,7 +617,7 @@ Public Class userControlDirectoriesList
         Else
             If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
                                                             e.Data, e.GetPosition(Me),
-                                                            e.Effects, "Copie impossible sur ce type de sélection", "")
+                                                            e.Effects, "Unauthorized copying when such selection", "")
             e.Effects = DragDropEffects.None
         End If
         e.Handled = True
@@ -683,7 +685,7 @@ Public Class userControlDirectoriesList
 
     'METHODES DE REPONSE AUX MENUS CONTEXTUELS
     Private Sub CreationRepertoire_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        NewDirectory("Nouveau")
+        NewDirectory("New folder")
     End Sub
     Private Sub SuppressionRepertoire_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         DirectoryDelete(gbFolderSelected)
@@ -896,10 +898,12 @@ Friend Class gbDirectoryItem
             '    CType(Me.Template.FindName("GBBorder", Me), Border).BorderBrush = CType(ListeParente.FindResource("ItemBorderBrush"), SolidColorBrush)
             If ((e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey) Or ListeParente.ForceCopyFiles Then
                 e.Effects = e.AllowedEffects And DragDropEffects.Copy
-                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me), e.Data, e.GetPosition(Me), e.Effects, "Copier vers %1", Header)
+                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
+                    e.Data, e.GetPosition(Me), e.Effects, "Copy to %1", Header)
             Else
                 e.Effects = e.AllowedEffects And DragDropEffects.Move
-                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me), e.Data, e.GetPosition(Me), e.Effects, "Déplace vers %1", Header)
+                If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
+                    e.Data, e.GetPosition(Me), e.Effects, "Move to %1", Header)
             End If
         ElseIf (e.Data.GetDataPresent("fileCDAudio")) Then
             CType(Me.Template.FindName("BordureDragDrop", Me), Border).Visibility = Windows.Visibility.Visible
@@ -931,7 +935,7 @@ Friend Class gbDirectoryItem
                     Try
                         If PlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me), e.Data,
                                                                             e.GetPosition(Me), e.Effects,
-                                                                            "Copier vers %1", Header)
+                                                                            "Copy to %1", Header)
                     Catch ex As Exception
                     End Try
                     ActionCopierEnCours = True
@@ -944,7 +948,7 @@ Friend Class gbDirectoryItem
                     Try
                         If PlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me), e.Data,
                                                                             e.GetPosition(Me), e.Effects,
-                                                                            "Déplacer vers %1", Header)
+                                                                            "Move to %1", Header)
                     Catch ex As Exception
                     End Try
                     ActionCopierEnCours = False
@@ -956,11 +960,11 @@ Friend Class gbDirectoryItem
             If (e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey Then
                 If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
                                                                         e.Data, e.GetPosition(Me),
-                                                                        e.Effects, "Copier vers %1", Header)
+                                                                        e.Effects, "Copy to %1", Header)
             Else
                 If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(Me),
                                                                         e.Data, e.GetPosition(Me),
-                                                                        e.Effects, "Convertir en vers sur %1", Header)
+                                                                        e.Effects, "Convert to %1", Header)
             End If
         Else
             e.Effects = DragDropEffects.None

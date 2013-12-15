@@ -1,4 +1,4 @@
-﻿<UserControl x:Uid="gbdev" x:Class="userControlDirectoriesList"
+﻿<UserControl x:Class="userControlDirectoriesList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,20 +14,20 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.ContextMenu>
-        <ContextMenu x:Uid="ContextMenu_1">
-            <MenuItem x:Uid="CreationRepertoire" Name="CreationRepertoire" Header="Nouveau..." Click="CreationRepertoire_Click">
+        <ContextMenu  >
+            <MenuItem   Name="CreationRepertoire" Header="New..." Click="CreationRepertoire_Click">
                 <MenuItem.Icon>
                     <Image  x:Uid="Image_1" Height="16" Width="16" Source="/GBPlayer;component/Images/imgmenus/ajouterrepertoire24.png" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Uid="SuppressionRepertoire" Name="SuppressionRepertoire" Header="Supprimer..." Click="SuppressionRepertoire_Click">
+            <MenuItem   Name="SuppressionRepertoire" Header="Delete..." Click="SuppressionRepertoire_Click">
                 <MenuItem.Icon>
                     <Image  x:Uid="Image_2" Height="16" Width="16" Source="/GBPlayer;component/Images/imgmenus/supprimerrepertoire24.png" />
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
     </UserControl.ContextMenu>
-    <Grid x:Uid="Grille" Name="Grille" Background="Transparent" >
+    <Grid  Name="Grille" Background="Transparent" >
         <TreeView x:Uid="gbListe" Style="{StaticResource GBTreeView}" Name="gbListe" HorizontalContentAlignment="Center" 
                   HorizontalAlignment="Stretch" FontSize="12">
 <!--
@@ -39,7 +39,7 @@
                     </MenuItem>
                 </ContextMenu>            
             </TreeView.ContextMenu> -->
-            <TreeViewItem x:Uid="TreeViewItem_1" Style="{StaticResource GBItems}" Header="Texte de l'item 1" IsExpanded="True" MaxWidth="500">
+            <TreeViewItem   Style="{StaticResource GBItems}" Header="Texte de l'item 1" IsExpanded="True" MaxWidth="500">
             </TreeViewItem>
         </TreeView>
     </Grid>

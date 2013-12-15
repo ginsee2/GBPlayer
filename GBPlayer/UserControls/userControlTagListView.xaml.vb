@@ -87,7 +87,6 @@ Public Class userControlTagListView
                                                                  Colonne.Width = Dimension
                                                                  CType(ListeFichiers.View, GridView).Columns.Add(Colonne)
                                                              Catch ex As Exception
-                                                                 MsgBox("erreu")
                                                              End Try
                                                          End Sub)
             If SauvegardeTagListView.Count > 0 Then
@@ -256,25 +255,27 @@ Public Class userControlTagListView
             ListeFichiers.Dispatcher.BeginInvoke(New UpdateListeRepInterfaceDelegate(AddressOf UpdateListeRepInterface),
                                                     PriorityForDispatcher,
                                                     {Nothing, FilesInfosUpdateOrder.debut, PasRepEnCours, NumMiseAJour, ""})
-            If ListeTriee.Count > 0 Then
-                If DemandeMaJ <> NumMiseAJour Then Exit Sub
-                Dim Compteur As Integer
-                For Each i In ListeTriee
-                    Dim ItemASelectionner As String = ""
-                    Dim InfoFichierEnCours As tagID3FilesInfos
-                    If DemandeMaJ = NumMiseAJour Then
-                        InfoFichierEnCours = New tagID3FilesInfos(i) 'New tagID3FilesInfos(i.<Nom>.Value) '
-                        If i.<Nom>.Value = ItemSelected Then ItemASelectionner = ItemSelected
-                        If Compteur > 2 Then PriorityForDispatcher = DispatcherPriority.Input
-                        If Compteur > 10 Then PriorityForDispatcher = DispatcherPriority.ContextIdle
-                        ListeFichiers.Dispatcher.BeginInvoke(New UpdateListeRepInterfaceDelegate(AddressOf UpdateListeRepInterface),
-                                                       PriorityForDispatcher,
-                                                       {InfoFichierEnCours, FilesInfosUpdateOrder.update, PasRepEnCours, NumMiseAJour, ItemASelectionner})
-                    Else
-                        Exit Sub
-                    End If
-                    Compteur += 1
-                Next
+            If ListeTriee IsNot Nothing Then
+                If ListeTriee.Count > 0 Then
+                    If DemandeMaJ <> NumMiseAJour Then Exit Sub
+                    Dim Compteur As Integer
+                    For Each i In ListeTriee
+                        Dim ItemASelectionner As String = ""
+                        Dim InfoFichierEnCours As tagID3FilesInfos
+                        If DemandeMaJ = NumMiseAJour Then
+                            InfoFichierEnCours = New tagID3FilesInfos(i) 'New tagID3FilesInfos(i.<Nom>.Value) '
+                            If i.<Nom>.Value = ItemSelected Then ItemASelectionner = ItemSelected
+                            If Compteur > 2 Then PriorityForDispatcher = DispatcherPriority.Input
+                            If Compteur > 10 Then PriorityForDispatcher = DispatcherPriority.ContextIdle
+                            ListeFichiers.Dispatcher.BeginInvoke(New UpdateListeRepInterfaceDelegate(AddressOf UpdateListeRepInterface),
+                                                           PriorityForDispatcher,
+                                                           {InfoFichierEnCours, FilesInfosUpdateOrder.update, PasRepEnCours, NumMiseAJour, ItemASelectionner})
+                        Else
+                            Exit Sub
+                        End If
+                        Compteur += 1
+                    Next
+                End If
             End If
         Catch ex As Exception
         End Try
@@ -394,7 +395,6 @@ Public Class userControlTagListView
         Select Case e.Key
             Case Key.LeftShift
                 If TexteLink IsNot Nothing Then
-                    '   CType(TexteLink.ToolTip, ToolTip).Content = "Lancer une recherche sur '" & ExtraitChaine(TexteLink.Name, "tagLink", "", 7) & "'"
                     TexteLink.Foreground = Brushes.Blue
                 End If
             Case Else
@@ -417,7 +417,7 @@ Public Class userControlTagListView
         If TypeOf (ListeFichiers.View) Is GridView And Not DisableCustomisation Then
             MenuContextuelHeaderListe.Items.Clear()
             For Each i As GridViewColumn In CType(ListeFichiers.View, GridView).Columns
-                If CType(i.Header, GridViewColumnHeader).Tag.ToString <> "Nom" Then
+                If CType(i.Header, GridViewColumnHeader).Tag.ToString <> "Name" And CType(i.Header, GridViewColumnHeader).Tag.ToString <> "Artist" Then
                     Dim UnItem As MenuItem = New MenuItem()
                     UnItem.Header = CType(i.Header, GridViewColumnHeader).Tag.ToString
                     UnItem.AddHandler(MenuItem.ClickEvent, New RoutedEventHandler(AddressOf ReponseMenuHeader))
@@ -456,7 +456,7 @@ Public Class userControlTagListView
                         e.Handled = True
                     End If
                 Catch ex As Exception
-                    MsgBox("Le lien """ & Newurl & """ est non valide", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkOnly, "Lien URL non valide")
+                    MsgBox("The link """ & Newurl & """ is invalid", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkOnly, "URL invalid link")
                 End Try
             End If
         End If
@@ -487,19 +487,19 @@ Public Class userControlTagListView
             Dim ShiftDown As Boolean = (Keyboard.GetKeyStates(Key.LeftShift) And KeyStates.Down) > 0
             Select Case Lien.Name
                 Case "tagLinkArtiste"
-                    RaiseEvent RequeteRecherche("artiste:" & TexteRecherche, Not ShiftDown)
+                    RaiseEvent RequeteRecherche("artist:" & TexteRecherche, Not ShiftDown)
                 Case "tagLinkTitre"
-                    RaiseEvent RequeteRecherche("titre:" & Trim(ExtraitChaine(TexteRecherche, "", "[", , True)), Not ShiftDown)
+                    RaiseEvent RequeteRecherche("title:" & Trim(ExtraitChaine(TexteRecherche, "", "[", , True)), Not ShiftDown)
                 Case "tagLinkLabel"
                     RaiseEvent RequeteRecherche("label:" & TexteRecherche, Not ShiftDown)
                 Case "tagLinkCatalogue"
                     RaiseEvent RequeteRecherche("catalogue:" & TexteRecherche, Not ShiftDown)
                 Case "tagLinkAnnee"
-                    RaiseEvent RequeteRecherche("annee:" & TexteRecherche, Not ShiftDown)
+                    RaiseEvent RequeteRecherche("year:" & TexteRecherche, Not ShiftDown)
                 Case "tagLinkStyle"
                     RaiseEvent RequeteRecherche("style:" & TexteRecherche, Not ShiftDown)
                 Case "tagLinkCompositeur"
-                    RaiseEvent RequeteRecherche("compositeur:" & TexteRecherche, Not ShiftDown)
+                    RaiseEvent RequeteRecherche("composer:" & TexteRecherche, Not ShiftDown)
             End Select
             'End If
         End If
@@ -558,7 +558,7 @@ Public Class userControlTagListView
 
                 End If
             Catch ex As Exception
-                MsgBox("Le lien """ & Newurl & """ est non valide", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkOnly, "Lien URL non valide")
+                MsgBox("The link """ & Newurl & """ is invalid", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkOnly, "URL invalid link")
             End Try
         End If
     End Sub
@@ -697,7 +697,7 @@ Public Class userControlTagListView
                         RaiseEvent RequeteWebBrowser(NewURI)
                         e.Handled = True
                     Catch ex As Exception
-                        wpfMsgBox.MsgBoxInfo("Lien URL non valide", "Le lien """ & Newurl & """ est non valide", Nothing)
+                        wpfMsgBox.MsgBoxInfo("URL invalid link", "The link """ & Newurl & """ is invalid", Nothing)
                     End Try
 
                 End If
@@ -911,14 +911,14 @@ Public Class userControlTagListView
             e.Effects = e.AllowedEffects And DragDropEffects.Copy
             If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                             e.Data, e.GetPosition(e.OriginalSource),
-                                                            e.Effects, "Copier l'image vers la pochette de %1", DonneeSurvolee.Nom)
+                                                            e.Effects, "Copy image to %1", DonneeSurvolee.Nom)
         ElseIf (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             If ((e.KeyStates And DragDropKeyStates.ShiftKey) = DragDropKeyStates.ShiftKey) And
                                                                 (DonneeSurvolee IsNot Nothing) And Not ForceCopyFiles Then
                 e.Effects = e.AllowedEffects And DragDropEffects.Copy
                 If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                 e.Data, e.GetPosition(e.OriginalSource),
-                                                                e.Effects, "Copier les TAGID3 vers %1", DonneeSurvolee.Nom)
+                                                                e.Effects, "Copy TAGID3 to %1", DonneeSurvolee.Nom)
             ElseIf RepertoireParDefaut <> "" Then
                 If (((e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey) Or
                                                             (e.AllowedEffects And DragDropEffects.Move) = 0) Or
@@ -926,23 +926,23 @@ Public Class userControlTagListView
                     e.Effects = e.AllowedEffects And DragDropEffects.Copy
                     If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                     e.Data, e.GetPosition(e.OriginalSource),
-                                                                    e.Effects, "Copier vers %1", RepertoireParDefaut)
+                                                                    e.Effects, "Copy to %1", RepertoireParDefaut)
                 ElseIf (e.KeyStates And DragDropKeyStates.AltKey) = DragDropKeyStates.AltKey Then
                     e.Effects = e.AllowedEffects And DragDropEffects.Move
                     If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                     e.Data, e.GetPosition(e.OriginalSource),
-                                                                    e.Effects, "Convertir en mp3 vers %1", RepertoireParDefaut)
+                                                                    e.Effects, "Convert mp3 to %1", RepertoireParDefaut)
                 Else
                     e.Effects = e.AllowedEffects And DragDropEffects.Move
                     If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                     e.Data, e.GetPosition(e.OriginalSource),
-                                                                    e.Effects, "Déplace vers %1", RepertoireParDefaut)
+                                                                    e.Effects, "Move to %1", RepertoireParDefaut)
                 End If
             Else
                 e.Effects = DragDropEffects.None
                 If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                 e.Data, e.GetPosition(e.OriginalSource),
-                                                                e.Effects, "Copie impossible sur ce type de sélection", "")
+                                                                e.Effects, "Not copy on this selection", "")
             End If
             'e.Handled = True
         Else
@@ -1012,17 +1012,17 @@ Public Class userControlTagListView
                 If (e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey Then
                     If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                             e.Data, e.GetPosition(e.OriginalSource),
-                                                                            e.Effects, "Copier vers %1", RepertoireParDefaut)
+                                                                            e.Effects, "Copy to %1", RepertoireParDefaut)
                 Else
                     If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                   e.Data, e.GetPosition(e.OriginalSource),
-                                                                  e.Effects, "Convertir en mp3 vers %1", RepertoireParDefaut)
+                                                                  e.Effects, "Convert mp3 to %1", RepertoireParDefaut)
                 End If
             Else
                 e.Effects = DragDropEffects.None
                 If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                e.Data, e.GetPosition(e.OriginalSource),
-                                                                e.Effects, "Copie ou conversion impossible sur cette sélection", "")
+                                                                e.Effects, "Not copy or convert on this selection", "")
             End If
         ElseIf (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             If ((e.KeyStates And DragDropKeyStates.ShiftKey) = DragDropKeyStates.ShiftKey) And (DonneeSurvolee IsNot Nothing) And
@@ -1030,7 +1030,7 @@ Public Class userControlTagListView
                 e.Effects = e.AllowedEffects And DragDropEffects.Copy
                 If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                 e.Data, e.GetPosition(e.OriginalSource),
-                                                                e.Effects, "Copier les TAGID3 vers %1", DonneeSurvolee.Nom)
+                                                                e.Effects, "Copy TAGID3 to %1", DonneeSurvolee.Nom)
                 'ActionCopierTagEnCours = True
                 ActionDropEnCours = "DropTagEnCours"
             ElseIf RepertoireParDefaut <> "" Then
@@ -1044,7 +1044,7 @@ Public Class userControlTagListView
                         Debug.Print("passage " & compteur.ToString)
                         If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource), e.Data,
                                                           e.GetPosition(e.OriginalSource), e.Effects,
-                                                          "Copier vers %1", RepertoireParDefaut)
+                                                          "Copy to %1", RepertoireParDefaut)
                         'ActionCopierEnCours = True
                         'ActionCopierTagEnCours = False
                         ActionDropEnCours = "DropCopyEnCours"
@@ -1056,7 +1056,7 @@ Public Class userControlTagListView
                         e.Effects = e.AllowedEffects And DragDropEffects.Move
                         If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                       e.Data, e.GetPosition(e.OriginalSource),
-                                                                      e.Effects, "Convertir en mp3 vers %1", RepertoireParDefaut)
+                                                                      e.Effects, "Convert mp3 to %1", RepertoireParDefaut)
                         'ActionCopierEnCours = False
                         'ActionCopierTagEnCours = False
                         ActionDropEnCours = "DropMp3EnCours"
@@ -1069,7 +1069,7 @@ Public Class userControlTagListView
                     If ActionDropEnCours <> "DropMoveEnCours" Then
                         If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource), e.Data,
                                                                                 e.GetPosition(e.OriginalSource), e.Effects,
-                                                                                "Déplace vers %1", RepertoireParDefaut) ' CType(Me.Template.FindName("GBTextBlock", Me), textblock).he)
+                                                                                "Move to %1", RepertoireParDefaut) ' CType(Me.Template.FindName("GBTextBlock", Me), textblock).he)
                         'ActionCopierEnCours = False
                         'ActionCopierTagEnCours = False
                         ActionDropEnCours = "DropMoveEnCours"
@@ -1081,7 +1081,7 @@ Public Class userControlTagListView
                 e.Effects = DragDropEffects.None
                 If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                                     e.Data, e.GetPosition(e.OriginalSource),
-                                                                    e.Effects, "Copie impossible sur ce type de sélection", "")
+                                                                    e.Effects, "Not copy on this selection", "")
             End If
         Else
             e.Effects = DragDropEffects.None
@@ -1144,7 +1144,7 @@ Public Class userControlTagListView
                         NomDirectory = Path.GetFileName(j)
                         If ((e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey) Or ForceCopyFiles Then 'COPY DIRECTORY
                             Do Until Not My.Computer.FileSystem.DirectoryExists(Chemin & "\" & NomDirectory)
-                                NomDirectory = "Copie de " & NomDirectory
+                                NomDirectory = "Copy " & NomDirectory
                             Loop
                             My.Computer.FileSystem.CopyDirectory(j, Chemin & "\" & NomDirectory, FileIO.UIOption.AllDialogs, FileIO.UICancelOption.ThrowException)
                             If ExecuteDirectoryDropAction IsNot Nothing Then
@@ -1159,7 +1159,7 @@ Public Class userControlTagListView
                         If ((e.KeyStates And DragDropKeyStates.ControlKey) = DragDropKeyStates.ControlKey) Or
                                                                                                 ForceCopyFiles Then 'COPY FILE
                             Do Until Not My.Computer.FileSystem.FileExists(Chemin & "\" & NomFichier)
-                                NomFichier = "Copie de " & NomFichier
+                                NomFichier = "Copy " & NomFichier
                             Loop
                             My.Computer.FileSystem.CopyFile(j, Chemin & "\" & NomFichier, FileIO.UIOption.AllDialogs, FileIO.UICancelOption.ThrowException)
                             If ExecuteFileDropAction IsNot Nothing Then
@@ -1397,8 +1397,8 @@ Public Class userControlTagListView
         NomColonneTriEnCours = ChampATrier ' ColonneTriEnCours.Tag
         Dim ChampEncours As String = NomColonneTriEnCours
         If NomChampTriEnCours <> "" Then ChampEncours = NomChampTriEnCours
-        CollectionView.SortDescriptions.Add(New SortDescription(ChampEncours, NouvelleDirection))
-        CollectionView.SortDescriptions.Add(New SortDescription("Nom", ListSortDirection.Ascending))
+        CollectionView.SortDescriptions.Add(New SortDescription(EnglishToFrenchField(ChampEncours), NouvelleDirection))
+        CollectionView.SortDescriptions.Add(New SortDescription(EnglishToFrenchField("Name"), ListSortDirection.Ascending))
         SensColonneTriEnCours = NouvelleDirection
     End Sub
     'Procedure de réponse à une demande de tri sur une des colonne de la liste
@@ -1420,7 +1420,7 @@ Public Class userControlTagListView
             ColonneSort.TextDecorations = Nothing
             ColonneSort = Nothing
         Else
-            If ChampATrier <> "Artiste" Then
+            If ChampATrier <> "Artist" Then
                 If ColonneSortEnCours IsNot Nothing Then
                     ColonneSortEnCours.Foreground = CType(ColonneSortEnCours.Tag, Brush) ' Brushes.Black
                     ColonneSortEnCours = Nothing
@@ -1431,7 +1431,7 @@ Public Class userControlTagListView
                 End If
             End If
         End If
-        If (ChampATrier <> "Artiste") Or (SousChampATrier <> "") Then
+        If (ChampATrier <> "Artist") Or (SousChampATrier <> "") Then
             If ColonneTemporaireTri Is Nothing Then
                 If ColonneTriEnCours IsNot Nothing Then
                     AdornerLayer.GetAdornerLayer(Colonne).Remove(IconeDeTriEnCours)
@@ -1455,8 +1455,8 @@ Public Class userControlTagListView
                     _FilesCollection.Clear()
                     Dim ChampEncours As String = NomColonneTriEnCours
                     If SousChampATrier <> "" Then ChampEncours = SousChampATrier
-                    CollectionView.SortDescriptions.Add(New SortDescription(ChampEncours, NouvelleDirection))
-                    CollectionView.SortDescriptions.Add(New SortDescription("Nom", ListSortDirection.Ascending))
+                    CollectionView.SortDescriptions.Add(New SortDescription(EnglishToFrenchField(ChampEncours), NouvelleDirection))
+                    CollectionView.SortDescriptions.Add(New SortDescription(EnglishToFrenchField("Name"), ListSortDirection.Ascending))
                     If RequeteXElement Then
                         MiseAJourListeFichierXElement(BackUpRechercheEnCours, RepertoireParDefaut)
                     Else
@@ -1466,8 +1466,8 @@ Public Class userControlTagListView
                     '    CollectionView.SortDescriptions.Add(New SortDescription(ChampATrier, NouvelleDirection))
                     '    CollectionView.SortDescriptions.Add(New SortDescription("Nom", ListSortDirection.Ascending))
                 End If
-                End If
             End If
+        End If
     End Sub
     'Procedure de rafraichissement du tri
     Public Sub RefreshSort()
@@ -1476,17 +1476,41 @@ Public Class userControlTagListView
             If BackUpRechercheEnCours <> "" Then
                 MiseAJourListeFichierXElement(BackUpRechercheEnCours, RepertoireParDefaut)
             Else
-                ListeFichiers.Items.SortDescriptions.Add(New SortDescription(ColonneTriEnCours.Tag, IconeDeTriEnCours.Direction))
-                ListeFichiers.Items.SortDescriptions.Add(New SortDescription("Nom", ListSortDirection.Ascending))
+                ListeFichiers.Items.SortDescriptions.Add(New SortDescription(EnglishToFrenchField(ColonneTriEnCours.Tag), IconeDeTriEnCours.Direction))
+                ListeFichiers.Items.SortDescriptions.Add(New SortDescription(EnglishToFrenchField("Name"), ListSortDirection.Ascending))
             End If
         End If
     End Sub
+    Private Function EnglishToFrenchField(EnglishField As String) As String
+        Select Case EnglishField
+            Case "Name"
+                Return "Nom"
+            Case "Artist"
+                Return "Artiste"
+            Case "Title"
+                Return "Titre"
+            Case "WrittenBy"
+                Return "Compositeur"
+            Case "Year"
+                Return "Annee"
+            Case "Directory"
+                Return "Repertoire"
+            Case "Size"
+                Return "Taille"
+            Case "Track"
+                Return "Piste"
+            Case Else
+                Return EnglishField
+        End Select
+
+    End Function
 
     Public Function TriListeFichiers(ByVal Liste As IEnumerable(Of XElement)) As IEnumerable(Of XElement)
         Dim ChaineDeTri As String = NomColonneTriEnCours
         If NomChampTriEnCours <> "" Then ChaineDeTri = NomChampTriEnCours
+        If Liste Is Nothing Then Return Nothing
         Select Case ChaineDeTri
-            Case "Nom"
+            Case "Name"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<NomFichier>.Value Ascending
@@ -1494,7 +1518,7 @@ Public Class userControlTagListView
                     Return From i In Liste
                                 Order By i.<NomFichier>.Value Descending
                 End If
-            Case "Artiste"
+            Case "Artist"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<Artiste>.Value Ascending, i.<NomFichier>.Value Ascending
@@ -1502,7 +1526,7 @@ Public Class userControlTagListView
                     Return From i In Liste
                                 Order By i.<Artiste>.Value Descending, i.<NomFichier>.Value Ascending
                 End If
-            Case "Titre"
+            Case "Title"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<Titre>.Value Ascending, i.<NomFichier>.Value Ascending
@@ -1510,7 +1534,7 @@ Public Class userControlTagListView
                     Return From i In Liste
                                 Order By i.<Titre>.Value Descending, i.<NomFichier>.Value Ascending
                 End If
-            Case "Compositeur"
+            Case "WrittenBy"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<Compositeur>.Value Ascending, i.<NomFichier>.Value Ascending
@@ -1534,7 +1558,7 @@ Public Class userControlTagListView
                     Return From i In Liste
                                 Order By i.<Label>.Value Descending, i.<NomFichier>.Value Ascending
                 End If
-            Case "Annee"
+            Case "Year"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<Annee>.Value Ascending, i.<NomFichier>.Value Ascending
@@ -1550,7 +1574,7 @@ Public Class userControlTagListView
                     Return From i In Liste
                                 Order By i.<Style>.Value Descending, i.<NomFichier>.Value Ascending
                 End If
-            Case "Repertoire"
+            Case "Directory"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<Repertoire>.Value Ascending, i.<NomFichier>.Value Ascending
@@ -1566,7 +1590,7 @@ Public Class userControlTagListView
                     Return From i In Liste
                                 Order By i.<Album>.Value Descending, i.<NomFichier>.Value Ascending
                 End If
-            Case "Taille"
+            Case "Size"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<Taille>.Value Ascending, i.<NomFichier>.Value Ascending
@@ -1574,7 +1598,7 @@ Public Class userControlTagListView
                     Return From i In Liste
                                 Order By i.<Taille>.Value Descending, i.<NomFichier>.Value Ascending
                 End If
-            Case "Piste"
+            Case "Track"
                 If SensColonneTriEnCours = ListSortDirection.Ascending Then
                     Return From i In Liste
                                  Order By i.<Piste>.Value Ascending, i.<NomFichier>.Value Ascending

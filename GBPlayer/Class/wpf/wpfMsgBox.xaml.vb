@@ -6,10 +6,10 @@ Public Class wpfMsgBox
     Private Sub Button_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Dim Bouton As Button = CType(e.OriginalSource, Button)
         Select Case Bouton.Name
-            Case "Oui", "OK"
+            Case "Yes", "OK"
                 ChaineRetour = Me.Valeur.Text
                 EtatDialogue = True
-            Case "Non", "Annuler"
+            Case "No", "Cancel"
                 ChaineRetour = ""
                 EtatDialogue = False
         End Select
@@ -82,7 +82,7 @@ Public Class wpfMsgBox
             FenetreEnCours.Titre.Content = TexteTitre
             FenetreEnCours.Texte.Text = Texte
             FenetreEnCours.Texte.Visibility = Windows.Visibility.Visible
-            FenetreEnCours.Annuler.Visibility = Windows.Visibility.Hidden
+            FenetreEnCours.Cancel.Visibility = Windows.Visibility.Hidden
             FenetreEnCours.Valeur.Visibility = Windows.Visibility.Hidden
             FenetreEnCours.GrilleBoutons.ColumnDefinitions(1).Width = CType(New GridLengthConverter().ConvertFromString("0"), GridLength)
             FenetreEnCours.TexteExplication.Content = Explication
@@ -95,8 +95,8 @@ Public Class wpfMsgBox
     End Function
     Public Shared Function MsgBoxQuestion(ByVal TexteTitre As String, ByVal Texte As String, Optional ByVal Parent As UIElement = Nothing,
                                           Optional ByVal Explication As String = "",
-                                          Optional ByVal NomBpGauche As String = "Oui",
-                                          Optional ByVal NomBpDroit As String = "Non") As Boolean
+                                          Optional ByVal NomBpGauche As String = "Yes",
+                                          Optional ByVal NomBpDroit As String = "No") As Boolean
         Try
             Dim FenetreEnCours As wpfMsgBox = New wpfMsgBox
             If Parent IsNot Nothing Then
@@ -117,8 +117,8 @@ Public Class wpfMsgBox
             FenetreEnCours.Texte.Text = Texte
             FenetreEnCours.Texte.Visibility = Windows.Visibility.Visible
             FenetreEnCours.Valeur.Visibility = Windows.Visibility.Hidden
-            FenetreEnCours.Oui.Content = NomBpGauche
-            FenetreEnCours.Annuler.Content = NomBpDroit
+            FenetreEnCours.Yes.Content = NomBpGauche
+            FenetreEnCours.Cancel.Content = NomBpDroit
             FenetreEnCours.TexteExplication.Content = Explication
             FenetreEnCours.Valeur.Focus()
             FenetreEnCours.Visibility = Windows.Visibility.Visible

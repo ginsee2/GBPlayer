@@ -850,8 +850,8 @@ Public Class userControlWantList
                     RecherchePrecedente.IsEnabled = False
                 End If
                 UpdateFiltre()
-            Case Key.LeftCtrl
-                IndicateurRechercheDupliquer.IsChecked = Not IndicateurRechercheDupliquer.IsChecked
+                '    Case Key.LeftCtrl
+                '        IndicateurRechercheDupliquer.IsChecked = Not IndicateurRechercheDupliquer.IsChecked
         End Select
     End Sub
     'PROCEDURES D'APPEL RECHERCHE BIBLIOTHEQUE

@@ -662,25 +662,25 @@ Public Class tagID3Bibliotheque
                             Resultat(j) = SearchidXml(ChaineRecherche)
                         Case "d", "dir", "*dir", "*d"
                             Resultat(j) = SearchDirXml(ChaineRecherche)
-                        Case "artiste", "*artiste", "+artiste", "a", "+a", "*a"
+                        Case "artist", "artiste", "*artiste", "+artiste", "a", "+a", "*a", "*artist", "+artist"
                             Resultat(j) = SearchArtisteXml(ChaineRecherche, IIf(Left(NomCritere, 1) = "+", True, False), IIf(Left(NomCritere, 1) = "*", False, True))
-                        Case "titre", "*titre", "+titre", "t", "*t", "+t"
+                        Case "title", "titre", "*titre", "+titre", "t", "*t", "+t", "+title", "*title"
                             Resultat(j) = SearchTitreXml(ChaineRecherche, IIf(Left(NomCritere, 1) = "+", True, False), IIf(Left(NomCritere, 1) = "*", False, True))
                         Case "label", "*label", "+label", "l", "*l", "+l"
                             Resultat(j) = SearchLabelXml(ChaineRecherche, IIf(Left(NomCritere, 1) = "+", True, False), IIf(Left(NomCritere, 1) = "*", False, True))
-                        Case "compositeur", "*compositeur", "+compositeur", "cp", "*cp", "+cp"
+                        Case "composer", "cp", "*cp", "+cp", "+composer", "*composer"
                             Resultat(j) = SearchCompositeurXml(ChaineRecherche, IIf(Left(NomCritere, 1) = "+", True, False), IIf(Left(NomCritere, 1) = "*", False, True))
-                        Case "groupement", "*groupement", "+groupement", "g", "*g", "+g"
+                        Case "sg", "*sg", "+sg", "subgroup", "+subgroup", "*subgroup"
                             Resultat(j) = SearchGroupementXml(ChaineRecherche, IIf(Left(NomCritere, 1) = "+", True, False), IIf(Left(NomCritere, 1) = "*", False, True))
                         Case "style", "+style", "*style", "s", "*s", "+s"
                             Resultat(j) = SearchStyleXml(ChaineRecherche, IIf(Right(NomCritere, 1) = "+", True, False))
                         Case "catalogue", "*catalogue", "+catalogue", "c", "*c", "+c"
                             Resultat(j) = SearchCatalogueXml(ChaineRecherche)
-                        Case "annee", "*annee", "+annee", "y", "*y", "+y"
+                        Case "year", "annee", "*annee", "+annee", "y", "*y", "+y", "+year", "*year"
                             Resultat(j) = SearchAnneeXml(ChaineRecherche)
-                        Case "piste", "*piste", "+piste", "p", "*p", "+p"
+                        Case "track", "t", "*t", "+p", "+track", "*track", "piste", "*piste", "+piste", "p", "*p", "+p"
                             Resultat(j) = SearchPisteXml(ChaineRecherche)
-                        Case "fichier", "*fichier", "f", "*f"
+                        Case "file", "*file", "fichier", "*fichier", "f", "*f"
                             Resultat(j) = SearchNomFichierXml(ChaineRecherche)
                         Case Else
                             Resultat(j) = SearchNomFichierXml(ChaineRecherche)

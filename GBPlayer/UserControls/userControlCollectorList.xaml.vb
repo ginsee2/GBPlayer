@@ -118,8 +118,11 @@ Public Class gbListeCollection
     Private Sub UploadBackup()
         Dim source As String = Path.GetFileName(PathFichierCollection)
         If Application.Config.collectionList_backupDirectory = "" Then
-            If Directory.Exists(Application.Config.directoriesList_root) Then _
-                FileCopy(Application.Config.directoriesList_root & "\Backup_" & source, PathFichierCollection)
+            Try
+                If Directory.Exists(Application.Config.directoriesList_root) Then _
+                    FileCopy(Application.Config.directoriesList_root & "\Backup_" & source, PathFichierCollection)
+            Catch ex As Exception
+            End Try
         Else
             If Directory.Exists(Application.Config.collectionList_backupDirectory) Then _
              FileCopy(Application.Config.collectionList_backupDirectory & "\Backup_" & source, PathFichierCollection)
@@ -1457,8 +1460,8 @@ Public Class gbListeCollection
                     RecherchePrecedente.IsEnabled = False
                 End If
                 UpdateFiltre()
-            Case Key.LeftCtrl
-                IndicateurRechercheDupliquer.IsChecked = Not IndicateurRechercheDupliquer.IsChecked
+                '   Case Key.LeftCtrl
+                '       IndicateurRechercheDupliquer.IsChecked = Not IndicateurRechercheDupliquer.IsChecked
         End Select
     End Sub
     'PROCEDURES D'APPEL RECHERCHE BIBLIOTHEQUE

@@ -98,6 +98,7 @@ Public Class WindowConfig
                                         For Each j As IHTMLElement In i.all
                                             If j.className = "auth_success_verify_code" Then
                                                 FinaliseDemandeAcces(j.outerText)
+                                                Exit Sub
                                             End If
                                         Next
                                     End If

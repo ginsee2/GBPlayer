@@ -62,7 +62,7 @@
                         FontSize="12">
                     </TextBox>
                 </DockPanel>
-                <TextBlock x:Uid="Texte" Name="Texte" Grid.Row="1"  Margin="4" Height="Auto" 
+                <TextBlock  Name="Texte" Grid.Row="1"  Margin="4" Height="Auto" 
                         Background="Transparent"
                        HorizontalAlignment="Left"
                          VerticalAlignment="Center"
@@ -80,10 +80,10 @@
                             <ColumnDefinition x:Uid="ColumnDefinition_1" Width="50*"/>
                             <ColumnDefinition x:Uid="ColumnDefinition_2" Width="50*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Uid="Oui" Name="Oui" Height="40" Style="{StaticResource W8Button}" Margin="2" Content="Oui" 
+                        <Button  Name="Yes" Height="40" Style="{StaticResource W8Button}" Margin="2" Content="Yes" 
                                 Click="Button_Click" Width="Auto" IsDefault="True" Grid.Row="1" />
-                        <Button x:Uid="Annuler" Name="Annuler" Height="40" Style="{StaticResource W8Button}" 
-                                Margin="2" Grid.Column="1" Content="Annuler" Click="Button_Click" Width="Auto" 
+                        <Button  Name="Cancel" Height="40" Style="{StaticResource W8Button}" 
+                                Margin="2" Grid.Column="1" Content="Cancel" Click="Button_Click" Width="Auto" 
                                 IsDefault="False" IsCancel="True" Grid.Row="1" />
                     </Grid>
                 </Grid>

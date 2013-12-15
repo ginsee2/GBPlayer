@@ -122,8 +122,8 @@ Public Class UserControlSellList
     '**************************************************************************************************************
     Public Sub UpdateIdSellList(ByVal idRelease As String)
         Dim NodeSelectionne As XmlElement = CType(XMLBinding.SelectedItem, XmlElement)
-        If wpfMsgBox.MsgBoxQuestion("Ajouter un disque à vendre", "Voulez-vous ajouter un disque à vendre avec le numéro d'ID : " &
-                                            idRelease, Nothing) Then
+        If wpfMsgBox.MsgBoxQuestion("Add new item", "Would you add item with the ID number : " &
+                                            idRelease & "?", Nothing) Then
             CreateIdWantList(idRelease)
         End If
     End Sub
@@ -143,10 +143,10 @@ Public Class UserControlSellList
     End Sub
     Private Sub DeleteIdSellList()
         Dim NodeSelectionne As XmlElement = CType(XMLBinding.SelectedItem, XmlElement)
-        If wpfMsgBox.MsgBoxQuestion("Confirmation suppression",
-                                    IIf(XMLBinding.SelectedItems.Count > 1, "Voulez-vous supprimer les disques à vendre sélectionnés?", _
-                                                                            "Voulez-vous supprimer le disque à vendre sélectionné?"), Me, _
-                                    IIf(XMLBinding.SelectedItems.Count > 1, XMLBinding.SelectedItems.Count & " disques à vendre sélectionnés", _
+        If wpfMsgBox.MsgBoxQuestion("Confirm removal",
+                                    IIf(XMLBinding.SelectedItems.Count > 1, "Do you want to remove the selected items?", _
+                                                                            "Do you want to remove the selected item?"), Me, _
+                                    IIf(XMLBinding.SelectedItems.Count > 1, XMLBinding.SelectedItems.Count & " items selected", _
                                         NodeSelectionne.SelectSingleNode("release/description").InnerText)) Then
             Dim NodeASelectionner As XmlElement = Nothing
             For Each i As XmlElement In XMLBinding.SelectedItems
@@ -193,7 +193,8 @@ Public Class UserControlSellList
                         End If
                     ElseIf (Valeur = "Sold") Then
                         If (IconClic = "Draft") And (Valeur = "Sold") Then
-                            If wpfMsgBox.MsgBoxQuestion("Relist sold listing", "Want to relist this sold listing?") Then
+                            If wpfMsgBox.MsgBoxQuestion("Relist item", "Want to relist this item?", ,
+                                                        DonneeSurvolee.SelectSingleNode("release/description").InnerText) Then
                                 DiscogsServer.RequestRelist_SellListId("", DonneeSurvolee.SelectSingleNode("id").InnerText, AddressOf DiscogsServerRelistIdResultNotify)
                             End If
                         End If
@@ -337,7 +338,7 @@ Public Class UserControlSellList
     End Sub
     Private Sub BPSellList_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BPSellList.Click
         Me.IsEnabled = False
-        NbreElementsAffiches.Text = "Mise a jour en cours...."
+        NbreElementsAffiches.Text = "Update in progress...."
         DiscogsServer.RequestGet_SellListAll(Application.Config.user_name, New DelegateRequestResult(AddressOf DiscogsServerGetAllResultNotify))
     End Sub
 
@@ -412,7 +413,7 @@ Public Class UserControlSellList
                                                                DataProvider.Source = New Uri(PathFichierSellList)
                                                                'DataProvider.Refresh()
                                                            Else
-                                                               wpfMsgBox.MsgBoxInfo("La mise à jour à échouée", "Les informations Discogs n'ont pas pu être mis à jour", Me)
+                                                               wpfMsgBox.MsgBoxInfo("Update failure", "The list of items has not been updated", Me)
                                                            End If
                                                            NbreElementsAffiches.Text = XMLBinding.Items.Count & " items"
                                                            Me.IsEnabled = True
@@ -535,7 +536,7 @@ Public Class UserControlSellList
                                          New NoArgDelegate(Sub()
                                                                MenuContextuel.Tag = ""
                                                                If xmlFileResult = "" Then
-                                                                   wpfMsgBox.MsgBoxInfo("Echec update", "La mise a jour des ordres à échouée")
+                                                                   wpfMsgBox.MsgBoxInfo("Update failure", "Update orders failed")
                                                                End If
                                                            End Sub))
     End Sub
@@ -971,7 +972,7 @@ Public Class UserControlSellList
             e.Effects = e.AllowedEffects And DragDropEffects.Copy
             If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
                                                             e.Data, e.GetPosition(e.OriginalSource),
-                                                            e.Effects, "Ajouter un nouveau vinyl à la collection", "")
+                                                            e.Effects, "Add new item", "")
         Else
             e.Effects = DragDropEffects.None
             If PlateformVista And FlagPlateformVista Then DropTargetHelper.DragEnter(Window.GetWindow(e.OriginalSource),
@@ -1210,8 +1211,8 @@ Public Class UserControlSellList
                     RecherchePrecedente.IsEnabled = False
                 End If
                 UpdateFiltre()
-            Case Key.LeftCtrl
-                IndicateurRechercheDupliquer.IsChecked = Not IndicateurRechercheDupliquer.IsChecked
+                '    Case Key.LeftCtrl
+                '        IndicateurRechercheDupliquer.IsChecked = Not IndicateurRechercheDupliquer.IsChecked
         End Select
     End Sub
     'PROCEDURES D'APPEL RECHERCHE BIBLIOTHEQUE
@@ -1222,12 +1223,12 @@ Public Class UserControlSellList
             TexteLien = RemplaceOccurences(TexteLien, ",", " ")
             Select Case NomLien
                 Case "tagLinkArtiste"
-                    If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("artiste:" & TexteLien, Not ShiftDown)
+                    If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("artist:" & TexteLien, Not ShiftDown)
                     If (IndicateurRechercheDupliquer.IsChecked) Or (RechercheLocale.IsChecked) Then FiltreVinyls("" & TexteLien, Not ShiftDown, True)
                 Case "tagLinkTitre"
                     Dim Chaine As String = Trim(ExtraitChaine(TexteLien, "", "(", False))
                     If Chaine = "" Then Chaine = TexteLien
-                    If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("titre:" & Chaine, Not ShiftDown)
+                    If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("title:" & Chaine, Not ShiftDown)
                     If (IndicateurRechercheDupliquer.IsChecked) Or (RechercheLocale.IsChecked) Then FiltreVinyls("" & Chaine, Not ShiftDown, True)
                 Case "tagLinkId"
                     If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("id:" & TexteLien, Not ShiftDown)
@@ -1239,8 +1240,8 @@ Public Class UserControlSellList
                     If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("catalogue:" & TexteLien, Not ShiftDown)
                     If (IndicateurRechercheDupliquer.IsChecked) Or (RechercheLocale.IsChecked) Then FiltreVinyls("catalogue:" & TexteLien, Not ShiftDown, True)
                 Case "tagLinkAnnee"
-                    If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("annee:" & TexteLien, Not ShiftDown)
-                    If (IndicateurRechercheDupliquer.IsChecked) Or (RechercheLocale.IsChecked) Then FiltreVinyls("annee:" & TexteLien, Not ShiftDown, True)
+                    If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("year:" & TexteLien, Not ShiftDown)
+                    If (IndicateurRechercheDupliquer.IsChecked) Or (RechercheLocale.IsChecked) Then FiltreVinyls("year:" & TexteLien, Not ShiftDown, True)
                 Case "tagLinkStyle"
                     If (IndicateurRechercheDupliquer.IsChecked) Or (Not RechercheLocale.IsChecked) Then EnvoieRequeteRecherche("style:" & TexteLien, Not ShiftDown)
                     If (IndicateurRechercheDupliquer.IsChecked) Or (RechercheLocale.IsChecked) Then FiltreVinyls("style:" & TexteLien, Not ShiftDown, True)
@@ -1285,7 +1286,7 @@ Public Class UserControlSellList
                                                       If Vinyl.SelectSingleNode("id").InnerText <> ChaineRecherche Then Resultat = False
                                                   Case "id", "+id", "*id"
                                                       If ExtraitChaine(Vinyl.SelectSingleNode("release/id").InnerText, "", "-", , True) <> ChaineRecherche Then Resultat = False
-                                                  Case "artiste", "a", "+artiste", "+a", "*artiste", "*a"
+                                                  Case "artist", "artiste", "a", "+artiste", "+a", "*artiste", "*a"
                                                       If Left(NomCritere, 1) = "+" Then
                                                           If Vinyl.SelectSingleNode("release/description").InnerText <> ChaineRecherche Then Resultat = False
                                                       ElseIf Left(NomCritere, 1) = "*" Then
@@ -1295,7 +1296,7 @@ Public Class UserControlSellList
                                                       Else
                                                           If InStr(Vinyl.SelectSingleNode("release/description").InnerText, ChaineRecherche, CompareMethod.Text) = 0 Then Resultat = False
                                                       End If
-                                                  Case "titre", "t", "+titre", "+t", "*titre", "*t"
+                                                  Case "title", "titre", "t", "+titre", "+t", "*titre", "*t"
                                                       If Left(NomCritere, 1) = "+" Then
                                                           If Vinyl.SelectSingleNode("release/description").InnerText <> ChaineRecherche Then Resultat = False
                                                       ElseIf Left(NomCritere, 1) = "*" Then
@@ -1325,7 +1326,7 @@ Public Class UserControlSellList
                                                       For Each i In Split(ChaineRecherche)
                                                           If InStr(Vinyl.SelectSingleNode("release/catalog_number").InnerText, Trim(i), CompareMethod.Text) = 0 Then Resultat = False
                                                       Next
-                                                  Case "annee", "y", "+annee", "+y", "*annee", "*y"
+                                                  Case "year", "annee", "y", "+annee", "+y", "*annee", "*y"
                                                       If Vinyl.SelectSingleNode("release/year").InnerText <> ChaineRecherche Then Resultat = False
                                                   Case "style", "s", "+style", "+s", "*style", "*s"
                                                       If Vinyl.SelectSingleNode("release/extension/style") IsNot Nothing Then
